@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -14,8 +15,8 @@ export default function Nav() {
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-lg font-semibold tracking-tight text-gray-900">
-          Rmotion
+        <Link href="/">
+          <Image src="/logo.png" alt="Rmotion" height={36} width={120} className="object-contain" priority />
         </Link>
         <nav className="flex items-center gap-6">
           {links.map((l) => (
