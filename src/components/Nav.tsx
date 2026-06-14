@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/machines", label: "Machines" },
+  { href: "/machines", label: "Produits" },
   { href: "/articles", label: "Articles" },
   { href: "/devis", label: "Devis" },
   { href: "/contact", label: "Contact" },
