@@ -1,19 +1,6 @@
 import Link from "next/link";
-import pool from "@/lib/db";
-
-async function getFeaturedMachines() {
-  const res = await pool.query(
-    `SELECT m.id, m.name, m.slug, m.tagline, m.price_range, c.name as category
-     FROM machines m
-     JOIN categories c ON c.id = m.category_id
-     WHERE m.featured = true AND m.published = true
-     ORDER BY m.id`
-  );
-  return res.rows;
-}
 
 export default async function HomePage() {
-  const machines = await getFeaturedMachines();
 
   return (
     <>
@@ -38,25 +25,39 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Machines phares */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="flex items-baseline justify-between mb-10">
-          <h2 className="text-2xl font-semibold">Machines phares</h2>
-          <Link href="/machines" className="text-sm text-gray-500 hover:text-gray-900">Tout voir →</Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {machines.map((m) => (
-            <Link key={m.id} href={`/machines/${m.slug}`} className="group border border-gray-200 rounded-lg p-6 hover:border-gray-400 transition-colors">
-              <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center text-gray-400 text-xs uppercase tracking-wider">
-                {m.category}
-              </div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{m.category}</p>
-              <h3 className="font-medium text-gray-900 mb-1 group-hover:underline">{m.name}</h3>
-              <p className="text-sm text-gray-500 line-clamp-2">{m.tagline}</p>
-              <p className="mt-3 text-sm font-medium text-gray-700">{m.price_range}</p>
-            </Link>
-          ))}
-        </div>
+      {/* Gammes */}
+      <section className="flex w-full h-[520px]">
+        {[
+          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques" },
+          { label: "Découpe laser", href: "/machines?type=decoupe-laser", desc: "Découpe nette sur acrylique, bois, tissu et plus" },
+          { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier" },
+        ].map((gamme, i) => (
+          <Link
+            key={gamme.label}
+            href={gamme.href}
+            className="group relative flex-1 flex flex-col justify-end p-10 bg-gray-100 border-r last:border-r-0 border-gray-200 overflow-hidden transition-colors hover:bg-gray-900"
+          >
+            {/* Placeholder image — à remplacer par une vraie image */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-xs uppercase tracking-widest group-hover:opacity-0 transition-opacity">
+              Image gamme {i + 1}
+            </div>
+            <div className="relative z-10">
+              <p className="text-xs uppercase tracking-widest text-gray-400 group-hover:text-gray-300 mb-2 transition-colors">
+                Gamme
+              </p>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-white mb-2 transition-colors">
+                {gamme.label}
+              </h2>
+              <p className="text-sm text-gray-500 group-hover:text-gray-300 mb-4 transition-colors">
+                {gamme.desc}
+              </p>
+              <span className="text-sm text-gray-900 group-hover:text-white underline transition-colors">
+                Voir les produits →
+              </span>
+            </div>
+          </Link>
+        ))}
       </section>
 
       {/* Promesse */}
