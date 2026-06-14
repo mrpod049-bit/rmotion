@@ -22,7 +22,7 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-6 py-28">
           <p className="text-sm uppercase tracking-widest text-gray-400 mb-4">Machines laser & CNC</p>
           <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
-            L&apos;outil professionnel à prix accessible pour votre atelier
+            Machines compétitives, pensées pour votre entreprise
           </h1>
           <p className="text-gray-300 text-lg mb-10 max-w-xl">
             Rmotion sélectionne et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
