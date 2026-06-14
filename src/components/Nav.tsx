@@ -16,7 +16,7 @@ export default function Nav() {
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50 h-24">
       <div className="max-w-screen-2xl mx-auto px-10 h-full flex items-stretch justify-between">
         <Link href="/" className="flex items-center">
-          <Image src="/logo.png" alt="Rmotion" height={70} width={255} className="object-contain" style={{ height: 70, width: "auto" }} priority quality={100} />
+          <Image src="/logo.png" alt="Rmotion" height={80} width={291} className="object-contain" style={{ height: 80, width: "auto" }} priority quality={100} />
         </Link>
         <nav className="flex items-stretch gap-4">
           {links.map((l) => (
