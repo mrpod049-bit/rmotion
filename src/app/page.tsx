@@ -1,29 +1,12 @@
 import Link from "next/link";
+import Hero from "@/components/Hero";
 
 export default async function HomePage() {
 
   return (
     <>
       {/* Hero */}
-      <section className="bg-gray-900 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-28">
-          <p className="text-sm uppercase tracking-widest text-gray-400 mb-4">Machines laser & CNC</p>
-          <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
-            Machines compétitives, pensées pour votre entreprise
-          </h1>
-          <p className="text-gray-300 text-lg mb-10 max-w-xl">
-            Rmotion sélectionne et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/machines" className="bg-white text-gray-900 px-6 py-3 rounded font-medium hover:bg-gray-100 transition-colors">
-              Voir le catalogue
-            </Link>
-            <Link href="/devis" className="border border-gray-500 text-white px-6 py-3 rounded hover:border-white transition-colors">
-              Demander un devis
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* Gammes */}
       <section className="flex flex-col w-full">
