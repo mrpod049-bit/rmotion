@@ -15,7 +15,7 @@ const images = [
   "/gammes/cnc-5.jpg",
 ];
 
-const IMG_W = 391; // largeur fixe d'une photo (px)
+const IMG_W = 313; // largeur fixe d'une photo (px)
 const GAP = 100; // écart entre deux photos (px)
 const STEP = IMG_W + GAP; // distance parcourue à chaque cran
 const CLONES = 3; // photos dupliquées en fin de piste pour boucler sans couture
