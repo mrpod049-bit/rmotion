@@ -15,7 +15,8 @@ const images = [
   "/gammes/cnc-5.jpg",
 ];
 
-const IMG_W = 460; // largeur fixe d'une photo (px)
+const IMG_W = 391; // largeur fixe d'une photo (px)
+const IMG_H = 326; // hauteur fixe d'une photo (px)
 const GAP = 100; // écart entre deux photos (px)
 const STEP = IMG_W + GAP; // distance parcourue à chaque cran
 const CLONES = 3; // photos dupliquées en fin de piste pour boucler sans couture
@@ -66,7 +67,8 @@ export default function Hero() {
                 src={src}
                 alt=""
                 aria-hidden
-                className="h-96 w-full object-cover rounded-lg"
+                style={{ height: IMG_H }}
+                className="w-full object-cover rounded-lg"
               />
             </div>
           ))}
