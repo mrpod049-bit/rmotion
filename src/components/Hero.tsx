@@ -1,57 +1,78 @@
 "use client";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 
-// Images de démo — à remplacer plus tard par tes propres visuels.
-// Il suffit de changer les URLs (ou de pointer vers /public/...).
+// Photos des machines (dossier public/gammes). Ordre alterné laser / CNC.
 const images = [
-  "https://picsum.photos/seed/rmotion-laser/1600/700",
-  "https://picsum.photos/seed/rmotion-cnc/1600/700",
-  "https://picsum.photos/seed/rmotion-atelier/1600/700",
-  "https://picsum.photos/seed/rmotion-metal/1600/700",
+  "/gammes/cnc-1.jpg",
+  "/gammes/laser-1.jpg",
+  "/gammes/cnc-2.jpg",
+  "/gammes/laser-2.jpg",
+  "/gammes/cnc-3.jpg",
+  "/gammes/laser-3.jpg",
+  "/gammes/cnc-4.jpg",
+  "/gammes/laser-4.jpg",
+  "/gammes/cnc-5.jpg",
 ];
 
+const VISIBLE = 3; // nombre de photos affichées en même temps
+const STEP_MS = 2200; // temps entre deux crans
+
 export default function Hero() {
-  const [active, setActive] = useState(0);
-  const [hovering, setHovering] = useState(false);
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  // On duplique les premières images en fin de piste pour un bouclage sans couture.
+  const track = [...images, ...images.slice(0, VISIBLE)];
+  const N = track.length;
 
-  const start = () => {
-    setHovering(true);
-    timer.current = setInterval(() => {
-      setActive((i) => (i + 1) % images.length);
-    }, 1100);
-  };
+  const [index, setIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
 
-  const stop = () => {
-    setHovering(false);
-    if (timer.current) clearInterval(timer.current);
-    timer.current = null;
-    setActive(0);
-  };
+  // Avance d'un cran à intervalle régulier, en continu.
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => i + 1), STEP_MS);
+    return () => clearInterval(id);
+  }, []);
+
+  // Bouclage : une fois arrivé sur les clones, on revient au début sans animation.
+  useEffect(() => {
+    if (index === images.length) {
+      const t = setTimeout(() => {
+        setAnimate(false);
+        setIndex(0);
+      }, 800);
+      return () => clearTimeout(t);
+    }
+    if (!animate) {
+      const t = setTimeout(() => setAnimate(true), 50);
+      return () => clearTimeout(t);
+    }
+  }, [index, animate]);
 
   return (
-    <section
-      className="relative bg-gray-900 text-white overflow-hidden"
-      onMouseEnter={start}
-      onMouseLeave={stop}
-    >
-      {/* Images de fond qui s'enchaînent au survol */}
+    <section className="relative bg-[#0b2239] text-white overflow-hidden">
+      {/* Carrousel de fond : défile de droite à gauche en continu */}
       <div className="absolute inset-0">
-        {images.map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={src}
-            src={src}
-            alt=""
-            aria-hidden
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out ${
-              hovering && i === active ? "opacity-40" : "opacity-0"
-            }`}
-          />
-        ))}
-        {/* Voile sombre pour garder le texte lisible par-dessus les images */}
-        <div className="absolute inset-0 bg-gray-900/40" />
+        <div
+          className="flex h-full"
+          style={{
+            width: `${(N * 100) / VISIBLE}%`,
+            transform: `translateX(-${(index * 100) / N}%)`,
+            transition: animate ? "transform 800ms ease-in-out" : "none",
+          }}
+        >
+          {track.map((src, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={i}
+              src={src}
+              alt=""
+              aria-hidden
+              style={{ width: `${100 / N}%` }}
+              className="h-full object-cover"
+            />
+          ))}
+        </div>
+        {/* Voile bleu nuit pour garder le texte lisible par-dessus les photos */}
+        <div className="absolute inset-0 bg-[#0b2239]/70" />
       </div>
 
       {/* Contenu */}
