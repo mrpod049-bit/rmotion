@@ -48,28 +48,9 @@ export default function Hero() {
   }, [index, animate]);
 
   return (
-    <section className="bg-white text-gray-900">
-      {/* Texte */}
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-10">
-        <p className="text-sm uppercase tracking-widest text-gray-400 mb-4">Machines laser &amp; CNC</p>
-        <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
-          Machines compétitives, pensées pour votre entreprise
-        </h1>
-        <p className="text-gray-600 text-lg mb-10 max-w-xl">
-          Rmotion sélectionne et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
-        </p>
-        <div className="flex gap-4">
-          <Link href="/machines" className="bg-gray-900 text-white px-6 py-3 rounded font-medium hover:bg-gray-700 transition-colors">
-            Voir le catalogue
-          </Link>
-          <Link href="/devis" className="border border-gray-300 text-gray-900 px-6 py-3 rounded hover:border-gray-900 transition-colors">
-            Demander un devis
-          </Link>
-        </div>
-      </div>
-
-      {/* Bande de vignettes qui défile de droite à gauche, en continu, sur fond blanc */}
-      <div className="overflow-hidden pb-24 pt-2">
+    <section className="relative bg-white text-white overflow-hidden">
+      {/* Fond blanc + photos plus petites et espacées qui défilent de droite à gauche */}
+      <div className="absolute inset-0 flex items-center bg-white">
         <div
           className="flex"
           style={{
@@ -79,16 +60,38 @@ export default function Hero() {
           }}
         >
           {track.map((src, i) => (
-            <div key={i} style={{ width: `${100 / N}%` }} className="px-3">
+            <div key={i} style={{ width: `${100 / N}%` }} className="px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
                 alt=""
                 aria-hidden
-                className="h-52 w-full object-cover rounded-lg border border-gray-200"
+                className="h-64 w-full object-cover rounded-lg"
               />
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Filtre bleuté par-dessus les photos */}
+      <div className="absolute inset-0 bg-[#0b2239]/70" />
+
+      {/* Contenu */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-28">
+        <p className="text-sm uppercase tracking-widest text-gray-300 mb-4">Machines laser &amp; CNC</p>
+        <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
+          Machines compétitives, pensées pour votre entreprise
+        </h1>
+        <p className="text-gray-200 text-lg mb-10 max-w-xl">
+          Rmotion sélectionne et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
+        </p>
+        <div className="flex gap-4">
+          <Link href="/machines" className="bg-white text-gray-900 px-6 py-3 rounded font-medium hover:bg-gray-100 transition-colors">
+            Voir le catalogue
+          </Link>
+          <Link href="/devis" className="border border-gray-300 text-white px-6 py-3 rounded hover:border-white hover:bg-white/10 transition-colors">
+            Demander un devis
+          </Link>
         </div>
       </div>
     </section>
