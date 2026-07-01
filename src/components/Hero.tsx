@@ -15,13 +15,14 @@ const images = [
   "/gammes/cnc-5.jpg",
 ];
 
-const VISIBLE = 3; // nombre de photos affichées en même temps
+const IMG_W = 460; // largeur fixe d'une photo (px)
+const GAP = 100; // écart entre deux photos (px)
+const STEP = IMG_W + GAP; // distance parcourue à chaque cran
+const CLONES = 3; // photos dupliquées en fin de piste pour boucler sans couture
 const STEP_MS = 2200; // temps entre deux crans
 
 export default function Hero() {
-  // On duplique les premières images en fin de piste pour un bouclage sans couture.
-  const track = [...images, ...images.slice(0, VISIBLE)];
-  const N = track.length;
+  const track = [...images, ...images.slice(0, CLONES)];
 
   const [index, setIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
@@ -49,25 +50,23 @@ export default function Hero() {
 
   return (
     <section className="relative bg-white text-white overflow-hidden">
-      {/* Fond blanc + photos plus petites et espacées qui défilent de droite à gauche */}
+      {/* Fond blanc + photos (taille fixe, écart fixe) qui défilent de droite à gauche */}
       <div className="absolute inset-0 flex items-center bg-white">
         <div
           className="flex"
           style={{
-            width: `${(N * 100) / VISIBLE}%`,
-            transform: `translateX(-${(index * 100) / N}%)`,
+            transform: `translateX(-${index * STEP}px)`,
             transition: animate ? "transform 800ms ease-in-out" : "none",
           }}
         >
           {track.map((src, i) => (
-            <div key={i} style={{ width: `${100 / N}%` }} className="shrink-0 flex justify-center">
+            <div key={i} className="shrink-0" style={{ width: IMG_W, marginRight: GAP }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
                 alt=""
                 aria-hidden
-                style={{ width: "calc(100% - 100px)" }}
-                className="h-96 object-cover rounded-lg"
+                className="h-96 w-full object-cover rounded-lg"
               />
             </div>
           ))}
@@ -75,7 +74,7 @@ export default function Hero() {
       </div>
 
       {/* Filtre bleuté par-dessus les photos */}
-      <div className="absolute inset-0 bg-[#0b2239]/70" />
+      <div className="absolute inset-0 bg-[#0b2239]/55" />
 
       {/* Contenu */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-28">
