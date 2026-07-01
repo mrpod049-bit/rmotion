@@ -16,7 +16,6 @@ const images = [
 ];
 
 const IMG_W = 391; // largeur fixe d'une photo (px)
-const IMG_H = 326; // hauteur fixe d'une photo (px)
 const GAP = 100; // écart entre deux photos (px)
 const STEP = IMG_W + GAP; // distance parcourue à chaque cran
 const CLONES = 3; // photos dupliquées en fin de piste pour boucler sans couture
@@ -52,23 +51,22 @@ export default function Hero() {
   return (
     <section className="relative bg-white text-white overflow-hidden">
       {/* Fond blanc + photos (taille fixe, écart fixe) qui défilent de droite à gauche */}
-      <div className="absolute inset-0 flex items-center bg-white">
+      <div className="absolute inset-0 flex bg-white">
         <div
-          className="flex"
+          className="flex h-full"
           style={{
             transform: `translateX(-${index * STEP}px)`,
             transition: animate ? "transform 800ms ease-in-out" : "none",
           }}
         >
           {track.map((src, i) => (
-            <div key={i} className="shrink-0" style={{ width: IMG_W, marginRight: GAP }}>
+            <div key={i} className="shrink-0 h-full" style={{ width: IMG_W, marginRight: GAP }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
                 alt=""
                 aria-hidden
-                style={{ height: IMG_H }}
-                className="w-full object-cover rounded-lg"
+                className="h-full w-full object-cover"
               />
             </div>
           ))}
