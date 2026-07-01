@@ -2,27 +2,34 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-// Photos des machines (dossier public/gammes). Ordre alterné laser / CNC.
-const images = [
-  "/gammes/cnc-1.jpg",
-  "/gammes/laser-1.jpg",
-  "/gammes/cnc-2.jpg",
-  "/gammes/laser-2.jpg",
-  "/gammes/cnc-3.jpg",
-  "/gammes/laser-3.jpg",
-  "/gammes/cnc-4.jpg",
-  "/gammes/laser-4.jpg",
-  "/gammes/cnc-5.jpg",
+// Photos des machines avec leurs dimensions naturelles (pour respecter leur format).
+const IMAGES = [
+  { src: "/gammes/cnc-1.jpg", w: 612, h: 390 },
+  { src: "/gammes/laser-1.jpg", w: 368, h: 352 },
+  { src: "/gammes/cnc-2.jpg", w: 351, h: 424 },
+  { src: "/gammes/laser-2.jpg", w: 331, h: 367 },
+  { src: "/gammes/cnc-3.jpg", w: 575, h: 537 },
+  { src: "/gammes/laser-3.jpg", w: 307, h: 365 },
+  { src: "/gammes/cnc-4.jpg", w: 555, h: 583 },
+  { src: "/gammes/laser-4.jpg", w: 358, h: 370 },
+  { src: "/gammes/cnc-5.jpg", w: 434, h: 511 },
 ];
 
-const IMG_W = 313; // largeur fixe d'une photo (px)
+const IMG_H = 300; // hauteur des photos (px) — LE réglage de taille
 const GAP = 100; // écart entre deux photos (px)
-const STEP = IMG_W + GAP; // distance parcourue à chaque cran
-const CLONES = 3; // photos dupliquées en fin de piste pour boucler sans couture
+const CLONES = 6; // photos dupliquées en fin de piste pour boucler sans couture (remplit les grands écrans)
 const STEP_MS = 2200; // temps entre deux crans
 
+// Largeur d'une photo à la hauteur IMG_H, en respectant son format naturel.
+const widthOf = (im: { w: number; h: number }) => Math.round(IMG_H * (im.w / im.h));
+
 export default function Hero() {
-  const track = [...images, ...images.slice(0, CLONES)];
+  const track = [...IMAGES, ...IMAGES.slice(0, CLONES)];
+
+  // Décalage cumulé (en px) pour amener chaque photo en position — gère les largeurs variables.
+  const offsets = track.map((_, i) =>
+    track.slice(0, i).reduce((sum, im) => sum + widthOf(im) + GAP, 0)
+  );
 
   const [index, setIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
@@ -35,7 +42,7 @@ export default function Hero() {
 
   // Bouclage : une fois arrivé sur les clones, on revient au début sans animation.
   useEffect(() => {
-    if (index === images.length) {
+    if (index === IMAGES.length) {
       const t = setTimeout(() => {
         setAnimate(false);
         setIndex(0);
@@ -50,23 +57,27 @@ export default function Hero() {
 
   return (
     <section className="relative bg-white text-white overflow-hidden">
-      {/* Fond blanc + photos (taille fixe, écart fixe) qui défilent de droite à gauche */}
-      <div className="absolute inset-0 flex bg-white">
+      {/* Fond blanc + photos (format naturel, taille réduite) qui défilent de droite à gauche */}
+      <div className="absolute inset-0 flex items-center bg-white">
         <div
-          className="flex h-full"
+          className="flex"
           style={{
-            transform: `translateX(-${index * STEP}px)`,
+            transform: `translateX(-${offsets[index]}px)`,
             transition: animate ? "transform 800ms ease-in-out" : "none",
           }}
         >
-          {track.map((src, i) => (
-            <div key={i} className="shrink-0 h-full" style={{ width: IMG_W, marginRight: GAP }}>
+          {track.map((im, i) => (
+            <div
+              key={i}
+              className="shrink-0"
+              style={{ width: widthOf(im), height: IMG_H, marginRight: GAP }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={src}
+                src={im.src}
                 alt=""
                 aria-hidden
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover rounded-lg"
               />
             </div>
           ))}
@@ -77,7 +88,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[#0b2239]/55" />
 
       {/* Contenu */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-28">
         <p className="text-sm uppercase tracking-widest text-gray-300 mb-4">Machines laser &amp; CNC</p>
         <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
           Machines compétitives, pensées pour votre entreprise
