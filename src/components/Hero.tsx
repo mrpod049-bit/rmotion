@@ -77,7 +77,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[#0b2239]/55" />
 
       {/* Contenu */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-28">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16">
         <p className="text-sm uppercase tracking-widest text-gray-300 mb-4">Machines laser &amp; CNC</p>
         <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
           Machines compétitives, pensées pour votre entreprise
