@@ -60,13 +60,13 @@ export default function Hero() {
           }}
         >
           {track.map((src, i) => (
-            <div key={i} style={{ width: `${100 / N}%` }} className="px-4">
+            <div key={i} style={{ width: `${100 / N}%` }} className="px-[50px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
                 alt=""
                 aria-hidden
-                className="h-64 w-full object-cover rounded-lg"
+                className="h-96 w-full object-cover rounded-lg"
               />
             </div>
           ))}
