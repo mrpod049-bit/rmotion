@@ -68,35 +68,41 @@ INSERT INTO categories (name, slug, description, type) VALUES
   ('Plasmas CNC', 'plasmas-cnc', 'Découpe plasma CNC pour métaux jusqu''à 25mm', 'cnc');
 
 INSERT INTO machines (category_id, name, slug, tagline, description, specs, price_range, featured) VALUES
-  (1, 'LaserPro 6040', 'laserpro-6040',
+  (1, 'Laser ouvert 30/100W', 'laser-ouvert-30-100w',
    'La découpe laser CO2 accessible pour les ateliers',
    'Machine laser CO2 60x40cm idéale pour les petites séries. Parfaite pour le bois, l''acrylique, le cuir et le tissu. Pilotage simple via LightBurn.',
    '{"puissance": "80W", "surface_travail": "600x400mm", "vitesse_max": "500mm/s", "logiciel": "LightBurn", "refroidissement": "eau"}',
-   '2 500 € – 3 500 €', true),
+   NULL, true),
 
-  (1, 'LaserPro 1390', 'laserpro-1390',
+  (1, 'Laser fermé 60/100W', 'laser-ferme-60-100w',
    'Grand format pour production en série',
    'Laser CO2 130x90cm pour les ateliers qui produisent en volume. Tube 130W, tête motorisée, mise au point automatique.',
    '{"puissance": "130W", "surface_travail": "1300x900mm", "vitesse_max": "600mm/s", "logiciel": "LightBurn / RDWorks", "refroidissement": "eau"}',
-   '5 500 € – 7 000 €', true),
+   NULL, true),
 
-  (2, 'FibreMax 20W', 'fibremax-20w',
+  (2, 'Laser fermé 20/30W', 'laser-ferme-20-30w',
    'Marquage laser fibre compact et précis',
    'Laser fibre 20W pour le marquage permanent sur acier, inox, aluminium et autres métaux. Idéal pour la traçabilité et la personnalisation.',
    '{"puissance": "20W", "surface_travail": "110x110mm", "vitesse_max": "8000mm/s", "logiciel": "EzCad2", "garantie_source": "100 000h"}',
-   '3 000 € – 4 000 €', false),
+   NULL, false),
 
-  (3, 'CNC Router 6090', 'cnc-router-6090',
+  (3, 'Centre d''usinage miniature XH7115', 'centre-usinage-xh7115',
    'Fraiseuse CNC polyvalente pour bois et alu',
    'Fraiseuse CNC 60x90cm robuste, structure acier soudé. Idéale pour la menuiserie, l''enseigne et le prototypage aluminium.',
    '{"surface_travail": "600x900mm", "course_z": "100mm", "broche": "2.2kW air", "precision": "0.1mm", "logiciel": "Mach3 / GRBL"}',
-   '3 500 € – 5 000 €', true),
+   NULL, true),
 
-  (4, 'Plasma CNC 1530', 'plasma-cnc-1530',
+  (4, 'MS series router', 'ms-series-router',
    'Découpe plasma CNC acier jusqu''à 20mm',
    'Table plasma CNC 150x300cm avec torche Hypertherm. Découpe acier, inox et aluminium. Idéale pour la serrurerie, la carrosserie et la métallerie.',
    '{"surface_travail": "1500x3000mm", "epaisseur_max": "20mm acier", "torche": "Hypertherm 45XP", "logiciel": "SheetCam + Mach3"}',
-   '8 000 € – 12 000 €', true);
+   NULL, true),
+
+  (3, 'Centre d''usinage miniature VMC540T', 'centre-usinage-vmc540t',
+   'Centre d''usinage vertical compact pour l''atelier',
+   'Centre d''usinage vertical miniature, adapté aux petites séries et au prototypage en atelier.',
+   '{}',
+   NULL, false);
 
 INSERT INTO articles (title, slug, excerpt, category, published, published_at) VALUES
   ('Laser CO2 vs Laser Fibre : lequel choisir ?', 'laser-co2-vs-fibre',

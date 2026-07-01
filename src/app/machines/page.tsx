@@ -33,8 +33,7 @@ export default async function MachinesPage() {
                 </div>
                 <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{m.category}</p>
                 <h3 className="font-medium text-gray-900 mb-2 group-hover:underline">{m.name}</h3>
-                <p className="text-sm text-gray-500 mb-4 line-clamp-2">{m.tagline}</p>
-                <p className="text-sm font-medium text-gray-700">{m.price_range}</p>
+                <p className="text-sm text-gray-500 line-clamp-2">{m.tagline}</p>
               </Link>
             ))}
           </div>

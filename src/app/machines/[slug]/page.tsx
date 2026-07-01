@@ -34,8 +34,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         <div>
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">{machine.category}</p>
           <h1 className="text-3xl font-semibold mb-3">{machine.name}</h1>
-          <p className="text-gray-500 mb-6">{machine.tagline}</p>
-          <p className="text-xl font-medium text-gray-800 mb-8">{machine.price_range}</p>
+          <p className="text-gray-500 mb-8">{machine.tagline}</p>
 
           <Link
             href={`/devis?machine=${machine.id}&nom=${encodeURIComponent(machine.name)}`}
