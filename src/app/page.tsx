@@ -11,7 +11,7 @@ export default async function HomePage() {
       {/* Gammes */}
       <section className="flex flex-col w-full">
         {[
-          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/engraving.jpg" },
+          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/engraving.png" },
           { label: "Découpe laser", href: "/machines?type=decoupe-laser", desc: "Découpe nette sur acrylique, bois, tissu et plus", image: null },
           { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier", image: null },
           { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble", image: null },
