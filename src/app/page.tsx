@@ -26,7 +26,13 @@ export default async function HomePage() {
                 {/* Image révélée en fondu au survol, pleine largeur (bords coïncidant avec le bandeau) */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={gamme.image} alt="" aria-hidden className="h-full w-full object-cover" />
+                  <img
+                    src={gamme.image}
+                    alt=""
+                    aria-hidden
+                    className="h-full w-full object-cover"
+                    style={{ transform: "translate(100px, 10px) scale(1.2)" }}
+                  />
                 </div>
                 {/* Voile bleuté qui apparaît lui aussi en fondu par-dessus l'image */}
                 <div className="absolute inset-0 bg-[#0b2239]/55 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
