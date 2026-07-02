@@ -87,13 +87,13 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
    NULL, false),
 
   (3, 'Centre d''usinage miniature XH7115', 'centre-usinage-xh7115',
-   'Fraiseuse CNC polyvalente pour bois et alu',
+   'Centre d''usinage ultra compact',
    'Fraiseuse CNC 60x90cm robuste, structure acier soudé. Idéale pour la menuiserie, l''enseigne et le prototypage aluminium.',
    '{"surface_travail": "600x900mm", "course_z": "100mm", "broche": "2.2kW air", "precision": "0.1mm", "logiciel": "Mach3 / GRBL"}',
    NULL, true),
 
   (4, 'MS series router', 'ms-series-router',
-   'Découpe plasma CNC acier jusqu''à 20mm',
+   'Découpe grande surface sur bois, plastiques et aluminium',
    'Table plasma CNC 150x300cm avec torche Hypertherm. Découpe acier, inox et aluminium. Idéale pour la serrurerie, la carrosserie et la métallerie.',
    '{"surface_travail": "1500x3000mm", "epaisseur_max": "20mm acier", "torche": "Hypertherm 45XP", "logiciel": "SheetCam + Mach3"}',
    NULL, true),
@@ -103,6 +103,13 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
    'Centre d''usinage vertical miniature, adapté aux petites séries et au prototypage en atelier.',
    '{}',
    NULL, false);
+
+-- Photos des machines
+UPDATE machines SET images = ARRAY['/gammes/laser-1.jpg']::text[] WHERE slug = 'laser-ferme-20-30w';
+UPDATE machines SET images = ARRAY['/gammes/laser-2.jpg']::text[] WHERE slug = 'laser-ferme-60-100w';
+UPDATE machines SET images = ARRAY['/gammes/laser-4.jpg']::text[] WHERE slug = 'laser-ouvert-30-100w';
+UPDATE machines SET images = ARRAY['/gammes/cnc-3.jpg']::text[] WHERE slug = 'centre-usinage-vmc540t';
+UPDATE machines SET images = ARRAY['/gammes/cnc-1.jpg']::text[] WHERE slug = 'ms-series-router';
 
 INSERT INTO articles (title, slug, excerpt, category, published, published_at) VALUES
   ('Laser CO2 vs Laser Fibre : lequel choisir ?', 'laser-co2-vs-fibre',

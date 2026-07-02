@@ -3,7 +3,7 @@ import pool from "@/lib/db";
 
 async function getMachines() {
   const res = await pool.query(
-    `SELECT m.id, m.name, m.slug, m.tagline, m.price_range, c.name as category, c.type
+    `SELECT m.id, m.name, m.slug, m.tagline, m.price_range, m.images, c.name as category, c.type
      FROM machines m
      JOIN categories c ON c.id = m.category_id
      WHERE m.published = true
@@ -28,9 +28,18 @@ export default async function MachinesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {group.items.map((m) => (
               <Link key={m.id} href={`/machines/${m.slug}`} className="group border border-gray-200 rounded-lg p-6 hover:border-gray-400 transition-colors">
-                <div className="h-36 bg-gray-100 rounded mb-5 flex items-center justify-center text-gray-400 text-xs uppercase tracking-wider">
-                  {m.category}
-                </div>
+                {m.images?.[0] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={m.images[0]}
+                    alt={m.name}
+                    className="h-36 w-full object-cover rounded mb-5"
+                  />
+                ) : (
+                  <div className="h-36 bg-gray-100 rounded mb-5 flex items-center justify-center text-gray-400 text-xs uppercase tracking-wider">
+                    {m.category}
+                  </div>
+                )}
                 <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{m.category}</p>
                 <h3 className="font-medium text-gray-900 mb-2 group-hover:underline">{m.name}</h3>
                 <p className="text-sm text-gray-500 line-clamp-2">{m.tagline}</p>

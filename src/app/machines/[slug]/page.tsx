@@ -26,9 +26,18 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Visuel */}
-        <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm uppercase tracking-wider">
-          {machine.category}
-        </div>
+        {machine.images?.[0] ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={machine.images[0]}
+            alt={machine.name}
+            className="h-96 w-full object-cover rounded-lg"
+          />
+        ) : (
+          <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm uppercase tracking-wider">
+            {machine.category}
+          </div>
+        )}
 
         {/* Infos */}
         <div>
