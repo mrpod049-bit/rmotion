@@ -29,12 +29,14 @@ export default async function MachinesPage() {
             {group.items.map((m) => (
               <Link key={m.id} href={`/machines/${m.slug}`} className="group border border-gray-200 rounded-lg p-6 hover:border-gray-400 transition-colors">
                 {m.images?.[0] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={m.images[0]}
-                    alt={m.name}
-                    className="h-72 w-full object-cover rounded mb-5"
-                  />
+                  <div className="h-72 mb-5 flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={m.images[0]}
+                      alt={m.name}
+                      className="h-[85%] w-[85%] object-cover rounded"
+                    />
+                  </div>
                 ) : (
                   <div className="h-72 bg-gray-100 rounded mb-5 flex items-center justify-center text-gray-400 text-xs uppercase tracking-wider">
                     {m.category}
