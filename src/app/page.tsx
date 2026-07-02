@@ -11,9 +11,9 @@ export default async function HomePage() {
       {/* Gammes */}
       <section className="flex flex-col w-full">
         {[
-          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/engraving.png" },
-          { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier", image: null },
-          { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble", image: null },
+          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/engraving.png", transform: "translate(100px, 10px) scale(1.2)" },
+          { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier", image: "/gammes/milling.jpg", transform: undefined },
+          { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble", image: null, transform: undefined },
         ].map((gamme, i) => (
           <Link
             key={gamme.label}
@@ -30,7 +30,7 @@ export default async function HomePage() {
                     alt=""
                     aria-hidden
                     className="h-full w-full object-cover"
-                    style={{ transform: "translate(100px, 10px) scale(1.2)" }}
+                    style={{ transform: gamme.transform }}
                   />
                 </div>
                 {/* Voile bleuté qui apparaît lui aussi en fondu par-dessus l'image */}
