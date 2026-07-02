@@ -3,10 +3,10 @@ import pool from "@/lib/db";
 
 // Taille d'affichage de la photo dans sa cellule (% de la cellule). Défaut : 85.
 const IMG_SCALE: Record<string, number> = {
-  "laser-ferme-20-30w": 90,
-  "laser-ferme-60-100w": 85,
-  "laser-ouvert-30-100w": 85,
-  "centre-usinage-xh7115": 80,
+  "laser-ferme-20-30w": 70,
+  "laser-ferme-60-100w": 70,
+  "laser-ouvert-30-100w": 70,
+  "centre-usinage-xh7115": 65,
 };
 
 async function getMachines() {
