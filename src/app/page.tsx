@@ -11,21 +11,31 @@ export default async function HomePage() {
       {/* Gammes */}
       <section className="flex flex-col w-full">
         {[
-          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques" },
-          { label: "Découpe laser", href: "/machines?type=decoupe-laser", desc: "Découpe nette sur acrylique, bois, tissu et plus" },
-          { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier" },
-          { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble" },
+          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/engraving.jpg" },
+          { label: "Découpe laser", href: "/machines?type=decoupe-laser", desc: "Découpe nette sur acrylique, bois, tissu et plus", image: null },
+          { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier", image: null },
+          { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble", image: null },
         ].map((gamme, i) => (
           <Link
             key={gamme.label}
             href={gamme.href}
             className="group relative flex items-center h-56 px-12 bg-gray-100 border-b last:border-b-0 border-gray-200 overflow-hidden transition-colors hover:bg-gray-900"
           >
-            {/* Placeholder image — à remplacer par une vraie image */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute right-12 top-1/2 -translate-y-1/2 text-gray-300 text-xs uppercase tracking-widest group-hover:opacity-0 transition-opacity">
-              Image gamme {i + 1}
-            </div>
+            {gamme.image ? (
+              /* Image révélée au survol, centrée */
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={gamme.image} alt="" aria-hidden className="h-full w-auto object-contain" />
+              </div>
+            ) : (
+              <>
+                {/* Placeholder — à remplacer par une vraie image */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute right-12 top-1/2 -translate-y-1/2 text-gray-300 text-xs uppercase tracking-widest group-hover:opacity-0 transition-opacity">
+                  Image gamme {i + 1}
+                </div>
+              </>
+            )}
             <div className="relative z-10 max-w-xl">
               <p className="text-xs uppercase tracking-widest text-gray-400 group-hover:text-gray-300 mb-2 transition-colors">
                 Gamme
