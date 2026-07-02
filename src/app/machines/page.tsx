@@ -1,6 +1,14 @@
 import Link from "next/link";
 import pool from "@/lib/db";
 
+// Taille d'affichage de la photo dans sa cellule (% de la cellule). Défaut : 85.
+const IMG_SCALE: Record<string, number> = {
+  "laser-ferme-20-30w": 90,
+  "laser-ferme-60-100w": 85,
+  "laser-ouvert-30-100w": 85,
+  "centre-usinage-xh7115": 80,
+};
+
 async function getMachines() {
   const res = await pool.query(
     `SELECT m.id, m.name, m.slug, m.tagline, m.price_range, m.images, c.name as category, c.type
@@ -34,7 +42,8 @@ export default async function MachinesPage() {
                     <img
                       src={m.images[0]}
                       alt={m.name}
-                      className="h-[85%] w-[85%] object-cover rounded"
+                      style={{ width: `${IMG_SCALE[m.slug] ?? 85}%`, height: `${IMG_SCALE[m.slug] ?? 85}%` }}
+                      className="object-cover rounded"
                     />
                   </div>
                 ) : (
