@@ -19,14 +19,18 @@ export default async function HomePage() {
           <Link
             key={gamme.label}
             href={gamme.href}
-            className="group relative flex items-center h-56 px-12 bg-gray-100 border-b last:border-b-0 border-gray-200 overflow-hidden transition-colors hover:bg-gray-900"
+            className={`group relative flex items-center h-56 px-12 bg-gray-100 border-b last:border-b-0 border-gray-200 overflow-hidden transition-colors ${gamme.image ? "" : "hover:bg-gray-900"}`}
           >
             {gamme.image ? (
-              /* Image révélée au survol, centrée */
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={gamme.image} alt="" aria-hidden className="h-full w-auto object-contain" />
-              </div>
+              <>
+                {/* Image révélée en fondu au survol, pleine largeur (bords coïncidant avec le bandeau) */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={gamme.image} alt="" aria-hidden className="h-full w-full object-cover" />
+                </div>
+                {/* Voile bleuté qui apparaît lui aussi en fondu par-dessus l'image */}
+                <div className="absolute inset-0 bg-[#0b2239]/55 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              </>
             ) : (
               <>
                 {/* Placeholder — à remplacer par une vraie image */}
