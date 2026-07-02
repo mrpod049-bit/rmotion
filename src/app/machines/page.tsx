@@ -42,8 +42,8 @@ export default async function MachinesPage() {
                     <img
                       src={m.images[0]}
                       alt={m.name}
-                      style={{ width: `${IMG_SCALE[m.slug] ?? 85}%`, height: `${IMG_SCALE[m.slug] ?? 85}%` }}
-                      className="object-cover rounded"
+                      style={{ height: `${IMG_SCALE[m.slug] ?? 85}%`, width: "auto" }}
+                      className="max-w-full object-contain rounded"
                     />
                   </div>
                 ) : (
