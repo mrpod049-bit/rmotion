@@ -110,6 +110,7 @@ UPDATE machines SET images = ARRAY['/gammes/laser-2.jpg']::text[] WHERE slug = '
 UPDATE machines SET images = ARRAY['/gammes/laser-4.jpg']::text[] WHERE slug = 'laser-ouvert-30-100w';
 UPDATE machines SET images = ARRAY['/gammes/cnc-3.jpg']::text[] WHERE slug = 'centre-usinage-vmc540t';
 UPDATE machines SET images = ARRAY['/gammes/cnc-1.jpg']::text[] WHERE slug = 'ms-series-router';
+UPDATE machines SET images = ARRAY['/gammes/cnc-2.jpg']::text[] WHERE slug = 'centre-usinage-xh7115';
 
 INSERT INTO articles (title, slug, excerpt, category, published, published_at) VALUES
   ('Laser CO2 vs Laser Fibre : lequel choisir ?', 'laser-co2-vs-fibre',

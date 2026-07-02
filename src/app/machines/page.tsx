@@ -33,10 +33,10 @@ export default async function MachinesPage() {
                   <img
                     src={m.images[0]}
                     alt={m.name}
-                    className="h-36 w-full object-cover rounded mb-5"
+                    className="h-72 w-full object-cover rounded mb-5"
                   />
                 ) : (
-                  <div className="h-36 bg-gray-100 rounded mb-5 flex items-center justify-center text-gray-400 text-xs uppercase tracking-wider">
+                  <div className="h-72 bg-gray-100 rounded mb-5 flex items-center justify-center text-gray-400 text-xs uppercase tracking-wider">
                     {m.category}
                   </div>
                 )}
