@@ -94,7 +94,7 @@ export default function Hero() {
           Machines compétitives, pensées pour votre entreprise
         </h1>
         <p className="text-gray-200 text-lg mb-10 max-w-xl">
-          Rmotion sélectionne et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
+          Rmotion conçoit et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
         </p>
         <div className="flex gap-4">
           <Link href="/machines" className="bg-white text-gray-900 px-6 py-3 rounded font-medium hover:bg-gray-100 transition-colors">
