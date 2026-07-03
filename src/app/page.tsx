@@ -72,11 +72,11 @@ export default async function HomePage() {
           </div>
           <div>
             <p className="font-semibold text-gray-900 mb-2">Devis sur mesure</p>
-            <p className="text-gray-500">Pas de prix catalogue fixe. Chaque atelier a ses besoins — on adapte la configuration et le budget.</p>
+            <p className="text-gray-500">Pas de prix catalogue fixe. Chaque atelier a ses besoins — nous adaptons la configuration et le budget.</p>
           </div>
           <div>
             <p className="font-semibold text-gray-900 mb-2">Accompagnement technique</p>
-            <p className="text-gray-500">Installation, prise en main, formation : on ne livre pas une machine, on met en place un outil de production.</p>
+            <p className="text-gray-500">Installation, prise en main, formation : nous ne livrons pas une machine, nous mettons en place un outil de production.</p>
           </div>
         </div>
       </section>
