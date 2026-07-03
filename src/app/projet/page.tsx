@@ -44,7 +44,7 @@ export default function ProjetPage() {
               Chez Rmotion, nous sommes en mesure de vous accompagner de l’idée de départ jusqu’à la mise en production.
             </p>
             <p>
-              Nous sommes en mesure de modifier nos machines catalogue, mais également de vous accompagner dans une réalisation sur mesure.
+              Nous sommes capables de modifier nos machines catalogue, mais également de vous accompagner dans une réalisation sur mesure.
             </p>
             <p>
               Nous pouvons également vous mettre en relation avec des fabricants spécialisés, pour des applications spécifiques.
