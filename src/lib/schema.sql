@@ -70,13 +70,13 @@ INSERT INTO categories (name, slug, description, type) VALUES
 INSERT INTO machines (category_id, name, slug, tagline, description, specs, price_range, featured) VALUES
   (1, 'OL Series', 'laser-ouvert-30-100w',
    'La découpe laser CO2 accessible pour les ateliers',
-   E'La machine de gravure laser OL Series est une machine très versatile, extrêmement compacte et pouvant offrir des niveaux de puissance très élevés. Sont disponible en option :\n\n- 3eme axe\n- Source laser JPT\n- Jeu de lentilles F-Theta de 70x70mm à 200x200 mm',
+   E'La machine de gravure laser OL Series est une machine très versatile, extrêmement compacte et pouvant offrir des niveaux de puissance très élevés. Sont disponibles en option :\n\n- 3eme axe\n- Source laser JPT\n- Jeu de lentilles F-Theta de 70x70mm à 200x200 mm',
    '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"de 20 à 100W"},{"label":"Vitesse","value":"8000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"}]',
    NULL, true),
 
   (1, 'BCL Series', 'laser-ferme-60-100w',
    'Grand format pour production en série',
-   E'Les machines de gravure laser BCL Series sont conçues pour des productions en moyenne série de pièces volumineuses. Sont disponible en option :\n\n- 3eme axe rotatif\n- Tube laser JPT\n- Jeu de lentilles F=Theta, de 70x70mm à 300x300mm',
+   E'Les machines de gravure laser BCL Series sont conçues pour des productions en moyenne série de pièces volumineuses. Sont disponibles en option :\n\n- 3eme axe rotatif\n- Tube laser JPT\n- Jeu de lentilles F=Theta, de 70x70mm à 300x300mm',
    '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"20W à 100W"},{"label":"Vitesse max","value":"9000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"}]',
    NULL, true),
 
