@@ -62,10 +62,10 @@ CREATE TABLE contacts (
 
 -- Données d'exemple
 INSERT INTO categories (name, slug, description, type) VALUES
-  ('Découpe laser CO2', 'decoupe-laser-co2', 'Machines laser CO2 pour bois, acrylique, cuir et matériaux non métalliques', 'laser'),
-  ('Gravure laser fibre', 'gravure-laser-fibre', 'Lasers fibre pour marquage et gravure sur métaux', 'laser'),
-  ('Fraiseuses CNC', 'fraiseuses-cnc', 'Fraiseuses CNC pour bois, aluminium et matériaux composites', 'cnc'),
-  ('Plasmas CNC', 'plasmas-cnc', 'Découpe plasma CNC pour métaux jusqu''à 25mm', 'cnc');
+  ('Gravure laser fibre', 'gravure-laser-fibre', 'Lasers fibre pour marquage et gravure', 'laser'),      -- id 1
+  ('Usinage tout matériaux', 'usinage-tout-materiaux', 'Centres d''usinage polyvalents', 'cnc'),          -- id 2
+  ('Fraisage grand surface', 'fraisage-grand-surface', 'Fraisage sur grandes surfaces', 'cnc'),          -- id 3
+  ('Fraisage tout matériaux', 'fraisage-tout-materiaux', 'Fraisage plastiques et métaux', 'cnc');         -- id 4
 
 INSERT INTO machines (category_id, name, slug, tagline, description, specs, price_range, featured) VALUES
   (1, 'OL Series', 'laser-ouvert-30-100w',
@@ -80,25 +80,25 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
    '{"puissance": "130W", "surface_travail": "1300x900mm", "vitesse_max": "600mm/s", "logiciel": "LightBurn / RDWorks", "refroidissement": "eau"}',
    NULL, true),
 
-  (2, 'SCL20 / SLC30', 'laser-ferme-20-30w',
+  (1, 'SCL20 / SLC30', 'laser-ferme-20-30w',
    'Marquage laser fibre compact et précis',
    'Machine de gravure laser fibre, puissance de 20W ou 30W sur demande. Idéale pour le marquage en série de petites pièces en acier, aluminium, plastique, bois et cuir.',
    '{"Logiciel": "EzCad / Lightburn", "Puissance": "20/30W", "Vitesse max": "15000 mm/s", "Longueur d''onde": "1064 nm"}',
    NULL, false),
 
-  (3, 'SCS Series', 'centre-usinage-xh7115',
+  (4, 'SCS Series', 'centre-usinage-xh7115',
    'Fraiseuse plastique / métaux compacte',
    'Fraiseuse CNC 60x90cm robuste, structure acier soudé. Idéale pour la menuiserie, l''enseigne et le prototypage aluminium.',
    '{"surface_travail": "600x900mm", "course_z": "100mm", "broche": "2.2kW air", "precision": "0.1mm", "logiciel": "Mach3 / GRBL"}',
    NULL, true),
 
-  (4, 'MR Series', 'ms-series-router',
+  (3, 'MR Series', 'ms-series-router',
    'Découpe grande surface sur bois, plastiques et aluminium',
    'Table plasma CNC 150x300cm avec torche Hypertherm. Découpe acier, inox et aluminium. Idéale pour la serrurerie, la carrosserie et la métallerie.',
    '{"surface_travail": "1500x3000mm", "epaisseur_max": "20mm acier", "torche": "Hypertherm 45XP", "logiciel": "SheetCam + Mach3"}',
    NULL, true),
 
-  (3, 'MCS Series', 'centre-usinage-vmc540t',
+  (2, 'MCS Series', 'centre-usinage-vmc540t',
    'Centre d''usinage petit format',
    E'Le centre d''usinage miniature MCS Series est une machine polyvalente et facile à intégrer de part ses dimensions réduites.\n\nElle saura aisément traiter les plastiques techniques, ainsi que les métaux mêmes ferreux.\n\nOptions disponibles sur demande :\n- 4eme axe\n- Broche ISO 20\n- Contrôleur Keyuan 1000MC',
    '[{"label":"Dimensions de travail","value":"230x130x260mm"},{"label":"Taille de table","value":"430x120mm"},{"label":"Puissance de broche","value":"2.2kW"},{"label":"Vitesse de broche","value":"24000 RPM"},{"label":"Type broche","value":"ISO 16"},{"label":"Contrôleur","value":"980MC"},{"label":"Précision tous axes","value":"±0.01mm"},{"label":"Répétabilité","value":"±0.015mm"},{"label":"Dimensions externes","value":"950x780x1100mm"}]',
