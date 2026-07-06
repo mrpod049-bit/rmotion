@@ -82,8 +82,8 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
 
   (2, 'Laser fermé 20/30W', 'laser-ferme-20-30w',
    'Marquage laser fibre compact et précis',
-   'Laser fibre 20W pour le marquage permanent sur acier, inox, aluminium et autres métaux. Idéal pour la traçabilité et la personnalisation.',
-   '{"puissance": "20W", "surface_travail": "110x110mm", "vitesse_max": "8000mm/s", "logiciel": "EzCad2", "garantie_source": "100 000h"}',
+   'Machine de gravure laser fibre, puissance de 20W ou 30W sur demande. Idéale pour le marquage en série de petites pièces en acier, aluminium, plastique, bois et cuir.',
+   '{"Logiciel": "EzCad / Lightburn", "Puissance": "20/30W", "Vitesse max": "15000 mm/s", "Longueur d''onde": "1064 nm"}',
    NULL, false),
 
   (3, 'Centre d''usinage miniature XH7115', 'centre-usinage-xh7115',
