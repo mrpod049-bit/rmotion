@@ -87,7 +87,7 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
    NULL, false),
 
   (3, 'SCS Series', 'centre-usinage-xh7115',
-   'Centre d''usinage ultra compact',
+   'Fraiseuse plastique / métaux compacte',
    'Fraiseuse CNC 60x90cm robuste, structure acier soudé. Idéale pour la menuiserie, l''enseigne et le prototypage aluminium.',
    '{"surface_travail": "600x900mm", "course_z": "100mm", "broche": "2.2kW air", "precision": "0.1mm", "logiciel": "Mach3 / GRBL"}',
    NULL, true),
@@ -99,7 +99,7 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
    NULL, true),
 
   (3, 'MCS Series', 'centre-usinage-vmc540t',
-   'Centre d''usinage vertical compact pour l''atelier',
+   'Centre d''usinage petit format',
    E'Le centre d''usinage miniature MCS Series est une machine polyvalente et facile à intégrer de part ses dimensions réduites.\n\nElle saura aisément traiter les plastiques techniques, ainsi que les métaux mêmes ferreux.\n\nOptions disponibles sur demande :\n- 4eme axe\n- Broche ISO 20\n- Contrôleur Keyuan 1000MC',
    '[{"label":"Dimensions de travail","value":"230x130x260mm"},{"label":"Taille de table","value":"430x120mm"},{"label":"Puissance de broche","value":"2.2kW"},{"label":"Vitesse de broche","value":"24000 RPM"},{"label":"Type broche","value":"ISO 16"},{"label":"Contrôleur","value":"980MC"},{"label":"Précision tous axes","value":"±0.01mm"},{"label":"Répétabilité","value":"±0.015mm"},{"label":"Dimensions externes","value":"950x780x1100mm"}]',
    NULL, false);
