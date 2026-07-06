@@ -23,7 +23,12 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
   const machine = await getMachine(slug);
   if (!machine) notFound();
 
-  const specs = machine.specs as Record<string, string>;
+  // Les specs peuvent être un objet {label: valeur} ou une liste ordonnée [{label, value}]
+  // (la liste garantit l'ordre d'affichage, que jsonb ne préserve pas).
+  const rawSpecs = machine.specs;
+  const specEntries: [string, string][] = Array.isArray(rawSpecs)
+    ? (rawSpecs as { label: string; value: string }[]).map((s) => [s.label, s.value])
+    : Object.entries((rawSpecs ?? {}) as Record<string, string>);
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
@@ -64,7 +69,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Caractéristiques</h2>
             <dl className="border border-gray-200 rounded-lg divide-y divide-gray-200">
-              {Object.entries(specs).map(([key, val]) => (
+              {specEntries.map(([key, val]) => (
                 <div key={key} className="grid grid-cols-2 px-4 py-3 text-sm">
                   <dt className="text-gray-500 first-letter:uppercase">{key.replace(/_/g, " ")}</dt>
                   <dd className="text-gray-900 font-medium">{val}</dd>
@@ -78,7 +83,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       {/* Description */}
       <div className="mt-16 max-w-2xl">
         <h2 className="text-lg font-semibold mb-4">Description</h2>
-        <p className="text-gray-600 leading-relaxed">{machine.description}</p>
+        <p className="text-gray-600 leading-relaxed whitespace-pre-line">{machine.description}</p>
       </div>
     </div>
   );
