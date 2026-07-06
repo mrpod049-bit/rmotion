@@ -76,8 +76,8 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
 
   (1, 'BCL Series', 'laser-ferme-60-100w',
    'Grand format pour production en série',
-   'Laser CO2 130x90cm pour les ateliers qui produisent en volume. Tube 130W, tête motorisée, mise au point automatique.',
-   '{"puissance": "130W", "surface_travail": "1300x900mm", "vitesse_max": "600mm/s", "logiciel": "LightBurn / RDWorks", "refroidissement": "eau"}',
+   E'Les machines de gravure laser BCL Series sont conçues pour des productions en moyenne série de pièces volumineuses. Sont disponible en option :\n\n- 3eme axe rotatif\n- Tube laser JPT\n- Jeu de lentilles F=Theta, de 70x70mm à 300x300mm',
+   '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"20W à 100W"},{"label":"Vitesse max","value":"9000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"}]',
    NULL, true),
 
   (1, 'SCL20 / SLC30', 'laser-ferme-20-30w',
