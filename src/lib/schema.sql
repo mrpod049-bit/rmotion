@@ -70,8 +70,8 @@ INSERT INTO categories (name, slug, description, type) VALUES
 INSERT INTO machines (category_id, name, slug, tagline, description, specs, price_range, featured) VALUES
   (1, 'OL Series', 'laser-ouvert-30-100w',
    'La découpe laser CO2 accessible pour les ateliers',
-   'Machine laser CO2 60x40cm idéale pour les petites séries. Parfaite pour le bois, l''acrylique, le cuir et le tissu. Pilotage simple via LightBurn.',
-   '{"puissance": "80W", "surface_travail": "600x400mm", "vitesse_max": "500mm/s", "logiciel": "LightBurn", "refroidissement": "eau"}',
+   E'La machine de gravure laser OL Series est une machine très versatile, extrêmement compacte et pouvant offrir des niveaux de puissance très élevés. Sont disponible en option :\n\n- 3eme axe\n- Source laser JPT\n- Jeu de lentilles F-Theta de 70x70mm à 200x200 mm',
+   '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"de 20 à 100W"},{"label":"Vitesse","value":"8000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"}]',
    NULL, true),
 
   (1, 'BCL Series', 'laser-ferme-60-100w',
