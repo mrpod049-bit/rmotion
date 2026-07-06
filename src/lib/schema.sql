@@ -68,37 +68,37 @@ INSERT INTO categories (name, slug, description, type) VALUES
   ('Plasmas CNC', 'plasmas-cnc', 'Découpe plasma CNC pour métaux jusqu''à 25mm', 'cnc');
 
 INSERT INTO machines (category_id, name, slug, tagline, description, specs, price_range, featured) VALUES
-  (1, 'Laser ouvert 30/100W', 'laser-ouvert-30-100w',
+  (1, 'OL Series', 'laser-ouvert-30-100w',
    'La découpe laser CO2 accessible pour les ateliers',
    'Machine laser CO2 60x40cm idéale pour les petites séries. Parfaite pour le bois, l''acrylique, le cuir et le tissu. Pilotage simple via LightBurn.',
    '{"puissance": "80W", "surface_travail": "600x400mm", "vitesse_max": "500mm/s", "logiciel": "LightBurn", "refroidissement": "eau"}',
    NULL, true),
 
-  (1, 'Laser fermé 60/100W', 'laser-ferme-60-100w',
+  (1, 'BCL Series', 'laser-ferme-60-100w',
    'Grand format pour production en série',
    'Laser CO2 130x90cm pour les ateliers qui produisent en volume. Tube 130W, tête motorisée, mise au point automatique.',
    '{"puissance": "130W", "surface_travail": "1300x900mm", "vitesse_max": "600mm/s", "logiciel": "LightBurn / RDWorks", "refroidissement": "eau"}',
    NULL, true),
 
-  (2, 'Laser fermé 20/30W', 'laser-ferme-20-30w',
+  (2, 'SCL20 / SLC30', 'laser-ferme-20-30w',
    'Marquage laser fibre compact et précis',
    'Machine de gravure laser fibre, puissance de 20W ou 30W sur demande. Idéale pour le marquage en série de petites pièces en acier, aluminium, plastique, bois et cuir.',
    '{"Logiciel": "EzCad / Lightburn", "Puissance": "20/30W", "Vitesse max": "15000 mm/s", "Longueur d''onde": "1064 nm"}',
    NULL, false),
 
-  (3, 'Centre d''usinage miniature XH7115', 'centre-usinage-xh7115',
+  (3, 'SCS Series', 'centre-usinage-xh7115',
    'Centre d''usinage ultra compact',
    'Fraiseuse CNC 60x90cm robuste, structure acier soudé. Idéale pour la menuiserie, l''enseigne et le prototypage aluminium.',
    '{"surface_travail": "600x900mm", "course_z": "100mm", "broche": "2.2kW air", "precision": "0.1mm", "logiciel": "Mach3 / GRBL"}',
    NULL, true),
 
-  (4, 'MS series router', 'ms-series-router',
+  (4, 'MR Series', 'ms-series-router',
    'Découpe grande surface sur bois, plastiques et aluminium',
    'Table plasma CNC 150x300cm avec torche Hypertherm. Découpe acier, inox et aluminium. Idéale pour la serrurerie, la carrosserie et la métallerie.',
    '{"surface_travail": "1500x3000mm", "epaisseur_max": "20mm acier", "torche": "Hypertherm 45XP", "logiciel": "SheetCam + Mach3"}',
    NULL, true),
 
-  (3, 'Centre d''usinage miniature VMC540T', 'centre-usinage-vmc540t',
+  (3, 'MCS Series', 'centre-usinage-vmc540t',
    'Centre d''usinage vertical compact pour l''atelier',
    'Centre d''usinage vertical miniature, adapté aux petites séries et au prototypage en atelier.',
    '{}',
