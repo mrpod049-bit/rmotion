@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { sendNotification } from '@/lib/notify';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -12,6 +13,17 @@ export async function POST(req: NextRequest) {
   await pool.query(
     `INSERT INTO contacts (nom, email, sujet, message) VALUES ($1, $2, $3, $4)`,
     [nom, email, sujet || null, message]
+  );
+
+  await sendNotification(
+    'Nouveau message de contact — Rmotion',
+    [
+      { label: 'Nom', value: nom },
+      { label: 'Email', value: email },
+      { label: 'Sujet', value: sujet || '—' },
+      { label: 'Message', value: message },
+    ],
+    email
   );
 
   return NextResponse.json({ success: true });
