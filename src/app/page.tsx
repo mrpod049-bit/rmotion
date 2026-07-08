@@ -22,19 +22,19 @@ export default async function HomePage() {
           >
             {gamme.image ? (
               <>
-                {/* Image révélée en fondu au survol, pleine largeur (bords coïncidant avec le bandeau) */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                {/* Image : toujours visible sur mobile, révélée au survol sur desktop */}
+                <div className="absolute inset-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={gamme.image}
                     alt=""
                     aria-hidden
-                    className="h-full w-full object-cover"
-                    style={{ transform: gamme.transform }}
+                    className="h-full w-full object-cover gamme-img"
+                    style={gamme.transform ? ({ "--gamme-transform": gamme.transform } as React.CSSProperties) : undefined}
                   />
                 </div>
-                {/* Voile bleuté qui apparaît lui aussi en fondu par-dessus l'image */}
-                <div className="absolute inset-0 bg-[#0b2239]/55 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                {/* Voile bleuté (même opacité) : toujours visible sur mobile, au survol sur desktop */}
+                <div className="absolute inset-0 bg-[#0b2239]/55 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
               </>
             ) : (
               <>
@@ -46,16 +46,16 @@ export default async function HomePage() {
               </>
             )}
             <div className="relative z-10 max-w-xl">
-              <p className="text-xs uppercase tracking-widest text-gray-400 group-hover:text-gray-300 mb-2 transition-colors">
+              <p className="text-xs uppercase tracking-widest text-gray-300 lg:text-gray-400 lg:group-hover:text-gray-300 mb-2 transition-colors">
                 Gamme
               </p>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 group-hover:text-white mb-2 transition-colors">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-white lg:text-gray-900 lg:group-hover:text-white mb-2 transition-colors">
                 {gamme.label}
               </h2>
-              <p className="text-sm text-gray-500 group-hover:text-gray-300 mb-4 transition-colors">
+              <p className="text-sm text-gray-200 lg:text-gray-500 lg:group-hover:text-gray-300 mb-4 transition-colors">
                 {gamme.desc}
               </p>
-              <span className="text-sm text-gray-900 group-hover:text-white underline transition-colors">
+              <span className="text-sm text-white lg:text-gray-900 lg:group-hover:text-white underline transition-colors">
                 Voir les produits →
               </span>
             </div>

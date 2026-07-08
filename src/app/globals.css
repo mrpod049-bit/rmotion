@@ -3,3 +3,14 @@
 :root {
   --font-geist-sans: "Geist", sans-serif;
 }
+
+/* Décalage/zoom des images de bandeau : appliqué seulement sur desktop.
+   Sur mobile (bandeau étroit), l'image remplit sans décalage pour éviter les bords vides. */
+.gamme-img {
+  transform: none;
+}
+@media (min-width: 1024px) {
+  .gamme-img {
+    transform: var(--gamme-transform, none);
+  }
+}
