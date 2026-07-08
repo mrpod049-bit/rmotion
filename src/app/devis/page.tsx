@@ -45,11 +45,11 @@ function DevisForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Nom *" name="nom" value={form.nom} onChange={handleChange} required />
         <Field label="Société" name="societe" value={form.societe} onChange={handleChange} />
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Email *" name="email" type="email" value={form.email} onChange={handleChange} required />
         <Field label="Téléphone" name="telephone" value={form.telephone} onChange={handleChange} />
       </div>

@@ -88,19 +88,19 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[#0b2239]/55" />
 
       {/* Contenu */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-28">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 sm:py-24 lg:py-28">
         <p className="text-sm uppercase tracking-widest text-gray-300 mb-4">Machines laser &amp; CNC</p>
-        <h1 className="text-5xl font-semibold leading-tight mb-6 max-w-2xl">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight mb-6 max-w-2xl">
           Machines compétitives, pensées pour votre entreprise
         </h1>
         <p className="text-gray-200 text-lg mb-10 max-w-xl">
           Rmotion conçoit et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
         </p>
-        <div className="flex gap-4">
-          <Link href="/machines" className="bg-white text-gray-900 px-6 py-3 rounded font-medium hover:bg-gray-100 transition-colors">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <Link href="/machines" className="bg-white text-gray-900 px-6 py-3 rounded font-medium text-center hover:bg-gray-100 transition-colors">
             Voir le catalogue
           </Link>
-          <Link href="/devis" className="border border-gray-300 text-white px-6 py-3 rounded hover:border-white hover:bg-white/10 transition-colors">
+          <Link href="/devis" className="border border-gray-300 text-white px-6 py-3 rounded text-center hover:border-white hover:bg-white/10 transition-colors">
             Demander un devis
           </Link>
         </div>

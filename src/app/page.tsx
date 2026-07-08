@@ -18,7 +18,7 @@ export default async function HomePage() {
           <Link
             key={gamme.label}
             href={gamme.href}
-            className={`group relative flex items-center h-56 px-12 bg-gray-100 border-b last:border-b-0 border-gray-200 overflow-hidden transition-colors ${gamme.image ? "" : "hover:bg-gray-900"}`}
+            className={`group relative flex items-center h-56 px-6 sm:px-12 bg-gray-100 border-b last:border-b-0 border-gray-200 overflow-hidden transition-colors ${gamme.image ? "" : "hover:bg-gray-900"}`}
           >
             {gamme.image ? (
               <>
@@ -49,7 +49,7 @@ export default async function HomePage() {
               <p className="text-xs uppercase tracking-widest text-gray-400 group-hover:text-gray-300 mb-2 transition-colors">
                 Gamme
               </p>
-              <h2 className="text-3xl font-semibold text-gray-900 group-hover:text-white mb-2 transition-colors">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 group-hover:text-white mb-2 transition-colors">
                 {gamme.label}
               </h2>
               <p className="text-sm text-gray-500 group-hover:text-gray-300 mb-4 transition-colors">
@@ -65,7 +65,7 @@ export default async function HomePage() {
 
       {/* Promesse */}
       <section className="bg-gray-50 border-y border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-3 gap-10 text-sm">
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 text-sm">
           <div>
             <p className="font-semibold text-gray-900 mb-2">Sélection rigoureuse</p>
             <p className="text-gray-500">Nous testons chaque machine avant de la proposer. Que du matériel fiable, avec support pièces disponible.</p>

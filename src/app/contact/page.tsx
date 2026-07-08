@@ -39,7 +39,7 @@ export default function ContactPage() {
       <p className="text-gray-500 mb-10">Une question sur une machine, un projet ou une commande ? Écrivez-nous.</p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {[{ label: "Nom *", name: "nom", required: true }, { label: "Email *", name: "email", required: true }].map((f) => (
             <div key={f.name}>
               <label className="block text-sm font-medium text-gray-700 mb-1">{f.label}</label>
