@@ -1,7 +1,7 @@
 import pool from "@/lib/db";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Admin — Rmotion" };
+export const metadata = { title: "Admin", robots: { index: false, follow: false } };
 
 async function getData() {
   const devis = await pool.query(

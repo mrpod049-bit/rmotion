@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Notre philosophie — Rmotion",
+  title: "Notre philosophie",
   description:
     "Compétitivité pour les petites entreprises : des machines laser et CNC compactes, industrielles et à coût maîtrisé.",
 };

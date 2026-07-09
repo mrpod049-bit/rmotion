@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cache } from "react";
+import type { Metadata } from "next";
 import pool from "@/lib/db";
 
 // Taille d'affichage de la photo dans son cadre (% du cadre). Défaut : 100.
@@ -7,7 +9,7 @@ const DETAIL_SCALE: Record<string, number> = {
   "laser-ferme-20-30w": 70,
 };
 
-async function getMachine(slug: string) {
+const getMachine = cache(async (slug: string) => {
   const res = await pool.query(
     `SELECT m.*, c.name as category, c.type
      FROM machines m
@@ -16,6 +18,32 @@ async function getMachine(slug: string) {
     [slug]
   );
   return res.rows[0] || null;
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const machine = await getMachine(slug);
+  if (!machine) return { title: "Produit introuvable" };
+  const desc: string =
+    (machine.description ? String(machine.description).split("\n")[0] : "") ||
+    machine.tagline ||
+    "";
+  const image: string | undefined = machine.images?.[0];
+  return {
+    title: `${machine.name} — ${machine.category}`,
+    description: desc,
+    alternates: { canonical: `/machines/${slug}` },
+    openGraph: {
+      title: `${machine.name} — Rmotion`,
+      description: desc,
+      url: `https://www.rmotion.fr/machines/${slug}`,
+      images: image ? [{ url: image }] : undefined,
+    },
+  };
 }
 
 export default async function MachinePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -30,8 +58,26 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     ? (rawSpecs as { label: string; value: string }[]).map((s) => [s.label, s.value])
     : Object.entries((rawSpecs ?? {}) as Record<string, string>);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: machine.name,
+    description: machine.description
+      ? String(machine.description).replace(/\n+/g, " ")
+      : machine.tagline || "",
+    category: machine.category,
+    ...(machine.images?.[0]
+      ? { image: `https://www.rmotion.fr${machine.images[0]}` }
+      : {}),
+    brand: { "@type": "Brand", name: "Rmotion" },
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <Link href="/machines" className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">← Retour au catalogue</Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">

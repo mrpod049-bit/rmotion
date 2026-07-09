@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Votre projet — Rmotion",
+  title: "Votre projet",
   description:
     "De l'idée de départ à la mise en production : Rmotion vous accompagne pour vos machines sur mesure et applications spécifiques.",
 };

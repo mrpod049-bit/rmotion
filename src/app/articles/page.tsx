@@ -1,6 +1,13 @@
 import Link from "next/link";
 import pool from "@/lib/db";
 
+export const metadata = {
+  title: "Articles",
+  description:
+    "Guides techniques Rmotion : laser CO2 vs fibre, CNC bois ou métal, ROI d'une machine — pour bien choisir votre équipement laser ou CNC.",
+  alternates: { canonical: "/articles" },
+};
+
 async function getArticles() {
   const res = await pool.query(
     `SELECT id, title, slug, excerpt, category, published_at

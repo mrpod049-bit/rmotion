@@ -1,6 +1,13 @@
 import Link from "next/link";
 import pool from "@/lib/db";
 
+export const metadata = {
+  title: "Catalogue",
+  description:
+    "Machines laser fibre et centres d'usinage CNC compacts pour PME et TPE : gravure, découpe, fraisage. Solutions compétitives, devis sur mesure.",
+  alternates: { canonical: "/machines" },
+};
+
 // Taille d'affichage de la photo dans sa cellule (% de la cellule). Défaut : 85.
 const IMG_SCALE: Record<string, number> = {
   "laser-ferme-20-30w": 70,
