@@ -113,8 +113,8 @@ UPDATE machines SET images = ARRAY['/gammes/cnc-1.jpg']::text[] WHERE slug = 'ms
 UPDATE machines SET images = ARRAY['/gammes/cnc-2.jpg']::text[] WHERE slug = 'centre-usinage-xh7115';
 
 INSERT INTO articles (title, slug, excerpt, category, published, published_at) VALUES
-  ('Laser CO2 vs Laser Fibre : lequel choisir ?', 'laser-co2-vs-fibre',
-   'Comprendre les différences techniques et savoir quel laser correspond à votre activité.',
+  ('CO2, fibre, UV, quel laser choisir ?', 'co2-fibre-uv-quel-laser-choisir',
+   'CO2, fibre ou UV : comprendre les trois grandes familles de laser et choisir celui qui correspond à votre activité.',
    'Technologie laser', true, NOW()),
 
   ('CNC bois ou CNC métal : les critères de choix', 'cnc-bois-vs-metal',
