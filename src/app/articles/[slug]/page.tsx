@@ -40,7 +40,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!article) notFound();
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
+    <div className="max-w-4xl mx-auto px-6 py-16">
       <Link href="/articles" className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">← Retour aux articles</Link>
       <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{article.category}</p>
       <h1 className="text-3xl font-semibold mb-4">{article.title}</h1>
