@@ -65,18 +65,14 @@ export default async function HomePage() {
 
       {/* Promesse */}
       <section className="bg-gray-50 border-y border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 text-sm">
-          <div>
-            <p className="font-semibold text-gray-900 mb-2">Sélection rigoureuse</p>
-            <p className="text-gray-500">Nous testons chaque machine avant de la proposer. Que du matériel fiable, avec support pièces disponible.</p>
-          </div>
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10 text-sm">
           <div>
             <p className="font-semibold text-gray-900 mb-2">Devis sur mesure</p>
-            <p className="text-gray-500">Pas de prix catalogue fixe. Chaque atelier a ses besoins — nous adaptons la configuration et le budget.</p>
+            <p className="text-gray-500">Nous nous adaptons à vos contraintes techniques et budgétaires pour vous proposer la meilleure solution possible.</p>
           </div>
           <div>
             <p className="font-semibold text-gray-900 mb-2">Accompagnement technique</p>
-            <p className="text-gray-500">Installation, prise en main, formation : nous ne livrons pas une machine, nous mettons en place un outil de production.</p>
+            <p className="text-gray-500">Nous assurons la mise en place, l&apos;accompagnement et la formation au besoin.</p>
           </div>
         </div>
       </section>

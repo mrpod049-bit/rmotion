@@ -20,6 +20,7 @@ export default function Footer() {
         <div>
           <p className="font-semibold text-gray-900 mb-2">Contact</p>
           <p>contact@rmotion.fr</p>
+          <p><a href="tel:+33781492685" className="hover:text-gray-900">+33 7 81 49 26 85</a></p>
         </div>
       </div>
       <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">
