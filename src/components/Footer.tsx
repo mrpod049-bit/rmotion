@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ContactLinks from "@/components/ContactLinks";
 
 export default function Footer() {
   return (
@@ -12,15 +13,14 @@ export default function Footer() {
           <p className="font-semibold text-gray-900 mb-2">Navigation</p>
           <ul className="space-y-1">
             <li><Link href="/machines" className="hover:text-gray-900">Catalogue</Link></li>
-            <li><Link href="/articles" className="hover:text-gray-900">Articles</Link></li>
+            <li><Link href="/articles" className="hover:text-gray-900">Documentation</Link></li>
             <li><Link href="/devis" className="hover:text-gray-900">Devis</Link></li>
             <li><Link href="/contact" className="hover:text-gray-900">Contact</Link></li>
           </ul>
         </div>
         <div>
           <p className="font-semibold text-gray-900 mb-2">Contact</p>
-          <p>contact@rmotion.fr</p>
-          <p><a href="tel:+33781492685" className="hover:text-gray-900">+33 7 81 49 26 85</a></p>
+          <ContactLinks />
         </div>
       </div>
       <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">

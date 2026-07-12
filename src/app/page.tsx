@@ -49,7 +49,7 @@ export default async function HomePage() {
               <p className="text-xs uppercase tracking-widest text-gray-300 lg:text-gray-400 lg:group-hover:text-gray-300 mb-2 transition-colors">
                 Gamme
               </p>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-white lg:text-gray-900 lg:group-hover:text-white mb-2 transition-colors">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white lg:text-gray-900 lg:group-hover:text-white mb-2 transition-colors">
                 {gamme.label}
               </h2>
               <p className="text-sm text-gray-200 lg:text-gray-500 lg:group-hover:text-gray-300 mb-4 transition-colors">

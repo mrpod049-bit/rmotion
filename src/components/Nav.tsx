@@ -8,9 +8,7 @@ const links = [
   { href: "/machines", label: "Produits" },
   { href: "/projet", label: "Votre projet" },
   { href: "/philosophie", label: "Notre philosophie" },
-  { href: "/articles", label: "Articles" },
-  { href: "/devis", label: "Devis" },
-  { href: "/contact", label: "Contact" },
+  { href: "/articles", label: "Documentation" },
 ];
 
 export default function Nav() {
@@ -20,26 +18,26 @@ export default function Nav() {
 
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-10 h-20 lg:h-24 flex items-stretch justify-between">
-        <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+      <div className="max-w-screen-2xl mx-auto px-6 xl:px-10 h-20 xl:h-24 flex items-stretch justify-between gap-4">
+        <Link href="/" className="flex items-center shrink-0" onClick={() => setOpen(false)}>
           <Image
             src="/logo.png"
             alt="Rmotion"
             height={80}
             width={291}
-            className="h-12 sm:h-16 lg:h-20 w-auto object-contain"
+            className="h-12 sm:h-16 xl:h-20 w-auto object-contain"
             priority
             quality={100}
           />
         </Link>
 
         {/* Navigation desktop */}
-        <nav className="hidden lg:flex items-stretch gap-4">
+        <nav className="hidden xl:flex items-stretch">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`text-sm px-8 flex items-center transition-colors ${
+              className={`text-base px-5 flex items-center transition-colors ${
                 active(l.href)
                   ? "bg-gray-900 text-white font-medium"
                   : "text-gray-500 hover:bg-gray-900 hover:text-white"
@@ -50,7 +48,7 @@ export default function Nav() {
           ))}
           <Link
             href="/devis"
-            className="ml-2 flex items-center px-6 bg-gray-900 text-white text-sm hover:bg-gray-700 transition-colors"
+            className="flex items-center px-5 bg-gray-900 text-white text-base hover:bg-gray-700 transition-colors"
           >
             Demander un devis
           </Link>
@@ -62,7 +60,7 @@ export default function Nav() {
           onClick={() => setOpen((o) => !o)}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={open}
-          className="lg:hidden flex items-center px-2 text-gray-900"
+          className="xl:hidden flex items-center px-2 text-gray-900"
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             {open ? (
@@ -83,7 +81,7 @@ export default function Nav() {
 
       {/* Menu déroulant mobile */}
       {open && (
-        <nav className="lg:hidden border-t border-gray-200 bg-white">
+        <nav className="xl:hidden border-t border-gray-200 bg-white">
           {links.map((l) => (
             <Link
               key={l.href}

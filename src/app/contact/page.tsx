@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import ContactLinks from "@/components/ContactLinks";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ nom: "", email: "", sujet: "", message: "" });
@@ -77,12 +78,7 @@ export default function ContactPage() {
 
       <div className="mt-12 pt-8 border-t border-gray-200 text-sm text-gray-600">
         <p className="font-medium text-gray-900 mb-3">Nous joindre directement</p>
-        <p className="mb-1">
-          <a href="mailto:contact@rmotion.fr" className="hover:text-gray-900">contact@rmotion.fr</a>
-        </p>
-        <p>
-          <a href="tel:+33781492685" className="hover:text-gray-900">+33 7 81 49 26 85</a>
-        </p>
+        <ContactLinks />
       </div>
     </div>
   );
