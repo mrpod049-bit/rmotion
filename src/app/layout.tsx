@@ -53,8 +53,18 @@ const organizationJsonLd = {
   name: "Rmotion",
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
+  image: `${SITE_URL}/logo.png`,
   email: "contact@rmotion.fr",
+  telephone: "+33781492685",
   description: DESCRIPTION,
+  areaServed: "FR",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+33781492685",
+    email: "contact@rmotion.fr",
+    contactType: "sales",
+    availableLanguage: ["French"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

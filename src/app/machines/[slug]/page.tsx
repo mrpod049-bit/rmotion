@@ -72,11 +72,25 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     brand: { "@type": "Brand", name: "Rmotion" },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.rmotion.fr" },
+      { "@type": "ListItem", position: 2, name: "Catalogue", item: "https://www.rmotion.fr/machines" },
+      { "@type": "ListItem", position: 3, name: machine.name, item: `https://www.rmotion.fr/machines/${slug}` },
+    ],
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Link href="/machines" className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">← Retour au catalogue</Link>
 
