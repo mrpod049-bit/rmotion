@@ -19,7 +19,7 @@ export default function Nav() {
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-screen-2xl mx-auto pl-4 pr-4 xl:pl-0 xl:pr-8 h-20 xl:h-24 flex items-stretch justify-between gap-2 xl:gap-0">
-        <Link href="/" className="flex items-center shrink-0 xl:-ml-[10px]" onClick={() => setOpen(false)}>
+        <Link href="/" className="flex items-center shrink-0 xl:-ml-[10px] xl:-translate-x-10" onClick={() => setOpen(false)}>
           <Image
             src="/logo.png"
             alt="Rmotion"
