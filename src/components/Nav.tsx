@@ -32,12 +32,12 @@ export default function Nav() {
         </Link>
 
         {/* Navigation desktop — étalée sur tout l'espace entre le logo et le bord */}
-        <nav className="hidden xl:flex flex-1 items-stretch justify-between xl:ml-10">
+        <nav className="hidden xl:flex flex-1 items-stretch xl:ml-10">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`text-[1.4rem] px-3 flex items-center transition-colors ${
+              className={`flex-1 text-[1.4rem] px-3 flex items-center justify-center text-center whitespace-nowrap transition-colors ${
                 active(l.href)
                   ? "bg-gray-900 text-white font-medium"
                   : "text-gray-500 hover:bg-gray-900 hover:text-white"
@@ -48,7 +48,7 @@ export default function Nav() {
           ))}
           <Link
             href="/devis"
-            className="flex items-center px-3 bg-gray-900 text-white text-[1.4rem] hover:bg-gray-700 transition-colors"
+            className="flex items-center px-6 bg-gray-900 text-white text-[1.4rem] whitespace-nowrap hover:bg-gray-700 transition-colors"
           >
             Demander un devis
           </Link>
