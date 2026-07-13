@@ -18,26 +18,26 @@ export default function Nav() {
 
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="max-w-screen-2xl mx-auto px-6 xl:px-10 h-20 xl:h-24 flex items-stretch justify-between gap-4">
+      <div className="max-w-screen-2xl mx-auto pl-4 pr-4 xl:pl-5 xl:pr-8 h-20 xl:h-24 flex items-stretch justify-between gap-2">
         <Link href="/" className="flex items-center shrink-0" onClick={() => setOpen(false)}>
           <Image
             src="/logo.png"
             alt="Rmotion"
             height={80}
             width={291}
-            className="h-12 sm:h-16 xl:h-20 w-auto object-contain"
+            className="h-12 sm:h-16 2xl:h-20 w-auto object-contain"
             priority
             quality={100}
           />
         </Link>
 
-        {/* Navigation desktop */}
-        <nav className="hidden xl:flex items-stretch">
+        {/* Navigation desktop — étalée sur tout l'espace entre le logo et le bord */}
+        <nav className="hidden xl:flex flex-1 items-stretch justify-between">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`text-base px-5 flex items-center transition-colors ${
+              className={`text-[1.4rem] px-3 flex items-center transition-colors ${
                 active(l.href)
                   ? "bg-gray-900 text-white font-medium"
                   : "text-gray-500 hover:bg-gray-900 hover:text-white"
@@ -48,7 +48,7 @@ export default function Nav() {
           ))}
           <Link
             href="/devis"
-            className="flex items-center px-5 bg-gray-900 text-white text-base hover:bg-gray-700 transition-colors"
+            className="flex items-center px-3 bg-gray-900 text-white text-[1.4rem] hover:bg-gray-700 transition-colors"
           >
             Demander un devis
           </Link>
