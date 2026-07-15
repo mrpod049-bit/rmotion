@@ -78,14 +78,16 @@ export default async function HomePage() {
       </section>
 
       {/* CTA articles */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="flex items-baseline justify-between mb-6">
-          <h2 className="text-2xl font-semibold">Comprendre les technologies</h2>
-          <Link href="/articles" className="text-sm text-gray-500 hover:text-gray-900">Tous les articles →</Link>
+      <section className="bg-[#0f3151] text-white">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="text-2xl font-semibold">Comprendre les technologies</h2>
+            <Link href="/articles" className="text-sm text-gray-300 hover:text-white">Tous les articles →</Link>
+          </div>
+          <p className="text-gray-200 max-w-xl">
+            Laser CO2, fibre, CNC bois ou métal — nos guides techniques pour choisir le bon outil sans vous noyer dans les specs.
+          </p>
         </div>
-        <p className="text-gray-500 max-w-xl">
-          Laser CO2, fibre, CNC bois ou métal — nos guides techniques pour choisir le bon outil sans vous noyer dans les specs.
-        </p>
       </section>
     </>
   );
