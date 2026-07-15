@@ -29,6 +29,8 @@ export default function Footer() {
         <Link href="/cgu" className="hover:text-gray-900">CGU</Link>
         <span className="mx-2">·</span>
         <Link href="/confidentialite" className="hover:text-gray-900">Politique de confidentialité</Link>
+        <span className="mx-2">·</span>
+        <Link href="/mentions-legales" className="hover:text-gray-900">Mentions légales</Link>
       </div>
     </footer>
   );

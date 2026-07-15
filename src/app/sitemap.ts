@@ -4,7 +4,7 @@ import pool from "@/lib/db";
 const SITE = "https://www.rmotion.fr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["", "/machines", "/projet", "/philosophie", "/articles", "/devis", "/contact", "/cgu", "/confidentialite"];
+  const staticPaths = ["", "/machines", "/projet", "/philosophie", "/articles", "/devis", "/contact", "/cgu", "/confidentialite", "/mentions-legales"];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
     url: `${SITE}${p}`,
     lastModified: new Date(),
