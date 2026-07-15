@@ -20,7 +20,7 @@ export default function Footer() {
         </div>
         <div>
           <p className="font-semibold text-gray-900 mb-2">Contact</p>
-          <ContactLinks imgClassName="h-2.5 w-auto" />
+          <ContactLinks imgClassName="h-4 w-auto" />
         </div>
       </div>
       <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">
