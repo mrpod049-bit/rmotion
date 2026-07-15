@@ -25,6 +25,8 @@ export default function Footer() {
       </div>
       <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">
         © {new Date().getFullYear()} Rmotion — Tous droits réservés
+        <span className="mx-2">·</span>
+        <Link href="/cgu" className="hover:text-gray-900">CGU</Link>
       </div>
     </footer>
   );
