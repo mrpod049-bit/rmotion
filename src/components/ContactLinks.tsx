@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-export default function ContactLinks() {
+export default function ContactLinks({ imgClassName = "h-5 w-auto" }: { imgClassName?: string }) {
   // Adresse et numéro assemblés au clic → absents du HTML source (anti-scraping).
   const openMail = () => {
     window.location.href = "mailto:" + ["contact", "rmotion.fr"].join("@");
@@ -18,7 +18,7 @@ export default function ContactLinks() {
         aria-label="Envoyer un email à Rmotion"
         className="block hover:opacity-70 transition-opacity cursor-pointer"
       >
-        <Image src="/contact-email.png" alt="Adresse email Rmotion" width={439} height={49} className="h-5 w-auto" />
+        <Image src="/contact-email.png" alt="Adresse email Rmotion" width={439} height={49} className={imgClassName} />
       </button>
       <button
         type="button"
@@ -26,7 +26,7 @@ export default function ContactLinks() {
         aria-label="Appeler Rmotion"
         className="block hover:opacity-70 transition-opacity cursor-pointer"
       >
-        <Image src="/contact-phone.png" alt="Numéro de téléphone Rmotion" width={417} height={39} className="h-5 w-auto" />
+        <Image src="/contact-phone.png" alt="Numéro de téléphone Rmotion" width={417} height={39} className={imgClassName} />
       </button>
     </div>
   );
