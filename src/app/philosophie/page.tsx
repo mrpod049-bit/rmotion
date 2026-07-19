@@ -29,7 +29,17 @@ export default function PhilosophiePage() {
       <section className="max-w-3xl mx-auto px-6 py-20">
         <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
           {paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
+            <div key={i}>
+              <p>{p}</p>
+              {i === 2 && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src="/philosophie-projet.jpg"
+                  alt="Conception et planification d'un projet sur mesure"
+                  className="w-full rounded-lg mt-8"
+                />
+              )}
+            </div>
           ))}
         </div>
       </section>

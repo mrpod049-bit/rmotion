@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm text-gray-500">
         <div>
           <p className="font-semibold text-gray-900 mb-2">Rmotion</p>
-          <p>Machines laser et CNC pour PME et TPE.</p>
+          <p>Machines outils Laser &amp; CNC</p>
         </div>
         <div>
           <p className="font-semibold text-gray-900 mb-2">Navigation</p>
@@ -20,7 +20,7 @@ export default function Footer() {
         </div>
         <div>
           <p className="font-semibold text-gray-900 mb-2">Contact</p>
-          <ContactLinks imgClassName="h-4 w-auto" />
+          <ContactLinks imgClassName="h-[13px] w-auto" />
         </div>
       </div>
       <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">
