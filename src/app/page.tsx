@@ -18,7 +18,7 @@ export default async function HomePage() {
           <Link
             key={gamme.label}
             href={gamme.href}
-            className="group relative flex items-center h-56 px-6 sm:px-12 bg-[#2470a8] border-b last:border-b-0 border-white/10 overflow-hidden"
+            className="group relative flex items-center h-56 px-6 sm:px-12 bg-[#206599] border-b last:border-b-0 border-white/10 overflow-hidden"
           >
             {gamme.image ? (
               <>
@@ -34,7 +34,7 @@ export default async function HomePage() {
                   />
                 </div>
                 {/* Voile bleuté (même opacité) : toujours visible sur mobile, au survol sur desktop */}
-                <div className="absolute inset-0 bg-[#2470a8]/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-[#206599]/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
               </>
             ) : (
               <>
