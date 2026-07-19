@@ -64,17 +64,14 @@ export default async function HomePage() {
       </section>
 
       {/* CTA articles */}
-      <section className="bg-[#0f3151] text-white">
+      <Link href="/articles" className="block bg-[#0f3151] text-white hover:bg-[#0c2840] transition-colors">
         <div className="max-w-6xl mx-auto px-6 py-20">
-          <div className="flex items-baseline justify-between mb-6">
-            <h2 className="text-2xl font-semibold">Comprendre les technologies</h2>
-            <Link href="/articles" className="text-sm text-gray-300 hover:text-white">Tous les articles →</Link>
-          </div>
+          <h2 className="text-2xl font-semibold mb-4">Comprendre les technologies</h2>
           <p className="text-gray-200 max-w-xl">
-            Laser CO2, fibre, CNC bois ou métal — nos guides techniques pour choisir le bon outil sans vous noyer dans les specs.
+            Types de lasers, quelle solution d&apos;usinage choisir, consultez nos guides techniques
           </p>
         </div>
-      </section>
+      </Link>
 
       {/* Promesse */}
       <section className="bg-gray-50 border-y border-gray-200">
