@@ -18,7 +18,7 @@ export default async function HomePage() {
           <Link
             key={gamme.label}
             href={gamme.href}
-            className="group relative flex items-center h-56 px-6 sm:px-12 bg-[#0f3151] border-b last:border-b-0 border-white/10 overflow-hidden"
+            className="group relative flex items-center h-56 px-6 sm:px-12 bg-[#1b5a8a] border-b last:border-b-0 border-white/10 overflow-hidden"
           >
             {gamme.image ? (
               <>
@@ -34,7 +34,7 @@ export default async function HomePage() {
                   />
                 </div>
                 {/* Voile bleuté (même opacité) : toujours visible sur mobile, au survol sur desktop */}
-                <div className="absolute inset-0 bg-[#0f3151]/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-[#1b5a8a]/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
               </>
             ) : (
               <>
@@ -65,9 +65,9 @@ export default async function HomePage() {
 
       {/* CTA articles */}
       <Link href="/articles" className="block bg-[#0f3151] text-white hover:bg-[#0c2840] transition-colors">
-        <div className="max-w-6xl mx-auto px-6 py-20">
+        <div className="max-w-6xl mx-auto px-6 py-20 text-center">
           <h2 className="text-2xl font-semibold mb-4">Comprendre les technologies</h2>
-          <p className="text-gray-200 max-w-xl">
+          <p className="text-gray-200 max-w-xl mx-auto">
             Types de lasers, quelle solution d&apos;usinage choisir, consultez nos guides techniques
           </p>
         </div>
