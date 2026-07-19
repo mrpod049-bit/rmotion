@@ -18,7 +18,7 @@ export default async function HomePage() {
           <Link
             key={gamme.label}
             href={gamme.href}
-            className={`group relative flex items-center h-56 px-6 sm:px-12 bg-gray-100 border-b last:border-b-0 border-gray-200 overflow-hidden transition-colors ${gamme.image ? "" : "hover:bg-gray-900"}`}
+            className="group relative flex items-center h-56 px-6 sm:px-12 bg-[#0f3151] border-b last:border-b-0 border-white/10 overflow-hidden"
           >
             {gamme.image ? (
               <>
@@ -34,7 +34,7 @@ export default async function HomePage() {
                   />
                 </div>
                 {/* Voile bleuté (même opacité) : toujours visible sur mobile, au survol sur desktop */}
-                <div className="absolute inset-0 bg-[#0b2239]/55 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-[#0f3151]/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
               </>
             ) : (
               <>
@@ -46,16 +46,16 @@ export default async function HomePage() {
               </>
             )}
             <div className="relative z-10 max-w-xl">
-              <p className="text-xs uppercase tracking-widest text-gray-300 lg:text-gray-400 lg:group-hover:text-gray-300 mb-2 transition-colors">
+              <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">
                 Gamme
               </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white lg:text-gray-900 lg:group-hover:text-white mb-2 transition-colors">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-2">
                 {gamme.label}
               </h2>
-              <p className="text-sm text-gray-200 lg:text-gray-500 lg:group-hover:text-gray-300 mb-4 transition-colors">
+              <p className="text-sm text-gray-200 mb-4">
                 {gamme.desc}
               </p>
-              <span className="text-sm text-white lg:text-gray-900 lg:group-hover:text-white underline transition-colors">
+              <span className="text-sm text-white underline">
                 Voir les produits →
               </span>
             </div>
