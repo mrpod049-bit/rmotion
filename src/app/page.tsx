@@ -18,7 +18,7 @@ export default async function HomePage() {
           <Link
             key={gamme.label}
             href={gamme.href}
-            className="group relative flex items-center h-56 px-6 sm:px-12 bg-[#184f79] border-b last:border-b-0 border-white/10 overflow-hidden"
+            className="group relative flex items-center h-56 px-6 sm:px-12 bg-white border-b last:border-b-0 border-gray-200 overflow-hidden"
           >
             {gamme.image ? (
               <>
@@ -46,16 +46,16 @@ export default async function HomePage() {
               </>
             )}
             <div className="relative z-10 max-w-xl">
-              <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">
+              <p className="text-xs uppercase tracking-widest text-gray-200 lg:text-[#184f79]/70 lg:group-hover:text-gray-200 mb-2 transition-colors">
                 Gamme
               </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-2">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white lg:text-[#184f79] lg:group-hover:text-white mb-2 transition-colors">
                 {gamme.label}
               </h2>
-              <p className="text-sm text-gray-200 mb-4">
+              <p className="text-sm text-gray-200 lg:text-gray-600 lg:group-hover:text-gray-200 mb-4 transition-colors">
                 {gamme.desc}
               </p>
-              <span className="text-sm text-white underline">
+              <span className="text-sm text-white lg:text-[#184f79] lg:group-hover:text-white underline transition-colors">
                 Voir les produits →
               </span>
             </div>
@@ -64,10 +64,10 @@ export default async function HomePage() {
       </section>
 
       {/* CTA articles */}
-      <Link href="/articles" className="block bg-[#0f3151] text-white hover:bg-[#0c2840] transition-colors">
+      <Link href="/articles" className="block bg-white text-[#0f3151] border-y border-gray-200 hover:bg-gray-50 transition-colors">
         <div className="max-w-6xl mx-auto px-6 py-20 text-center">
           <h2 className="text-2xl font-semibold mb-4">Comprendre les technologies</h2>
-          <p className="text-gray-200 max-w-xl mx-auto">
+          <p className="text-gray-600 max-w-xl mx-auto">
             Types de lasers, quelle solution d&apos;usinage choisir, consultez nos guides techniques
           </p>
         </div>
