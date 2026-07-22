@@ -33,8 +33,8 @@ export default async function HomePage() {
                     style={gamme.transform ? ({ "--gamme-transform": gamme.transform } as React.CSSProperties) : undefined}
                   />
                 </div>
-                {/* Voile bleuté (même opacité) : toujours visible sur mobile, au survol sur desktop */}
-                <div className="absolute inset-0 bg-[#0f3151]/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
+                {/* Dégradé neutre pour la lisibilité du texte (pas de teinte bleue sur l'image) */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-700" />
               </>
             ) : (
               <>
