@@ -58,6 +58,10 @@ const organizationJsonLd = {
   telephone: "+33781492685",
   description: DESCRIPTION,
   areaServed: "FR",
+  sameAs: [
+    "https://www.instagram.com/rmotion.fr/",
+    "https://www.linkedin.com/company/rmotion/",
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+33781492685",
