@@ -20,13 +20,13 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 bg-gray-50 mt-16 sm:mt-24">
-      <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10 text-sm text-gray-500">
+    <footer className="bg-[#0d2f4e] text-gray-300 mt-16 sm:mt-24">
+      <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10 text-sm">
         {/* Marque + réseaux */}
         <div className="col-span-2 md:col-span-1">
-          <p className="font-semibold text-gray-900 mb-2">Rmotion</p>
+          <p className="font-semibold text-white mb-2">Rmotion</p>
           <p className="mb-4">Machines outils Laser &amp; CNC</p>
-          <p className="mb-5 max-w-xs">
+          <p className="mb-5 max-w-xs text-gray-400">
             Des machines laser fibre et centres d&apos;usinage CNC compacts, industriels et à coût maîtrisé pour les PME et TPE.
           </p>
           <div className="flex items-center gap-3">
@@ -37,7 +37,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-full border border-white/30 text-gray-200 hover:bg-white hover:text-[#0d2f4e] hover:border-white transition-colors"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                   {s.icon}
@@ -49,42 +49,42 @@ export default function Footer() {
 
         {/* Navigation */}
         <div>
-          <p className="font-semibold text-gray-900 mb-3">Navigation</p>
+          <p className="font-semibold text-white mb-3">Navigation</p>
           <ul className="space-y-2">
-            <li><Link href="/machines" className="hover:text-gray-900">Catalogue</Link></li>
-            <li><Link href="/articles" className="hover:text-gray-900">Documentation</Link></li>
-            <li><Link href="/devis" className="hover:text-gray-900">Devis</Link></li>
-            <li><Link href="/contact" className="hover:text-gray-900">Contact</Link></li>
+            <li><Link href="/machines" className="hover:text-white">Catalogue</Link></li>
+            <li><Link href="/articles" className="hover:text-white">Documentation</Link></li>
+            <li><Link href="/devis" className="hover:text-white">Devis</Link></li>
+            <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
           </ul>
         </div>
 
         {/* Découvrir */}
         <div>
-          <p className="font-semibold text-gray-900 mb-3">Découvrir</p>
+          <p className="font-semibold text-white mb-3">Découvrir</p>
           <ul className="space-y-2">
-            <li><Link href="/projet" className="hover:text-gray-900">Votre projet</Link></li>
-            <li><Link href="/philosophie" className="hover:text-gray-900">Notre philosophie</Link></li>
-            <li><Link href="/machines?type=gravure-laser" className="hover:text-gray-900">Gravure laser</Link></li>
-            <li><Link href="/machines?type=cnc" className="hover:text-gray-900">Fraisage &amp; CNC</Link></li>
+            <li><Link href="/projet" className="hover:text-white">Votre projet</Link></li>
+            <li><Link href="/philosophie" className="hover:text-white">Notre philosophie</Link></li>
+            <li><Link href="/machines?type=gravure-laser" className="hover:text-white">Gravure laser</Link></li>
+            <li><Link href="/machines?type=cnc" className="hover:text-white">Fraisage &amp; CNC</Link></li>
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <p className="font-semibold text-gray-900 mb-3">Contact</p>
-          <ContactLinks imgClassName="h-[13px] w-auto" />
+          <p className="font-semibold text-white mb-3">Contact</p>
+          <ContactLinks imgClassName="h-[13px] w-auto" light />
           <p className="mt-4">France</p>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">
+      <div className="border-t border-white/10 text-center py-4 text-xs text-gray-400">
         © {new Date().getFullYear()} Rmotion — Tous droits réservés
         <span className="mx-2">·</span>
-        <Link href="/cgu" className="hover:text-gray-900">CGU</Link>
+        <Link href="/cgu" className="hover:text-white">CGU</Link>
         <span className="mx-2">·</span>
-        <Link href="/confidentialite" className="hover:text-gray-900">Politique de confidentialité</Link>
+        <Link href="/confidentialite" className="hover:text-white">Politique de confidentialité</Link>
         <span className="mx-2">·</span>
-        <Link href="/mentions-legales" className="hover:text-gray-900">Mentions légales</Link>
+        <Link href="/mentions-legales" className="hover:text-white">Mentions légales</Link>
       </div>
     </footer>
   );
