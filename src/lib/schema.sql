@@ -71,37 +71,37 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
   (1, 'OL Series', 'laser-ouvert-30-100w',
    'La découpe laser CO2 accessible pour les ateliers',
    E'La machine de gravure laser OL Series est une machine très versatile, extrêmement compacte et pouvant offrir des niveaux de puissance très élevés. Sont disponibles en option :\n\n- 3eme axe\n- Source laser JPT\n- Jeu de lentilles F-Theta de 70x70mm à 200x200 mm',
-   '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"de 20 à 100W"},{"label":"Vitesse","value":"8000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"}]',
+   '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"de 20 à 100W"},{"label":"Vitesse","value":"8000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"},{"label":"Fréquence","value":"30 à 60 kHz (tube Raycus)"},{"label":"Fréquence","value":"1 à 600 kHz (tube JPT)"},{"label":"Surface de gravure","value":"70x70mm à 200x200mm"},{"label":"Puissance totale","value":"200W"},{"label":"Refroidissement","value":"Air"},{"label":"Poids total","value":"25 kg"}]',
    NULL, true),
 
   (1, 'BCL Series', 'laser-ferme-60-100w',
    'Grand format pour production en série',
    E'Les machines de gravure laser BCL Series sont conçues pour des productions en moyenne série de pièces volumineuses. Sont disponibles en option :\n\n- 3eme axe rotatif\n- Tube laser JPT\n- Jeu de lentilles F=Theta, de 70x70mm à 300x300mm',
-   '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"20W à 100W"},{"label":"Vitesse max","value":"9000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"}]',
+   '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"20W à 100W"},{"label":"Vitesse max","value":"9000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"},{"label":"Fréquence","value":"30 à 60 kHz (tube Raycus)"},{"label":"Fréquence","value":"1 à 600 kHz (tube JPT)"},{"label":"Puissance totale","value":"200W à 800W"},{"label":"Surface de gravure","value":"70x70mm à 300x300mm"},{"label":"Refroidissement","value":"Air"},{"label":"Poids total","value":"120 kg"}]',
    NULL, true),
 
   (1, 'SCL20 / SLC30', 'laser-ferme-20-30w',
    'Marquage laser fibre compact et précis',
    'Machine de gravure laser fibre, puissance de 20W ou 30W sur demande. Idéale pour le marquage en série de petites pièces en acier, aluminium, plastique, bois et cuir.',
-   '{"Logiciel": "EzCad / Lightburn", "Puissance": "20/30W", "Vitesse max": "15000 mm/s", "Longueur d''onde": "1064 nm"}',
+   '[{"label":"Logiciel","value":"EzCad / Lightburn"},{"label":"Puissance","value":"20/30W"},{"label":"Vitesse max","value":"15000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"},{"label":"Fréquence","value":"30 à 60 kHz (tube Raycus)"},{"label":"Fréquence","value":"1 à 600 kHz (tube JPT)"},{"label":"Surface de gravure","value":"70x70mm à 175x175mm"},{"label":"Puissance totale","value":"200W"},{"label":"Refroidissement","value":"Air"},{"label":"Poids total","value":"60 kg"}]',
    NULL, false),
 
   (4, 'SCS Series', 'centre-usinage-xh7115',
    'Fraiseuse plastique / métaux compacte',
    'Fraiseuse CNC 60x90cm robuste, structure acier soudé. Idéale pour la menuiserie, l''enseigne et le prototypage aluminium.',
-   '{"surface_travail": "600x900mm", "course_z": "100mm", "broche": "2.2kW air", "precision": "0.1mm", "logiciel": "Mach3 / GRBL"}',
+   '[{"label":"Surface de travail","value":"600x900x200"},{"label":"Puissance broche","value":"2.2 kW"},{"label":"Vitesse broche","value":"24k RPM"},{"label":"Refroidissement","value":"eau"},{"label":"Vitesse avance rapide","value":"12000 mm/min"},{"label":"Construction","value":"châssis en fonte rectifiée"},{"label":"Bridage","value":"étau ou brides simples"},{"label":"Poids total","value":"600 kg"},{"label":"Roulements linéaires","value":"à billes à recirculation"}]',
    NULL, true),
 
   (3, 'MR Series', 'ms-series-router',
    'Découpe grande surface sur bois, plastiques et aluminium',
    'Table plasma CNC 150x300cm avec torche Hypertherm. Découpe acier, inox et aluminium. Idéale pour la serrurerie, la carrosserie et la métallerie.',
-   '{"surface_travail": "1500x3000mm", "epaisseur_max": "20mm acier", "torche": "Hypertherm 45XP", "logiciel": "SheetCam + Mach3"}',
+   '[{"label":"Surface de travail","value":"1300x2500x300mm"},{"label":"Puissance broche","value":"3.2 kW"},{"label":"Refroidissement","value":"eau"},{"label":"Vitesse avance rapide","value":"15000 mm/min"},{"label":"Construction","value":"acier mécano-soudé"},{"label":"Bridage","value":"rails T-slot"},{"label":"Poids total","value":"1000 kg"},{"label":"Roulements linéaires","value":"à bille à recirculation"}]',
    NULL, true),
 
   (2, 'MCS Series', 'centre-usinage-vmc540t',
    'Centre d''usinage petit format',
    E'Le centre d''usinage miniature MCS Series est une machine polyvalente et facile à intégrer de part ses dimensions réduites.\n\nElle saura aisément traiter les plastiques techniques, ainsi que les métaux mêmes ferreux.\n\nOptions disponibles sur demande :\n- 4eme axe\n- Broche ISO 20\n- Contrôleur Keyuan 1000MC',
-   '[{"label":"Dimensions de travail","value":"230x130x260mm"},{"label":"Taille de table","value":"430x120mm"},{"label":"Puissance de broche","value":"2.2kW"},{"label":"Vitesse de broche","value":"24000 RPM"},{"label":"Type broche","value":"ISO 16"},{"label":"Contrôleur","value":"980MC"},{"label":"Précision tous axes","value":"±0.01mm"},{"label":"Répétabilité","value":"±0.015mm"},{"label":"Dimensions externes","value":"950x780x1100mm"}]',
+   '[{"label":"Surface de travail","value":"230x130x260mm"},{"label":"Puissance broche","value":"2.2 kW"},{"label":"Vitesse broche","value":"24k RPM"},{"label":"Refroidissement","value":"eau"},{"label":"Taille broche","value":"ISO20-ER16"},{"label":"Vitesse avance rapide","value":"8000 mm/min"},{"label":"Construction","value":"Fonte granitique rectifiée"},{"label":"Bridage","value":"T-Slots M8"},{"label":"Précision","value":"±0.01 mm"},{"label":"Répétabilité","value":"±0.015 mm"},{"label":"Puissance totale","value":"3.5kW"},{"label":"Poids total","value":"370 kg"}]',
    NULL, false);
 
 -- Photos des machines
