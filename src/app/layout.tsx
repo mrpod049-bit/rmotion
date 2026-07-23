@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import BackgroundPattern from "@/components/BackgroundPattern";
 import { Analytics } from "@vercel/analytics/next";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -73,15 +74,15 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${geist.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-white text-gray-900 antialiased font-sans">
+    <html lang="fr" className={`${geist.variable} h-full bg-white`}>
+      <body className="min-h-full flex flex-col text-gray-900 antialiased font-sans">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <div aria-hidden className="site-pattern" />
+        <BackgroundPattern />
         <Nav />
-        <main className="flex-1 relative z-10">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />
       </body>
