@@ -7,6 +7,24 @@
 
 /* Décalage/zoom des images de bandeau : appliqué seulement sur desktop.
    Sur mobile (bandeau étroit), l'image remplit sans décalage pour éviter les bords vides. */
+/* Fond de page : pictogrammes CNC/laser en filigrane, grille alternée inclinée à 45°.
+   Calque fixe derrière le contenu ; le fond blanc de la page reste la base. */
+.site-pattern {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("/pattern-tile.png");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  transform: rotate(45deg);
+  transform-origin: center;
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .gamme-img {
   transform: none;
 }
