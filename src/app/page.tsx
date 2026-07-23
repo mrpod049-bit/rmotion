@@ -11,7 +11,7 @@ export default async function HomePage() {
       {/* Gammes */}
       <section className="flex flex-col w-full">
         {[
-          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/engraving.png", transform: "translate(100px, 10px) scale(1.2)" },
+          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/gravure-laser.jpg", transform: undefined },
           { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier", image: "/gammes/milling.jpg", transform: undefined },
           { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble", image: "/gammes/design.jpg", transform: undefined },
         ].map((gamme, i) => (
