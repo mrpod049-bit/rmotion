@@ -12,7 +12,7 @@
 .site-pattern {
   position: fixed;
   top: -50%;
-  left: -50%;
+  left: -45%; /* grille décalée de 5% vers la droite */
   width: 200%;
   height: 200%;
   background-image: url("/pattern-tile.png");
