@@ -57,6 +57,12 @@ export default function PhilosophiePage() {
               Nous sommes en mesure de vous accompagner du devis à la mise en production, ceci grâce à des modules de formation adaptés à tous niveaux. Une ligne technique est également mise à votre disposition en cas de questions spécifiques.
             </p>
           </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/philosophie-accompagnement.jpg"
+            alt="Accompagnement et conseil technique"
+            className="w-full rounded-lg mt-8"
+          />
         </div>
 
         {/* SAV et garantie */}
