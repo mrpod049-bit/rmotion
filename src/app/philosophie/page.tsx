@@ -79,6 +79,12 @@ export default function PhilosophiePage() {
               Toutes nos machines sont garanties un an, toutes pièces incluses.
             </p>
           </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/philosophie-maintenance.jpg"
+            alt="Maintenance et réparation d'une carte électronique"
+            className="w-full rounded-lg mt-8"
+          />
         </div>
       </section>
     </>
