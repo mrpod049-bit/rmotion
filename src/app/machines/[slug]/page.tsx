@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
-
-// Taille d'affichage de la photo dans son cadre (% du cadre). Défaut : 100.
-const DETAIL_SCALE: Record<string, number> = {
-  "laser-ferme-20-30w": 70,
-};
+import ProductGallery from "@/components/ProductGallery";
 
 const getMachine = cache(async (slug: string) => {
   const res = await pool.query(
@@ -96,16 +92,8 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Visuel */}
-        {machine.images?.[0] ? (
-          <div className="h-96 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={machine.images[0]}
-              alt={machine.name}
-              style={{ height: `${DETAIL_SCALE[machine.slug] ?? 100}%`, width: "auto" }}
-              className="max-w-full object-contain rounded-lg"
-            />
-          </div>
+        {machine.images?.length ? (
+          <ProductGallery images={machine.images} alt={machine.name} />
         ) : (
           <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm uppercase tracking-wider">
             {machine.category}
