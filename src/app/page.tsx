@@ -65,9 +65,9 @@ export default async function HomePage() {
 
       {/* CTA articles */}
       <Link href="/articles" className="block bg-[#184f79] text-white hover:bg-[#134063] transition-colors">
-        <div className="max-w-6xl mx-auto px-6 py-20 text-center">
-          <h2 className="text-2xl font-semibold mb-4">Comprendre les technologies</h2>
-          <p className="text-gray-200 max-w-xl mx-auto">
+        <div className="max-w-6xl mx-auto px-6 py-20 text-left">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4">Comprendre les technologies</h2>
+          <p className="text-gray-200 text-lg sm:text-xl max-w-2xl">
             Types de lasers, quelle solution d&apos;usinage choisir, consultez nos guides techniques
           </p>
         </div>
