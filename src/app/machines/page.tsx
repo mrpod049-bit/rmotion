@@ -1,6 +1,10 @@
 import Link from "next/link";
 import pool from "@/lib/db";
 
+// ISR : le catalogue (page statique) se régénère depuis la base toutes les 60 s,
+// pour que les modifs de données (photos, machines...) apparaissent sans redéploiement.
+export const revalidate = 60;
+
 export const metadata = {
   title: "Catalogue",
   description:
