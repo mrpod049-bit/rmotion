@@ -90,18 +90,43 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       />
       <Link href="/machines" className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">← Retour au catalogue</Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        {/* Visuel */}
-        {machine.images?.length ? (
-          <ProductGallery images={machine.images} alt={machine.name} />
-        ) : (
-          <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm uppercase tracking-wider">
-            {machine.category}
-          </div>
-        )}
-
-        {/* Infos */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        {/* Colonne gauche : visuel + description (remonte pour combler le vide) */}
         <div>
+          {machine.images?.length ? (
+            <ProductGallery images={machine.images} alt={machine.name} />
+          ) : (
+            <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm uppercase tracking-wider">
+              {machine.category}
+            </div>
+          )}
+
+          {/* Description */}
+          <div className="mt-10">
+            <h2 className="text-lg font-semibold mb-4">Description</h2>
+            <div className="space-y-4">
+              {String(machine.description || "")
+                .split(/\n{2,}/)
+                .filter((p) => p.trim())
+                .map((para, idx) => {
+                  const isWarning = /^AVERTISSEMENT/i.test(para.trim());
+                  return (
+                    <p
+                      key={idx}
+                      className={`leading-relaxed whitespace-pre-line ${
+                        isWarning ? "text-red-600 font-bold" : "text-gray-600"
+                      }`}
+                    >
+                      {para}
+                    </p>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+
+        {/* Colonne droite : infos + tableaux, décalée de 50px vers la droite */}
+        <div className="lg:pl-[50px]">
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">{machine.category}</p>
           <h1 className="text-3xl font-semibold mb-3">{machine.name}</h1>
           <p className="text-gray-500 mb-8">{machine.tagline}</p>
@@ -139,62 +164,36 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
             </li>
           </ul>
 
-        </div>
-      </div>
+          {/* Options */}
+          {machine.options?.length ? (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Options</h2>
+              <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200 text-sm">
+                {(machine.options as string[]).map((opt) => (
+                  <li key={opt} className="flex items-center gap-3 px-4 py-3">
+                    <svg className="w-4 h-4 shrink-0 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span className="text-gray-700">{opt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
-      {/* Options + Caractéristiques — pleine largeur sous la photo/infos */}
-      <div className="mt-[50px] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-        {machine.options?.length ? (
+          {/* Caractéristiques */}
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Options</h2>
-            <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200 text-sm">
-              {(machine.options as string[]).map((opt) => (
-                <li key={opt} className="flex items-center gap-3 px-4 py-3">
-                  <svg className="w-4 h-4 shrink-0 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                  </svg>
-                  <span className="text-gray-700">{opt}</span>
-                </li>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Caractéristiques</h2>
+            <dl className="border border-gray-200 rounded-lg divide-y divide-gray-200">
+              {specEntries.map(([key, val]) => (
+                <div key={key} className="grid grid-cols-2 px-4 py-3 text-sm">
+                  <dt className="text-gray-500 first-letter:uppercase">{key.replace(/_/g, " ")}</dt>
+                  <dd className="text-gray-900 font-medium">{val}</dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </div>
-        ) : null}
-
-        {/* Specs */}
-        <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Caractéristiques</h2>
-          <dl className="border border-gray-200 rounded-lg divide-y divide-gray-200">
-            {specEntries.map(([key, val]) => (
-              <div key={key} className="grid grid-cols-2 px-4 py-3 text-sm">
-                <dt className="text-gray-500 first-letter:uppercase">{key.replace(/_/g, " ")}</dt>
-                <dd className="text-gray-900 font-medium">{val}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="mt-16 max-w-2xl">
-        <h2 className="text-lg font-semibold mb-4">Description</h2>
-        <div className="space-y-4">
-          {String(machine.description || "")
-            .split(/\n{2,}/)
-            .filter((p) => p.trim())
-            .map((para, idx) => {
-              const isWarning = /^AVERTISSEMENT/i.test(para.trim());
-              return (
-                <p
-                  key={idx}
-                  className={`leading-relaxed whitespace-pre-line ${
-                    isWarning ? "text-red-600 font-bold" : "text-gray-600"
-                  }`}
-                >
-                  {para}
-                </p>
-              );
-            })}
         </div>
       </div>
     </div>
