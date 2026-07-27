@@ -157,7 +157,24 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       {/* Description */}
       <div className="mt-16 max-w-2xl">
         <h2 className="text-lg font-semibold mb-4">Description</h2>
-        <p className="text-gray-600 leading-relaxed whitespace-pre-line">{machine.description}</p>
+        <div className="space-y-4">
+          {String(machine.description || "")
+            .split(/\n{2,}/)
+            .filter((p) => p.trim())
+            .map((para, idx) => {
+              const isWarning = /^AVERTISSEMENT/i.test(para.trim());
+              return (
+                <p
+                  key={idx}
+                  className={`leading-relaxed whitespace-pre-line ${
+                    isWarning ? "text-red-600 font-bold" : "text-gray-600"
+                  }`}
+                >
+                  {para}
+                </p>
+              );
+            })}
+        </div>
       </div>
     </div>
   );
