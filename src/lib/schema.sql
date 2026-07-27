@@ -16,6 +16,7 @@ CREATE TABLE machines (
   tagline VARCHAR(300),
   description TEXT,
   specs JSONB,
+  options TEXT[],
   price_range VARCHAR(100),
   images TEXT[],
   featured BOOLEAN DEFAULT false,
