@@ -35,7 +35,7 @@ export default async function MachinesPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
       <h1 className="text-3xl font-semibold mb-2">Catalogue</h1>
-      <p className="text-gray-500 mb-14">Machines laser et CNC sélectionnées pour les PME et TPE.</p>
+      <p className="text-gray-500 mb-14">Notre sélection de machines laser &amp; CNC, sélectionnées par nos soins pour répondre à l&apos;intégralité de vos besoins.</p>
 
       {[{ label: "Machines laser", items: laser }, { label: "Machines CNC", items: cnc }].map((group) => (
         <section key={group.label} className="mb-16">
