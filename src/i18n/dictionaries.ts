@@ -16,7 +16,7 @@ const fr = {
     eyebrow: "Machines laser & CNC",
     title: "Machines compétitives, pensées pour votre entreprise",
     subtitle:
-      "Rmotion conçoit et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.",
+      "Nous distribuons des machines outils laser & CNC, conçues par et pour des petites entreprises.",
     ctaCatalog: "Voir le catalogue",
     ctaQuote: "Demander un devis",
   },
@@ -207,7 +207,7 @@ const en: Dictionary = {
     eyebrow: "Laser & CNC machines",
     title: "Competitive machines, built for your business",
     subtitle:
-      "Rmotion designs and distributes reliable laser and CNC machines for SMEs and small businesses. No production lines — equipment scaled to your size.",
+      "We distribute laser & CNC machine tools, designed by and for small businesses.",
     ctaCatalog: "View the catalogue",
     ctaQuote: "Request a quote",
   },
