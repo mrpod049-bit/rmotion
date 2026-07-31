@@ -1,5 +1,8 @@
 import Link from "next/link";
 import ContactLinks from "@/components/ContactLinks";
+import { getLocale } from "@/i18n/server";
+import { getDictionary } from "@/i18n/dictionaries";
+import { localizeHref } from "@/i18n/config";
 
 const socials = [
   {
@@ -18,16 +21,19 @@ const socials = [
   },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+  const locale = await getLocale();
+  const t = getDictionary(locale).footer;
+  const L = (href: string) => localizeHref(href, locale);
   return (
     <footer className="bg-[#0d2f4e] text-gray-300 mt-16 sm:mt-24">
       <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10 text-sm">
         {/* Marque + réseaux */}
         <div className="col-span-2 md:col-span-1">
           <p className="font-semibold text-white mb-2">Rmotion</p>
-          <p className="mb-4">Machines outils Laser &amp; CNC</p>
+          <p className="mb-4">{t.tagline}</p>
           <p className="mb-5 max-w-xs text-gray-400">
-            Des machines laser fibre et centres d&apos;usinage CNC compacts, industriels et à coût maîtrisé pour les PME et TPE.
+            {t.desc}
           </p>
           <div className="flex items-center gap-3">
             {socials.map((s) => (
@@ -49,42 +55,42 @@ export default function Footer() {
 
         {/* Navigation */}
         <div>
-          <p className="font-semibold text-white mb-3">Navigation</p>
+          <p className="font-semibold text-white mb-3">{t.navHeading}</p>
           <ul className="space-y-2">
-            <li><Link href="/machines" className="hover:text-white">Catalogue</Link></li>
-            <li><Link href="/articles" className="hover:text-white">Documentation</Link></li>
-            <li><Link href="/devis" className="hover:text-white">Devis</Link></li>
-            <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
+            <li><Link href={L("/machines")} className="hover:text-white">{t.catalogue}</Link></li>
+            <li><Link href={L("/articles")} className="hover:text-white">{t.docs}</Link></li>
+            <li><Link href={L("/devis")} className="hover:text-white">{t.quote}</Link></li>
+            <li><Link href={L("/contact")} className="hover:text-white">{t.contact}</Link></li>
           </ul>
         </div>
 
         {/* Découvrir */}
         <div>
-          <p className="font-semibold text-white mb-3">Découvrir</p>
+          <p className="font-semibold text-white mb-3">{t.discoverHeading}</p>
           <ul className="space-y-2">
-            <li><Link href="/projet" className="hover:text-white">Votre projet</Link></li>
-            <li><Link href="/philosophie" className="hover:text-white">Notre philosophie</Link></li>
-            <li><Link href="/machines?type=gravure-laser" className="hover:text-white">Gravure laser</Link></li>
-            <li><Link href="/machines?type=cnc" className="hover:text-white">Fraisage &amp; CNC</Link></li>
+            <li><Link href={L("/projet")} className="hover:text-white">{t.yourProject}</Link></li>
+            <li><Link href={L("/philosophie")} className="hover:text-white">{t.philosophy}</Link></li>
+            <li><Link href={L("/machines?type=gravure-laser")} className="hover:text-white">{t.engraving}</Link></li>
+            <li><Link href={L("/machines?type=cnc")} className="hover:text-white">{t.milling}</Link></li>
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <p className="font-semibold text-white mb-3">Contact</p>
+          <p className="font-semibold text-white mb-3">{t.contactHeading}</p>
           <ContactLinks imgClassName="h-[13px] w-auto" light />
-          <p className="mt-4">France</p>
+          <p className="mt-4">{t.country}</p>
         </div>
       </div>
 
       <div className="border-t border-white/10 text-center py-4 text-xs text-gray-400">
-        © {new Date().getFullYear()} Rmotion — Tous droits réservés
+        © {new Date().getFullYear()} Rmotion — {t.rights}
         <span className="mx-2">·</span>
-        <Link href="/cgu" className="hover:text-white">CGU</Link>
+        <Link href={L("/cgu")} className="hover:text-white">{t.cgu}</Link>
         <span className="mx-2">·</span>
-        <Link href="/confidentialite" className="hover:text-white">Politique de confidentialité</Link>
+        <Link href={L("/confidentialite")} className="hover:text-white">{t.privacy}</Link>
         <span className="mx-2">·</span>
-        <Link href="/mentions-legales" className="hover:text-white">Mentions légales</Link>
+        <Link href={L("/mentions-legales")} className="hover:text-white">{t.legal}</Link>
       </div>
     </footer>
   );

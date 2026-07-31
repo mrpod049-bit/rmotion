@@ -3,6 +3,16 @@ import pool from "@/lib/db";
 
 const SITE = "https://www.rmotion.fr";
 
+// Chaque page existe en FR (racine) et en EN (/en). On déclare les deux versions
+// et leurs alternances hreflang pour que les moteurs indexent les deux langues.
+const alternates = (path: string) => ({
+  languages: {
+    fr: `${SITE}${path}`,
+    en: `${SITE}/en${path}`,
+    "x-default": `${SITE}${path}`,
+  },
+});
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = ["", "/machines", "/projet", "/philosophie", "/articles", "/devis", "/contact", "/cgu", "/confidentialite", "/mentions-legales"];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
@@ -10,6 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: p === "" ? 1 : 0.7,
+    alternates: alternates(p || "/"),
   }));
 
   let machineEntries: MetadataRoute.Sitemap = [];
@@ -21,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+      alternates: alternates(`/machines/${m.slug}`),
     }));
     const articles = await pool.query(
       "SELECT slug, published_at FROM articles WHERE published = true"
@@ -30,6 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: a.published_at || new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
+      alternates: alternates(`/articles/${a.slug}`),
     }));
   } catch {
     // en cas d'indisponibilité de la base, on renvoie au moins les pages statiques

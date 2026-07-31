@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import { getLocale, getT } from "@/i18n/server";
+import { localizeHref } from "@/i18n/config";
 
-export const metadata: Metadata = {
-  title: "Demande de devis",
-  description:
-    "Demandez un devis sur mesure pour votre machine laser fibre ou centre d'usinage CNC. Configuration et budget adaptés à votre atelier, réponse sous 24h.",
-  alternates: { canonical: "/devis" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getT();
+  return {
+    title: t.devis.metaTitle,
+    description: t.devis.metaDesc,
+    alternates: {
+      canonical: localizeHref("/devis", locale),
+      languages: { fr: "/devis", en: "/en/devis", "x-default": "/devis" },
+    },
+  };
+}
 
 export default function DevisLayout({ children }: { children: React.ReactNode }) {
   return children;

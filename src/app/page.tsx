@@ -1,7 +1,13 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
+import { getLocale } from "@/i18n/server";
+import { getDictionary } from "@/i18n/dictionaries";
+import { localizeHref } from "@/i18n/config";
 
 export default async function HomePage() {
+  const locale = await getLocale();
+  const t = getDictionary(locale).home;
+  const L = (href: string) => localizeHref(href, locale);
 
   return (
     <>
@@ -11,9 +17,9 @@ export default async function HomePage() {
       {/* Gammes */}
       <section className="flex flex-col w-full">
         {[
-          { label: "Gravure laser", href: "/machines?type=gravure-laser", desc: "Marquage précis sur métal, bois et plastiques", image: "/gammes/gravure-laser.jpg", transform: undefined },
-          { label: "Fraisage & CNC", href: "/machines?type=cnc", desc: "Usinage bois, alu et composites pour l'atelier", image: "/gammes/milling.jpg", transform: undefined },
-          { label: "Votre projet", href: "/projet", desc: "Un besoin spécifique ? Construisons la solution ensemble", image: "/gammes/design.jpg", transform: undefined },
+          { label: t.ranges.engraving.label, href: L("/machines?type=gravure-laser"), desc: t.ranges.engraving.desc, image: "/gammes/gravure-laser.jpg", transform: undefined },
+          { label: t.ranges.milling.label, href: L("/machines?type=cnc"), desc: t.ranges.milling.desc, image: "/gammes/milling.jpg", transform: undefined },
+          { label: t.ranges.project.label, href: L("/projet"), desc: t.ranges.project.desc, image: "/gammes/design.jpg", transform: undefined },
         ].map((gamme, i) => (
           <Link
             key={gamme.label}
@@ -47,7 +53,7 @@ export default async function HomePage() {
             )}
             <div className="relative z-10 max-w-xl">
               <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">
-                Gamme
+                {t.rangeEyebrow}
               </p>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-2">
                 {gamme.label}
@@ -56,7 +62,7 @@ export default async function HomePage() {
                 {gamme.desc}
               </p>
               <span className="text-sm text-white underline">
-                Voir les produits →
+                {t.seeProducts}
               </span>
             </div>
           </Link>
@@ -64,11 +70,11 @@ export default async function HomePage() {
       </section>
 
       {/* CTA articles */}
-      <Link href="/articles" className="block bg-[#184f79] text-white hover:bg-[#134063] transition-colors">
+      <Link href={L("/articles")} className="block bg-[#184f79] text-white hover:bg-[#134063] transition-colors">
         <div className="max-w-6xl mx-auto px-6 py-20 text-left">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4">Comprendre les technologies</h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4">{t.articlesTitle}</h2>
           <p className="text-gray-200 text-lg sm:text-xl max-w-2xl">
-            Types de lasers, quelle solution d&apos;usinage choisir, consultez nos guides techniques
+            {t.articlesText}
           </p>
         </div>
       </Link>
@@ -77,12 +83,12 @@ export default async function HomePage() {
       <section className="bg-gray-50 border-y border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10 text-sm">
           <div>
-            <p className="font-semibold text-gray-900 mb-2">Devis sur mesure</p>
-            <p className="text-gray-500">Nous nous adaptons à vos contraintes techniques et budgétaires pour vous proposer la meilleure solution possible.</p>
+            <p className="font-semibold text-gray-900 mb-2">{t.promise1Title}</p>
+            <p className="text-gray-500">{t.promise1Text}</p>
           </div>
           <div>
-            <p className="font-semibold text-gray-900 mb-2">Accompagnement technique</p>
-            <p className="text-gray-500">Nous assurons la mise en place, l&apos;accompagnement et la formation au besoin.</p>
+            <p className="font-semibold text-gray-900 mb-2">{t.promise2Title}</p>
+            <p className="text-gray-500">{t.promise2Text}</p>
           </div>
         </div>
       </section>

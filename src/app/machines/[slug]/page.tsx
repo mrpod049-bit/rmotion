@@ -4,10 +4,20 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
 import ProductGallery from "@/components/ProductGallery";
+import { getLocale, getT } from "@/i18n/server";
+import { localizeHref, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
-const getMachine = cache(async (slug: string) => {
+// Sélectionne les champs traduits (repli sur le FR) selon la locale.
+const getMachine = cache(async (slug: string, en: boolean) => {
   const res = await pool.query(
-    `SELECT m.*, c.name as category, c.type
+    `SELECT m.id, m.slug, m.price_range, m.images,
+            COALESCE(${en ? "m.name_en" : "NULL"}, m.name) AS name,
+            COALESCE(${en ? "m.tagline_en" : "NULL"}, m.tagline) AS tagline,
+            COALESCE(${en ? "m.description_en" : "NULL"}, m.description) AS description,
+            COALESCE(${en ? "m.specs_en" : "NULL"}, m.specs) AS specs,
+            COALESCE(${en ? "m.options_en" : "NULL"}, m.options) AS options,
+            COALESCE(${en ? "c.name_en" : "NULL"}, c.name) AS category, c.type
      FROM machines m
      JOIN categories c ON c.id = m.category_id
      WHERE m.slug = $1 AND m.published = true`,
@@ -22,8 +32,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const machine = await getMachine(slug);
-  if (!machine) return { title: "Produit introuvable" };
+  const locale = await getLocale();
+  const machine = await getMachine(slug, locale === "en");
+  if (!machine) return { title: getDictionary(locale).machine.notFound };
   const desc: string =
     (machine.description ? String(machine.description).split("\n")[0] : "") ||
     machine.tagline ||
@@ -32,11 +43,14 @@ export async function generateMetadata({
   return {
     title: `${machine.name} — ${machine.category}`,
     description: desc,
-    alternates: { canonical: `/machines/${slug}` },
+    alternates: {
+      canonical: localizeHref(`/machines/${slug}`, locale),
+      languages: { fr: `/machines/${slug}`, en: `/en/machines/${slug}`, "x-default": `/machines/${slug}` },
+    },
     openGraph: {
       title: `${machine.name} — Rmotion`,
       description: desc,
-      url: `https://www.rmotion.fr/machines/${slug}`,
+      url: `https://www.rmotion.fr${localizeHref(`/machines/${slug}`, locale)}`,
       images: image ? [{ url: image }] : undefined,
     },
   };
@@ -44,7 +58,10 @@ export async function generateMetadata({
 
 export default async function MachinePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const machine = await getMachine(slug);
+  const { locale, t: dict } = await getT();
+  const t = dict.machine;
+  const L = (href: string) => localizeHref(href, locale as Locale);
+  const machine = await getMachine(slug, locale === "en");
   if (!machine) notFound();
 
   // Les specs peuvent être un objet {label: valeur} ou une liste ordonnée [{label, value}]
@@ -72,9 +89,9 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.rmotion.fr" },
-      { "@type": "ListItem", position: 2, name: "Catalogue", item: "https://www.rmotion.fr/machines" },
-      { "@type": "ListItem", position: 3, name: machine.name, item: `https://www.rmotion.fr/machines/${slug}` },
+      { "@type": "ListItem", position: 1, name: t.breadcrumbHome, item: `https://www.rmotion.fr${L("/")}` },
+      { "@type": "ListItem", position: 2, name: t.breadcrumbCatalog, item: `https://www.rmotion.fr${L("/machines")}` },
+      { "@type": "ListItem", position: 3, name: machine.name, item: `https://www.rmotion.fr${L(`/machines/${slug}`)}` },
     ],
   };
 
@@ -88,7 +105,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <Link href="/machines" className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">← Retour au catalogue</Link>
+      <Link href={L("/machines")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         {/* Colonne gauche : visuel + description (remonte pour combler le vide) */}
@@ -103,13 +120,13 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
 
           {/* Description */}
           <div className="mt-10">
-            <h2 className="text-lg font-semibold mb-4">Description</h2>
+            <h2 className="text-lg font-semibold mb-4">{t.description}</h2>
             <div className="space-y-4">
               {String(machine.description || "")
                 .split(/\n{2,}/)
                 .filter((p) => p.trim())
                 .map((para, idx) => {
-                  const isWarning = /^AVERTISSEMENT/i.test(para.trim());
+                  const isWarning = /^(AVERTISSEMENT|SAFETY WARNING)/i.test(para.trim());
                   return (
                     <p
                       key={idx}
@@ -132,10 +149,10 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           <p className="text-gray-500 mb-8">{machine.tagline}</p>
 
           <Link
-            href={`/devis?machine=${machine.id}&nom=${encodeURIComponent(machine.name)}`}
+            href={L(`/devis?machine=${machine.id}&nom=${encodeURIComponent(machine.name)}`)}
             className="inline-block bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-700 transition-colors mb-10"
           >
-            Demander un devis pour cette machine
+            {t.quoteCta}
           </Link>
 
           {/* Infos service — identiques pour toutes les machines, au-dessus des specs */}
@@ -145,7 +162,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <polyline points="9 12 11 14 15 10" />
               </svg>
-              <span className="text-gray-700">Garantie 1 an</span>
+              <span className="text-gray-700">{t.warranty}</span>
             </li>
             <li className="flex items-start gap-3 px-4 py-3">
               <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -153,21 +170,21 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                 <line x1="12" y1="22.08" x2="12" y2="12" />
               </svg>
-              <span className="text-gray-700">Stock : <span className="text-gray-900 font-medium">Hors stock pour le moment</span>, délai de livraison 45 / 60 jours</span>
+              <span className="text-gray-700">{t.stockLabel} <span className="text-gray-900 font-medium">{t.stockValue}</span>, {t.stockTail}</span>
             </li>
             <li className="flex items-start gap-3 px-4 py-3">
               <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
-              <span className="text-gray-700">SAV et référents techniques joignables de 8h à 17h du lundi au vendredi</span>
+              <span className="text-gray-700">{t.support}</span>
             </li>
           </ul>
 
           {/* Options */}
           {machine.options?.length ? (
             <div className="mb-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Options</h2>
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">{t.options}</h2>
               <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200 text-sm">
                 {(machine.options as string[]).map((opt) => (
                   <li key={opt} className="flex items-center gap-3 px-4 py-3">
@@ -184,7 +201,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
 
           {/* Caractéristiques */}
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Caractéristiques</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">{t.specs}</h2>
             <dl className="border border-gray-200 rounded-lg divide-y divide-gray-200">
               {specEntries.map(([key, val]) => (
                 <div key={key} className="grid grid-cols-2 px-4 py-3 text-sm">

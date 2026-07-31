@@ -1,41 +1,44 @@
-export const metadata = {
-  title: "Notre philosophie",
-  description:
-    "Compétitivité pour les petites entreprises : des machines laser et CNC compactes, industrielles et à coût maîtrisé.",
-};
+import type { Metadata } from "next";
+import { getLocale, getT } from "@/i18n/server";
+import { localizeHref } from "@/i18n/config";
 
-const paragraphs = [
-  "Nous sommes pleinement conscients des difficultés pour les petites entreprises d’investir dans des machines laser ou CNC.",
-  "Même en forte croissance, les fonds sont souvent compliqués à mobiliser, la trésorerie manque, et les banques sont réticentes à financer le développement.",
-  "Nous nous efforçons de proposer des solutions adaptées pour des capacitaires moyens, avec de vraies capacités industrielles, et un coût maîtrisé.",
-  "Nous croyons de plus à la philosophie Desktop. Une machine n’a pas besoin d’être énorme et chère pour répondre à un besoin.",
-  "Compactes, fonctionnelles, modulaires. Un entretien simplifié pour une disponibilité maximale.",
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getT();
+  return {
+    title: t.philosophie.metaTitle,
+    description: t.philosophie.metaDesc,
+    alternates: {
+      canonical: localizeHref("/philosophie", locale),
+      languages: { fr: "/philosophie", en: "/en/philosophie", "x-default": "/philosophie" },
+    },
+  };
+}
 
-export default function PhilosophiePage() {
+export default async function PhilosophiePage() {
+  const { t: dict } = await getT();
+  const t = dict.philosophie;
+
   return (
     <>
       {/* Intro */}
       <section className="bg-gray-900 text-white">
         <div className="max-w-3xl mx-auto px-6 py-24">
-          <p className="text-sm uppercase tracking-widest text-gray-400 mb-4">Notre philosophie</p>
-          <h1 className="text-4xl font-semibold leading-tight">
-            Notre mot d’ordre : compétitivité pour les petites entreprises
-          </h1>
+          <p className="text-sm uppercase tracking-widest text-gray-400 mb-4">{t.eyebrow}</p>
+          <h1 className="text-4xl font-semibold leading-tight">{t.h1}</h1>
         </div>
       </section>
 
       {/* Texte */}
       <section className="max-w-3xl mx-auto px-6 py-20">
         <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-          {paragraphs.map((p, i) => (
+          {t.paragraphs.map((p, i) => (
             <div key={i}>
               <p>{p}</p>
               {i === 2 && (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src="/philosophie-projet.jpg"
-                  alt="Conception et planification d'un projet sur mesure"
+                  alt={t.eyebrow}
                   className="w-full rounded-lg mt-8"
                 />
               )}
@@ -45,44 +48,32 @@ export default function PhilosophiePage() {
 
         {/* Accompagnement */}
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Accompagnement</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">{t.supportHeading}</h2>
           <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-            <p>
-              Vous créez une activité ? Vous souhaitez développer une nouvelle branche ? Proposer un nouveau produit ? Vous n’avez pas les compétences en interne pour mettre en œuvre une machine outil ?
-            </p>
-            <p>
-              Nous accordons une grande importance au suivi. Selon votre niveau de compétences, notre offre s’étend de l’achat simple à l’accompagnement clé en main jusqu’à la mise en production.
-            </p>
-            <p>
-              Nous sommes en mesure de vous accompagner du devis à la mise en production, ceci grâce à des modules de formation adaptés à tous niveaux. Une ligne technique est également mise à votre disposition en cas de questions spécifiques.
-            </p>
+            {t.support.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/philosophie-accompagnement.jpg"
-            alt="Accompagnement et conseil technique"
+            alt={t.supportHeading}
             className="w-full rounded-lg mt-8"
           />
         </div>
 
         {/* SAV et garantie */}
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">SAV et garantie</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">{t.warrantyHeading}</h2>
           <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-            <p>
-              Parce que la fiabilité ne s’arrête pas au produit, nous stockons toutes les pièces détachées critiques en France, pour une disponibilité sous 48 heures.
-            </p>
-            <p>
-              En cas de défaillance, notre conseiller technique est joignable en semaine de 8h à 18h. Des solutions de télédépannage et de diagnostic sont également proposées.
-            </p>
-            <p>
-              Toutes nos machines sont garanties un an, toutes pièces incluses.
-            </p>
+            {t.warranty.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/philosophie-maintenance.jpg"
-            alt="Maintenance et réparation d'une carte électronique"
+            alt={t.warrantyHeading}
             className="w-full rounded-lg mt-8"
           />
         </div>

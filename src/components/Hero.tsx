@@ -1,6 +1,9 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { localeFromPathname, localizeHref } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 // Photos des machines avec leurs dimensions naturelles (pour respecter leur format).
 const IMAGES = [
@@ -24,6 +27,9 @@ const STEP_MS = 2200; // temps entre deux crans
 const widthOf = (im: { w: number; h: number }) => Math.round(IMG_H * (im.w / im.h));
 
 export default function Hero() {
+  const locale = localeFromPathname(usePathname());
+  const t = getDictionary(locale).hero;
+  const L = (href: string) => localizeHref(href, locale);
   const track = [...IMAGES, ...IMAGES.slice(0, CLONES)];
 
   // Décalage cumulé (en px) pour amener chaque photo en position — gère les largeurs variables.
@@ -89,19 +95,19 @@ export default function Hero() {
 
       {/* Contenu */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 sm:py-24 lg:py-28">
-        <p className="text-sm uppercase tracking-widest text-gray-300 mb-4">Machines laser &amp; CNC</p>
+        <p className="text-sm uppercase tracking-widest text-gray-300 mb-4">{t.eyebrow}</p>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight mb-6 max-w-2xl">
-          Machines compétitives, pensées pour votre entreprise
+          {t.title}
         </h1>
         <p className="text-gray-200 text-lg mb-10 max-w-xl">
-          Rmotion conçoit et distribue des machines laser et CNC fiables pour les PME et TPE. Pas de ligne de production — des équipements adaptés à votre échelle.
+          {t.subtitle}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <Link href="/machines" className="bg-white text-gray-900 px-6 py-3 rounded font-medium text-center hover:bg-gray-100 transition-colors">
-            Voir le catalogue
+          <Link href={L("/machines")} className="bg-white text-gray-900 px-6 py-3 rounded font-medium text-center hover:bg-gray-100 transition-colors">
+            {t.ctaCatalog}
           </Link>
-          <Link href="/devis" className="border border-gray-300 text-white px-6 py-3 rounded text-center hover:border-white hover:bg-white/10 transition-colors">
-            Demander un devis
+          <Link href={L("/devis")} className="border border-gray-300 text-white px-6 py-3 rounded text-center hover:border-white hover:bg-white/10 transition-colors">
+            {t.ctaQuote}
           </Link>
         </div>
       </div>

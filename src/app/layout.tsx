@@ -5,48 +5,59 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundPattern from "@/components/BackgroundPattern";
 import { Analytics } from "@vercel/analytics/next";
+import { getLocale } from "@/i18n/server";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 const SITE_URL = "https://www.rmotion.fr";
-const DESCRIPTION =
-  "Rmotion conçoit et distribue des machines laser fibre et centres d'usinage CNC compacts et compétitifs pour les PME et TPE. Devis sur mesure et accompagnement technique.";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
+const META = {
+  fr: {
     default: "Rmotion — Machines laser et CNC pour PME/TPE",
-    template: "%s — Rmotion",
+    description:
+      "Rmotion conçoit et distribue des machines laser fibre et centres d'usinage CNC compacts et compétitifs pour les PME et TPE. Devis sur mesure et accompagnement technique.",
   },
-  description: DESCRIPTION,
-  keywords: [
-    "machine laser fibre",
-    "gravure laser",
-    "découpe laser",
-    "centre d'usinage CNC",
-    "fraiseuse compacte",
-    "machine CNC PME",
-    "marquage laser",
-    "machine industrielle TPE",
-  ],
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: SITE_URL,
-    siteName: "Rmotion",
-    title: "Rmotion — Machines laser et CNC pour PME/TPE",
-    description: DESCRIPTION,
-    images: [{ url: "/logo.png", width: 485, height: 330, alt: "Rmotion" }],
+  en: {
+    default: "Rmotion — Laser and CNC machines for SMEs",
+    description:
+      "Rmotion designs and distributes compact, competitive fiber laser machines and CNC machining centres for SMEs and small businesses. Tailored quotes and technical support.",
   },
-  twitter: {
-    card: "summary",
-    title: "Rmotion — Machines laser et CNC pour PME/TPE",
-    description: DESCRIPTION,
-    images: ["/logo.png"],
-  },
-  robots: { index: true, follow: true },
-};
+} as const;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const m = META[locale];
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: m.default, template: "%s — Rmotion" },
+    description: m.description,
+    keywords: [
+      "machine laser fibre",
+      "gravure laser",
+      "découpe laser",
+      "centre d'usinage CNC",
+      "fraiseuse compacte",
+      "machine CNC PME",
+      "marquage laser",
+      "machine industrielle TPE",
+    ],
+    alternates: {
+      canonical: locale === "en" ? "/en" : "/",
+      languages: { fr: "/", en: "/en", "x-default": "/" },
+    },
+    openGraph: {
+      type: "website",
+      locale: locale === "en" ? "en_GB" : "fr_FR",
+      url: locale === "en" ? `${SITE_URL}/en` : SITE_URL,
+      siteName: "Rmotion",
+      title: m.default,
+      description: m.description,
+      images: [{ url: "/logo.png", width: 485, height: 330, alt: "Rmotion" }],
+    },
+    twitter: { card: "summary", title: m.default, description: m.description, images: ["/logo.png"] },
+    robots: { index: true, follow: true },
+  };
+}
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -57,7 +68,7 @@ const organizationJsonLd = {
   image: `${SITE_URL}/logo.png`,
   email: "contact@rmotion.fr",
   telephone: "+33781492685",
-  description: DESCRIPTION,
+  description: META.fr.description,
   areaServed: "FR",
   sameAs: [
     "https://www.instagram.com/rmotion.fr/",
@@ -68,13 +79,14 @@ const organizationJsonLd = {
     telephone: "+33781492685",
     email: "contact@rmotion.fr",
     contactType: "sales",
-    availableLanguage: ["French"],
+    availableLanguage: ["French", "English"],
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   return (
-    <html lang="fr" className={`${geist.variable} h-full bg-white`}>
+    <html lang={locale} className={`${geist.variable} h-full bg-white`}>
       <body className="min-h-full flex flex-col text-gray-900 antialiased font-sans">
         <script
           type="application/ld+json"
