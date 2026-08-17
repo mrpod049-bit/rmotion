@@ -52,9 +52,9 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Rmotion",
       title: m.default,
       description: m.description,
-      images: [{ url: "/logo.png", width: 485, height: 330, alt: "Rmotion" }],
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: "Rmotion — Machines laser fibre & CNC pour PME/TPE" }],
     },
-    twitter: { card: "summary", title: m.default, description: m.description, images: ["/logo.png"] },
+    twitter: { card: "summary_large_image", title: m.default, description: m.description, images: ["/og.png"] },
     robots: { index: true, follow: true },
   };
 }

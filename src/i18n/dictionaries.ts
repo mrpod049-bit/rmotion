@@ -80,6 +80,14 @@ const fr = {
     notFound: "Produit introuvable",
     breadcrumbHome: "Accueil",
     breadcrumbCatalog: "Catalogue",
+    faqTitle: "Questions fréquentes",
+    learnMore: "Pour aller plus loin",
+    faq: [
+      { q: "Cette machine est-elle garantie ?", a: "Oui, toutes nos machines sont garanties 1 an." },
+      { q: "Quels sont les délais de livraison ?", a: "Nos machines sont actuellement hors stock ; le délai de livraison indicatif est de 45 à 60 jours." },
+      { q: "Proposez-vous un support technique après l'achat ?", a: "Oui. Notre SAV et nos référents techniques sont joignables de 8h à 17h, du lundi au vendredi." },
+      { q: "Comment obtenir un prix ou un devis ?", a: "Chaque machine fait l'objet d'un devis sur mesure : utilisez le bouton « Demander un devis » sur cette page, ou contactez-nous." },
+    ],
   },
   articles: {
     metaTitle: "Articles",
@@ -271,6 +279,14 @@ const en: Dictionary = {
     notFound: "Product not found",
     breadcrumbHome: "Home",
     breadcrumbCatalog: "Catalogue",
+    faqTitle: "Frequently asked questions",
+    learnMore: "Learn more",
+    faq: [
+      { q: "Is this machine under warranty?", a: "Yes, all our machines come with a 1-year warranty." },
+      { q: "What are the delivery lead times?", a: "Our machines are currently out of stock; the indicative lead time is 45 to 60 days." },
+      { q: "Do you offer technical support after purchase?", a: "Yes. Our after-sales and technical support team is available 8am–5pm, Monday to Friday." },
+      { q: "How do I get a price or a quote?", a: "Each machine is quoted individually: use the “Request a quote” button on this page, or contact us." },
+    ],
   },
   articles: {
     metaTitle: "Articles",

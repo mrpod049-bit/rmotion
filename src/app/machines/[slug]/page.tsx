@@ -8,6 +8,8 @@ import { getLocale, getT } from "@/i18n/server";
 import { localizeHref, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
+const SITE = "https://www.rmotion.fr";
+
 // Sélectionne les champs traduits (repli sur le FR) selon la locale.
 const getMachine = cache(async (slug: string, en: boolean) => {
   const res = await pool.query(
@@ -24,6 +26,19 @@ const getMachine = cache(async (slug: string, en: boolean) => {
     [slug]
   );
   return res.rows[0] || null;
+});
+
+// Guides liés : articles publiés de la même famille (laser / cnc) — maillage interne.
+const getRelatedArticles = cache(async (type: string, en: boolean) => {
+  const res = await pool.query(
+    `SELECT slug, COALESCE(${en ? "title_en" : "NULL"}, title) AS title
+     FROM articles
+     WHERE published = true AND category ILIKE $1
+     ORDER BY published_at DESC NULLS LAST
+     LIMIT 3`,
+    [type === "laser" ? "%laser%" : "%cnc%"]
+  );
+  return res.rows as { title: string; slug: string }[];
 });
 
 export async function generateMetadata({
@@ -64,6 +79,8 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
   const machine = await getMachine(slug, locale === "en");
   if (!machine) notFound();
 
+  const relatedArticles = await getRelatedArticles(machine.type, locale === "en");
+
   // Les specs peuvent être un objet {label: valeur} ou une liste ordonnée [{label, value}]
   // (la liste garantit l'ordre d'affichage, que jsonb ne préserve pas).
   const rawSpecs = machine.specs;
@@ -79,10 +96,38 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       ? String(machine.description).replace(/\n+/g, " ")
       : machine.tagline || "",
     category: machine.category,
-    ...(machine.images?.[0]
-      ? { image: `https://www.rmotion.fr${machine.images[0]}` }
+    sku: machine.slug,
+    ...(machine.images?.length
+      ? { image: (machine.images as string[]).map((i) => `${SITE}${i}`) }
       : {}),
     brand: { "@type": "Brand", name: "Rmotion" },
+    ...(specEntries.length
+      ? {
+          additionalProperty: specEntries.map(([name, value]) => ({
+            "@type": "PropertyValue",
+            name: name.replace(/_/g, " "),
+            value,
+          })),
+        }
+      : {}),
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/BackOrder",
+      itemCondition: "https://schema.org/NewCondition",
+      priceCurrency: "EUR",
+      url: `${SITE}${L(`/machines/${slug}`)}`,
+      seller: { "@type": "Organization", name: "Rmotion" },
+    },
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   const breadcrumbJsonLd = {
@@ -104,6 +149,10 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <Link href={L("/machines")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
 
@@ -213,6 +262,38 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
       </div>
+
+      {/* FAQ — visible + JSON-LD FAQPage (utile référencement Google et IA) */}
+      <div className="mt-16 max-w-2xl">
+        <h2 className="text-lg font-semibold mb-4">{t.faqTitle}</h2>
+        <dl className="divide-y divide-gray-200 border-t border-gray-200">
+          {t.faq.map((f) => (
+            <div key={f.q} className="py-4">
+              <dt className="font-medium text-gray-900">{f.q}</dt>
+              <dd className="mt-1 text-gray-600 leading-relaxed">{f.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      {/* Guides liés — maillage interne vers les articles */}
+      {relatedArticles.length > 0 && (
+        <div className="mt-16 max-w-2xl">
+          <h2 className="text-lg font-semibold mb-4">{t.learnMore}</h2>
+          <ul className="space-y-2">
+            {relatedArticles.map((a) => (
+              <li key={a.slug}>
+                <Link
+                  href={L(`/articles/${a.slug}`)}
+                  className="text-gray-700 hover:text-gray-900 underline underline-offset-2"
+                >
+                  {a.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
