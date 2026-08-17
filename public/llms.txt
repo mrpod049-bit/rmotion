@@ -14,9 +14,11 @@
 - [SCS Series](https://www.rmotion.fr/machines/centre-usinage-xh7115) — Fraiseuse plastique / métaux compacte
 
 ## Guides et articles
+- [Comment calculer son ROI sur une machine laser](https://www.rmotion.fr/articles/roi-machine-laser) — Méthode simple pour estimer le retour sur investissement d'une machine laser en atelier TPE/PME.
 - [Quelle lentille choisir ?](https://www.rmotion.fr/articles/quelle-lentille-choisir) — Comprendre les lentilles F-Theta du marquage laser : principe, choix du matériau et longueur de focus pour choisir la focale adaptée à votre application.
 - [Quel type de CNC choisir ?](https://www.rmotion.fr/articles/quel-type-de-cnc-choisir) — Routeur, fraiseuse numérique ou centre d'usinage : comprendre les trois familles de CNC pour choisir la machine adaptée à vos matériaux et à votre atelier.
 - [CO2, fibre, UV, quel laser choisir ?](https://www.rmotion.fr/articles/co2-fibre-uv-quel-laser-choisir) — CO2, fibre ou UV : comprendre les trois grandes familles de laser et choisir celui qui correspond à votre activité.
+- [CNC bois ou CNC métal : les critères de choix](https://www.rmotion.fr/articles/cnc-bois-vs-metal) — Broche, vitesse, rigidité de bâti : ce qui change vraiment entre une fraiseuse bois et une machine métal.
 
 ## Informations pratiques
 - Garantie : 1 an sur toutes les machines
