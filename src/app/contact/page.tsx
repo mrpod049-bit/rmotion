@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import ContactLinks from "@/components/ContactLinks";
 import { localeFromPathname } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pixelTrack } from "@/lib/pixel";
 
 export default function ContactPage() {
   const locale = localeFromPathname(usePathname());
@@ -26,8 +27,10 @@ export default function ContactPage() {
       body: JSON.stringify({ ...form, locale }),
     });
     setSending(false);
-    if (res.ok) setDone(true);
-    else setError(t.error);
+    if (res.ok) {
+      setDone(true);
+      pixelTrack("Contact");
+    } else setError(t.error);
   };
 
   if (done) {

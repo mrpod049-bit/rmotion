@@ -3,6 +3,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState, Suspense } from "react";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pixelTrack } from "@/lib/pixel";
 
 function DevisForm() {
   const params = useSearchParams();
@@ -33,8 +34,10 @@ function DevisForm() {
       body: JSON.stringify({ ...form, machine_id: machineId || null, locale }),
     });
     setSending(false);
-    if (res.ok) setDone(true);
-    else setError(t.error);
+    if (res.ok) {
+      setDone(true);
+      pixelTrack("Lead", { content_name: form.machine_name || undefined });
+    } else setError(t.error);
   };
 
   if (done) {

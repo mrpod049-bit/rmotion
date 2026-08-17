@@ -4,6 +4,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
 import ProductGallery from "@/components/ProductGallery";
+import PixelEvent from "@/components/PixelEvent";
 import { getLocale, getT } from "@/i18n/server";
 import { localizeHref, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -153,6 +154,15 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <PixelEvent
+        event="ViewContent"
+        params={{
+          content_type: "product",
+          content_ids: [machine.slug],
+          content_name: machine.name,
+          content_category: machine.category,
+        }}
       />
       <Link href={L("/machines")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
 
