@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
-import { CONSENT_KEY, loadPixel, pixelTrack } from "@/lib/pixel";
+import { CONSENT_KEY, denyPixel, loadPixel, pixelTrack } from "@/lib/pixel";
 
 type Consent = "granted" | "denied";
 
@@ -39,9 +39,10 @@ export default function MetaPixel() {
     setMounted(true);
   }, []);
 
-  // Charge le pixel dès que le consentement est accordé.
+  // Charge le pixel dès que le consentement est accordé (ou abandonne la file si refusé).
   useEffect(() => {
     if (consent === "granted") loadPixel();
+    else if (consent === "denied") denyPixel();
   }, [consent]);
 
   // PageView au montage et à chaque navigation interne (si consenti).
