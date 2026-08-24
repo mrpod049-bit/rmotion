@@ -1,9 +1,64 @@
 "use client";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
+
+// Coordonnées encodées en base64 : jamais en clair dans le HTML, décodées
+// côté client uniquement après montage (invisibles pour les scrapers/SSR).
+const EMAIL_B64 = "Y29udGFjdEBybW90aW9uLmZy";
+const TEL_B64 = "KzMzNzgxNDkyNjg1";
+const decode = (s: string) =>
+  typeof window === "undefined" ? "" : window.atob(s);
+// "+33781492685" -> "07 81 49 26 85" (affichage FR local, sans le +33)
+const formatTel = (raw: string) => {
+  const local = raw.replace(/^\+33/, "0");
+  return local.replace(/(\d{2})(?=\d)/g, "$1 ").trim();
+};
+
+function ContactBlock() {
+  const t = getDictionary(localeFromPathname(usePathname())).devis;
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
+  if (!ready) return null; // rien à scraper dans le HTML serveur
+
+  const email = decode(EMAIL_B64);
+  const tel = decode(TEL_B64);
+  const go = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    window.location.href = href; // href construit au clic, jamais dans le DOM
+  };
+
+  return (
+    <div className="mt-12 pt-8 border-t border-gray-200">
+      <p className="text-sm font-medium text-gray-700 mb-4">{t.contactHeading}</p>
+      <div className="flex flex-col gap-3 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="text-gray-500 w-20">{t.contactEmailLabel}</span>
+          <a
+            href="#"
+            onClick={(e) => go(e, "mailto:" + email)}
+            className="text-gray-900 underline underline-offset-2 hover:text-gray-600"
+          >
+            {email}
+          </a>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-gray-500 w-20">{t.contactPhoneLabel}</span>
+          <a
+            href="#"
+            onClick={(e) => go(e, "tel:" + tel)}
+            className="text-gray-900 underline underline-offset-2 hover:text-gray-600"
+          >
+            {formatTel(tel)}
+          </a>
+        </div>
+      </div>
+      <p className="text-xs text-gray-400 mt-3">{t.contactPhoneHint}</p>
+    </div>
+  );
+}
 
 function DevisForm() {
   const params = useSearchParams();
@@ -104,6 +159,7 @@ export default function DevisPage() {
       <h1 className="text-3xl font-semibold mb-2">{t.title}</h1>
       <p className="text-gray-500 mb-10">{t.subtitle}</p>
       <Suspense><DevisForm /></Suspense>
+      <ContactBlock />
     </div>
   );
 }

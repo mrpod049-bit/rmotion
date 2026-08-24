@@ -139,6 +139,10 @@ const fr = {
     successText: "Nous vous recontacterons dans les 24h.",
     backHome: "← Retour à l'accueil",
     error: "Une erreur est survenue, veuillez réessayer.",
+    contactHeading: "Ou contactez-nous directement",
+    contactEmailLabel: "Email",
+    contactPhoneLabel: "Téléphone",
+    contactPhoneHint: "Du lundi au vendredi, 9h–18h",
   },
   philosophie: {
     metaTitle: "Notre philosophie",
@@ -338,6 +342,10 @@ const en: Dictionary = {
     successText: "We'll get back to you within 24h.",
     backHome: "← Back to home",
     error: "An error occurred, please try again.",
+    contactHeading: "Or contact us directly",
+    contactEmailLabel: "Email",
+    contactPhoneLabel: "Phone",
+    contactPhoneHint: "Monday to Friday, 9am–6pm",
   },
   philosophie: {
     metaTitle: "Our philosophy",
