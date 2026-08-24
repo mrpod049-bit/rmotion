@@ -83,10 +83,10 @@ const fr = {
     faqTitle: "Questions fréquentes",
     learnMore: "Pour aller plus loin",
     faq: [
-      { q: "Cette machine est-elle garantie ?", a: "Oui, toutes nos machines sont garanties 1 an." },
-      { q: "Quels sont les délais de livraison ?", a: "Nos machines sont actuellement hors stock ; le délai de livraison indicatif est de 45 à 60 jours." },
-      { q: "Proposez-vous un support technique après l'achat ?", a: "Oui. Notre SAV et nos référents techniques sont joignables de 8h à 17h, du lundi au vendredi." },
-      { q: "Comment obtenir un prix ou un devis ?", a: "Chaque machine fait l'objet d'un devis sur mesure : utilisez le bouton « Demander un devis » sur cette page, ou contactez-nous." },
+      { q: "Cette machine est-elle garantie ?", a: "Nos machines, ainsi que leurs modifications sur cahier des charges sont garanties un an. Nous nous engageons à vous fournir les pièces détachées sur une durée de dix ans." },
+      { q: "Quels sont les délais de livraison ?", a: "Les délais de livraison dépendent de nos stocks et du type de machine. Pour plus d'informations veuillez nous contacter." },
+      { q: "Proposez-vous un support technique après l'achat ?", a: "Notre SAV et nos référents techniques sont joignables par téléphone du lundi au vendredi de 8h à 17h. Nous nous engageons à traiter votre demande dans un délai de 48 heures." },
+      { q: "Comment obtenir un prix ou un devis ?", a: "Afin de répondre au mieux à votre besoin, chaque machine fait l'objet d'un devis spécifique. Pour cela, veuillez nous contacter, ou nous envoyer un formulaire grâce à l'onglet « Demander un devis »." },
     ],
   },
   articles: {
@@ -286,10 +286,10 @@ const en: Dictionary = {
     faqTitle: "Frequently asked questions",
     learnMore: "Learn more",
     faq: [
-      { q: "Is this machine under warranty?", a: "Yes, all our machines come with a 1-year warranty." },
-      { q: "What are the delivery lead times?", a: "Our machines are currently out of stock; the indicative lead time is 45 to 60 days." },
-      { q: "Do you offer technical support after purchase?", a: "Yes. Our after-sales and technical support team is available 8am–5pm, Monday to Friday." },
-      { q: "How do I get a price or a quote?", a: "Each machine is quoted individually: use the “Request a quote” button on this page, or contact us." },
+      { q: "Is this machine under warranty?", a: "Our machines, along with any modifications made to specification, are guaranteed for one year. We commit to supplying spare parts for a period of ten years." },
+      { q: "What are the delivery lead times?", a: "Lead times depend on our stock levels and the type of machine. Please contact us for more information." },
+      { q: "Do you offer technical support after purchase?", a: "Our after-sales and technical support team is reachable by phone Monday to Friday, 8am–5pm. We commit to handling your request within 48 hours." },
+      { q: "How do I get a price or a quote?", a: "To best meet your needs, each machine is quoted individually. Please contact us, or send us a form via the “Request a quote” tab." },
     ],
   },
   articles: {

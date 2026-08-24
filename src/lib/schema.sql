@@ -90,7 +90,7 @@ INSERT INTO machines (category_id, name, slug, tagline, description, specs, pric
    '[{"label":"Logiciel","value":"EzCAD / Lightburn"},{"label":"Puissance","value":"20W à 100W"},{"label":"Vitesse max","value":"9000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"},{"label":"Fréquence","value":"30 à 60 kHz (tube Raycus)"},{"label":"Fréquence","value":"1 à 600 kHz (tube JPT)"},{"label":"Puissance totale","value":"200W à 800W"},{"label":"Surface de gravure","value":"70x70mm à 300x300mm"},{"label":"Refroidissement","value":"Air"},{"label":"Poids total","value":"120 kg"}]',
    NULL, true),
 
-  (1, 'SCL20 / SLC30', 'laser-ferme-20-30w',
+  (1, 'SCL Series', 'laser-ferme-20-30w',
    'Marquage laser fibre compact et précis',
    'Machine de gravure laser fibre, puissance de 20W ou 30W sur demande. Idéale pour le marquage en série de petites pièces en acier, aluminium, plastique, bois et cuir.',
    '[{"label":"Logiciel","value":"EzCad / Lightburn"},{"label":"Puissance","value":"20/30W"},{"label":"Vitesse max","value":"15000 mm/s"},{"label":"Longueur d''onde","value":"1064 nm"},{"label":"Fréquence","value":"30 à 60 kHz (tube Raycus)"},{"label":"Fréquence","value":"1 à 600 kHz (tube JPT)"},{"label":"Surface de gravure","value":"70x70mm à 175x175mm"},{"label":"Puissance totale","value":"200W"},{"label":"Refroidissement","value":"Air"},{"label":"Poids total","value":"60 kg"}]',
