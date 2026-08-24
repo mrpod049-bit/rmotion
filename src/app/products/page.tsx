@@ -18,10 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Taille d'affichage de la photo dans sa cellule (% de la cellule). Défaut : 85.
 const IMG_SCALE: Record<string, number> = {
-  "laser-ferme-20-30w": 91,
-  "laser-ferme-60-100w": 70,
-  "laser-ouvert-30-100w": 70,
-  "centre-usinage-xh7115": 65,
+  "scl-series": 91,
+  "bcl-series": 70,
+  "ol-series": 70,
+  "scs-series": 65,
 };
 
 async function getMachines(en: boolean) {
