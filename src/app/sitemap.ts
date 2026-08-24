@@ -14,7 +14,7 @@ const alternates = (path: string) => ({
 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["", "/machines", "/projet", "/philosophie", "/articles", "/devis", "/contact", "/cgu", "/confidentialite", "/mentions-legales"];
+  const staticPaths = ["", "/products", "/projet", "/philosophie", "/articles", "/devis", "/contact", "/cgu", "/confidentialite", "/mentions-legales"];
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
     url: `${SITE}${p}`,
     lastModified: new Date(),
@@ -28,11 +28,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const machines = await pool.query("SELECT slug FROM machines WHERE published = true");
     machineEntries = machines.rows.map((m) => ({
-      url: `${SITE}/machines/${m.slug}`,
+      url: `${SITE}/products/${m.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
-      alternates: alternates(`/machines/${m.slug}`),
+      alternates: alternates(`/products/${m.slug}`),
     }));
     const articles = await pool.query(
       "SELECT slug, published_at FROM articles WHERE published = true"

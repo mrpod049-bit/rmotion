@@ -17,8 +17,8 @@ export default async function HomePage() {
       {/* Gammes */}
       <section className="flex flex-col w-full">
         {[
-          { label: t.ranges.engraving.label, href: L("/machines?type=gravure-laser"), desc: t.ranges.engraving.desc, image: "/gammes/gravure-laser.jpg", transform: undefined },
-          { label: t.ranges.milling.label, href: L("/machines?type=cnc"), desc: t.ranges.milling.desc, image: "/gammes/milling.jpg", transform: undefined },
+          { label: t.ranges.engraving.label, href: L("/products?type=gravure-laser"), desc: t.ranges.engraving.desc, image: "/gammes/gravure-laser.jpg", transform: undefined },
+          { label: t.ranges.milling.label, href: L("/products?type=cnc"), desc: t.ranges.milling.desc, image: "/gammes/milling.jpg", transform: undefined },
           { label: t.ranges.project.label, href: L("/projet"), desc: t.ranges.project.desc, image: "/gammes/design.jpg", transform: undefined },
         ].map((gamme, i) => (
           <Link

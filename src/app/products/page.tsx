@@ -10,8 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t.machines.metaTitle,
     description: t.machines.metaDesc,
     alternates: {
-      canonical: localizeHref("/machines", locale),
-      languages: { fr: "/machines", en: "/en/machines", "x-default": "/machines" },
+      canonical: localizeHref("/products", locale),
+      languages: { fr: "/products", en: "/en/products", "x-default": "/products" },
     },
   };
 }
@@ -55,7 +55,7 @@ export default async function MachinesPage() {
           <h2 className="text-lg font-medium border-b border-gray-200 pb-3 mb-8">{group.label}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {group.items.map((m) => (
-              <Link key={m.id} href={L(`/machines/${m.slug}`)} className="group border border-gray-200 rounded-lg p-6 hover:border-gray-400 transition-colors">
+              <Link key={m.id} href={L(`/products/${m.slug}`)} className="group border border-gray-200 rounded-lg p-6 hover:border-gray-400 transition-colors">
                 {m.images?.[0] ? (
                   <div className="h-72 mb-5 flex items-center justify-center">
                     {/* eslint-disable-next-line @next/next/no-img-element */}

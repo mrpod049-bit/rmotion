@@ -57,7 +57,7 @@ export default async function Footer() {
         <div>
           <p className="font-semibold text-white mb-3">{t.navHeading}</p>
           <ul className="space-y-2">
-            <li><Link href={L("/machines")} className="hover:text-white">{t.catalogue}</Link></li>
+            <li><Link href={L("/products")} className="hover:text-white">{t.catalogue}</Link></li>
             <li><Link href={L("/articles")} className="hover:text-white">{t.docs}</Link></li>
             <li><Link href={L("/devis")} className="hover:text-white">{t.quote}</Link></li>
             <li><Link href={L("/contact")} className="hover:text-white">{t.contact}</Link></li>
@@ -70,8 +70,8 @@ export default async function Footer() {
           <ul className="space-y-2">
             <li><Link href={L("/projet")} className="hover:text-white">{t.yourProject}</Link></li>
             <li><Link href={L("/philosophie")} className="hover:text-white">{t.philosophy}</Link></li>
-            <li><Link href={L("/machines?type=gravure-laser")} className="hover:text-white">{t.engraving}</Link></li>
-            <li><Link href={L("/machines?type=cnc")} className="hover:text-white">{t.milling}</Link></li>
+            <li><Link href={L("/products?type=gravure-laser")} className="hover:text-white">{t.engraving}</Link></li>
+            <li><Link href={L("/products?type=cnc")} className="hover:text-white">{t.milling}</Link></li>
           </ul>
         </div>
 

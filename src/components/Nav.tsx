@@ -14,7 +14,7 @@ export default function Nav() {
   const L = (href: string) => localizeHref(href, locale);
 
   const links = [
-    { href: L("/machines"), label: t.products },
+    { href: L("/products"), label: t.products },
     { href: L("/projet"), label: t.project },
     { href: L("/philosophie"), label: t.philosophy },
     { href: L("/articles"), label: t.docs },

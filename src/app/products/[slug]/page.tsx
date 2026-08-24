@@ -60,13 +60,13 @@ export async function generateMetadata({
     title: `${machine.name} — ${machine.category}`,
     description: desc,
     alternates: {
-      canonical: localizeHref(`/machines/${slug}`, locale),
-      languages: { fr: `/machines/${slug}`, en: `/en/machines/${slug}`, "x-default": `/machines/${slug}` },
+      canonical: localizeHref(`/products/${slug}`, locale),
+      languages: { fr: `/products/${slug}`, en: `/en/products/${slug}`, "x-default": `/products/${slug}` },
     },
     openGraph: {
       title: `${machine.name} — Rmotion`,
       description: desc,
-      url: `https://www.rmotion.fr${localizeHref(`/machines/${slug}`, locale)}`,
+      url: `https://www.rmotion.fr${localizeHref(`/products/${slug}`, locale)}`,
       images: image ? [{ url: image }] : undefined,
     },
   };
@@ -116,7 +116,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       availability: "https://schema.org/BackOrder",
       itemCondition: "https://schema.org/NewCondition",
       priceCurrency: "EUR",
-      url: `${SITE}${L(`/machines/${slug}`)}`,
+      url: `${SITE}${L(`/products/${slug}`)}`,
       seller: { "@type": "Organization", name: "Rmotion" },
     },
   };
@@ -136,8 +136,8 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: t.breadcrumbHome, item: `https://www.rmotion.fr${L("/")}` },
-      { "@type": "ListItem", position: 2, name: t.breadcrumbCatalog, item: `https://www.rmotion.fr${L("/machines")}` },
-      { "@type": "ListItem", position: 3, name: machine.name, item: `https://www.rmotion.fr${L(`/machines/${slug}`)}` },
+      { "@type": "ListItem", position: 2, name: t.breadcrumbCatalog, item: `https://www.rmotion.fr${L("/products")}` },
+      { "@type": "ListItem", position: 3, name: machine.name, item: `https://www.rmotion.fr${L(`/products/${slug}`)}` },
     ],
   };
 
@@ -164,7 +164,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           content_category: machine.category,
         }}
       />
-      <Link href={L("/machines")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
+      <Link href={L("/products")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         {/* Colonne gauche : visuel + description (remonte pour combler le vide) */}

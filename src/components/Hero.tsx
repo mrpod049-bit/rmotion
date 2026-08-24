@@ -103,7 +103,7 @@ export default function Hero() {
           {t.subtitle}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <Link href={L("/machines")} className="bg-white text-gray-900 px-6 py-3 rounded font-medium text-center hover:bg-gray-100 transition-colors">
+          <Link href={L("/products")} className="bg-white text-gray-900 px-6 py-3 rounded font-medium text-center hover:bg-gray-100 transition-colors">
             {t.ctaCatalog}
           </Link>
           <Link href={L("/devis")} className="border border-gray-300 text-white px-6 py-3 rounded text-center hover:border-white hover:bg-white/10 transition-colors">
