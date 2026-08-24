@@ -55,7 +55,6 @@ function ContactBlock() {
           </a>
         </div>
       </div>
-      <p className="text-xs text-gray-400 mt-3">{t.contactPhoneHint}</p>
     </div>
   );
 }
