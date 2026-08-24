@@ -32,7 +32,7 @@ function ContactBlock() {
 
   return (
     <div className="mb-12 pb-8 border-b border-gray-200">
-      <p className="text-2xl font-semibold text-gray-900 mb-4">{t.contactHeading}</p>
+      <p className="text-3xl font-semibold text-gray-900 mb-4">{t.contactHeading}</p>
       <div className="flex flex-col gap-3 text-sm">
         <div className="flex items-center gap-2">
           <span className="text-gray-500 w-20">{t.contactEmailLabel}</span>
@@ -156,9 +156,9 @@ export default function DevisPage() {
   const t = getDictionary(localeFromPathname(usePathname())).devis;
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
+      <ContactBlock />
       <h1 className="text-3xl font-semibold mb-2">{t.title}</h1>
       <p className="text-gray-500 mb-10">{t.subtitle}</p>
-      <ContactBlock />
       <Suspense><DevisForm /></Suspense>
     </div>
   );
