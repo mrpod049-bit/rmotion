@@ -69,6 +69,7 @@ const fr = {
   machine: {
     back: "← Retour au catalogue",
     description: "Description",
+    priceFrom: "À partir de",
     quoteCta: "Demander un devis pour cette machine",
     warranty: "Garantie 1 an",
     stockLabel: "Stock :",
@@ -272,6 +273,7 @@ const en: Dictionary = {
   machine: {
     back: "← Back to catalogue",
     description: "Description",
+    priceFrom: "From",
     quoteCta: "Request a quote for this machine",
     warranty: "1-year warranty",
     stockLabel: "Stock:",

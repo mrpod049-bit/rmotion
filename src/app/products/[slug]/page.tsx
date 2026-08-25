@@ -89,6 +89,21 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     ? (rawSpecs as { label: string; value: string }[]).map((s) => [s.label, s.value])
     : Object.entries((rawSpecs ?? {}) as Record<string, string>);
 
+  // Prix « à partir de » : price_range contient le montant en euros HT (ex. "5399").
+  // Si la valeur n'est pas numérique, on l'affiche telle quelle (repli).
+  const en = locale === "en";
+  const priceAmount = Number(machine.price_range);
+  const hasNumericPrice =
+    machine.price_range != null &&
+    String(machine.price_range).trim() !== "" &&
+    Number.isFinite(priceAmount) &&
+    priceAmount > 0;
+  const priceLabel = hasNumericPrice
+    ? en
+      ? `${t.priceFrom} €${new Intl.NumberFormat("en-GB").format(priceAmount)} excl. VAT`
+      : `${t.priceFrom} ${new Intl.NumberFormat("fr-FR").format(priceAmount)} € HT`
+    : machine.price_range || null;
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -112,10 +127,11 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         }
       : {}),
     offers: {
-      "@type": "Offer",
+      "@type": hasNumericPrice ? "AggregateOffer" : "Offer",
       availability: "https://schema.org/BackOrder",
       itemCondition: "https://schema.org/NewCondition",
       priceCurrency: "EUR",
+      ...(hasNumericPrice ? { lowPrice: priceAmount } : {}),
       url: `${SITE}${L(`/products/${slug}`)}`,
       seller: { "@type": "Organization", name: "Rmotion" },
     },
@@ -205,7 +221,11 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         <div className="lg:pl-[50px]">
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">{machine.category}</p>
           <h1 className="text-3xl font-semibold mb-3">{machine.name}</h1>
-          <p className="text-gray-500 mb-8">{machine.tagline}</p>
+          <p className="text-gray-500 mb-6">{machine.tagline}</p>
+
+          {priceLabel && (
+            <p className="text-2xl font-semibold text-gray-900 mb-8">{priceLabel}</p>
+          )}
 
           <Link
             href={L(`/devis?machine=${machine.id}&nom=${encodeURIComponent(machine.name)}`)}
