@@ -153,6 +153,22 @@ export async function setPhoneContacted(leadId: number, value: boolean) {
   revalidatePath("/admin/crm");
 }
 
+// Annule une conversion : refait basculer une opportunité dans l'inbox des
+// leads à qualifier (en cas d'erreur/confusion). Conserve TOUT le reste —
+// notamment les statuts contacté email/téléphone, les coordonnées, les notes,
+// les lignes machines — pour ne rien perdre si on reconvertit ensuite.
+export async function revertToLead(leadId: number) {
+  await pool.query(
+    `UPDATE crm_leads
+       SET type = 'lead', stage_id = NULL, won = false, closed_at = NULL, active = true
+     WHERE id = $1`,
+    [leadId]
+  );
+  revalidatePath("/admin/crm");
+  revalidatePath("/admin/crm/leads");
+  redirect("/admin/crm/leads");
+}
+
 // Met un lead de côté (archivé, sort de l'inbox) sans le supprimer.
 export async function ignoreLead(leadId: number) {
   await pool.query(

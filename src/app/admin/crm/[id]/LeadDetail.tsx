@@ -17,6 +17,7 @@ import {
   addLineOption,
   removeLineOption,
   deleteLead,
+  revertToLead,
 } from "../actions";
 
 const eur = new Intl.NumberFormat("fr-FR", {
@@ -143,6 +144,7 @@ export default function LeadDetail({
               Rouvrir l&apos;opportunité
             </button>
           )}
+          {lead.type === "opportunity" && <RevertButton leadId={lead.id} />}
         </div>
       </div>
 
@@ -349,6 +351,36 @@ function LostButton({ leadId, onDone }: { leadId: number; onDone: () => void }) 
         OK
       </button>
       <button onClick={() => setOpen(false)} className="text-xs text-gray-400">✕</button>
+    </div>
+  );
+}
+
+// Renvoie l'opportunité dans l'inbox des leads à qualifier (annule la conversion).
+function RevertButton({ leadId }: { leadId: number }) {
+  const [confirming, setConfirming] = useState(false);
+  const [pending, startTransition] = useTransition();
+  if (!confirming)
+    return (
+      <button
+        onClick={() => setConfirming(true)}
+        className="text-xs text-gray-500 border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 whitespace-nowrap"
+        title="Refait basculer ce lead dans les prospects à qualifier (garde les statuts de contact)"
+      >
+        ↩ Renvoyer aux leads
+      </button>
+    );
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-gray-600">Confirmer&nbsp;?</span>
+      <button
+        disabled={pending}
+        onClick={() => startTransition(() => revertToLead(leadId))}
+        className="text-xs bg-gray-800 text-white rounded px-2 py-1 hover:bg-gray-700 disabled:opacity-50"
+      >
+        {pending ? "…" : "Oui, renvoyer"}
+      </button>
+      <button onClick={() => setConfirming(false)} disabled={pending}
+        className="text-xs text-gray-400 hover:underline">Annuler</button>
     </div>
   );
 }
