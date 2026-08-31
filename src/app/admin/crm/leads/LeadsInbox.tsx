@@ -4,7 +4,13 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { InboxLead, ContactChannel } from "@/lib/crm";
-import { convertLeadToOpportunity, ignoreLead, setPhoneContacted } from "../actions";
+import {
+  convertLeadToOpportunity,
+  ignoreLead,
+  setPhoneContacted,
+  markNotInterested,
+  markInterested,
+} from "../actions";
 
 function fmtDate(d: Date | string | null) {
   if (!d) return "";
@@ -12,22 +18,25 @@ function fmtDate(d: Date | string | null) {
 }
 
 export default function LeadsInbox({
-  rows, sectors, total, page, limit, filters,
+  rows, sectors, total, page, limit, counts, filters,
 }: {
   rows: InboxLead[];
   sectors: string[];
   total: number;
   page: number;
   limit: number;
-  filters: { sector: string; channel: ContactChannel; q: string };
+  counts: { toQualify: number; toContact: number; notInterested: number };
+  filters: { sector: string; channel: ContactChannel; q: string; notInterested: boolean };
 }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [q, setQ] = useState(filters.q);
+  const notInterested = filters.notInterested;
 
   function go(next: Partial<{ sector: string; channel: string; q: string; page: number }>) {
     const p = new URLSearchParams();
     const merged = { ...filters, page: 1, ...next };
+    if (notInterested) p.set("view", "not_interested");
     if (merged.sector) p.set("sector", merged.sector);
     if (merged.channel && merged.channel !== "all") p.set("channel", merged.channel);
     if (merged.q) p.set("q", merged.q);
@@ -38,13 +47,30 @@ export default function LeadsInbox({
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const cell = "px-3 py-2";
 
+  const tab = "px-3 py-1.5 rounded-md text-sm font-medium border";
+  const tabOn = "bg-blue-600 text-white border-blue-600";
+  const tabOff = "bg-white text-gray-600 border-gray-300 hover:border-blue-400";
+
   return (
     <div className="max-w-full mx-auto px-6 py-10">
       <div className="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">
         <Link href="/admin/crm" className="hover:underline">← Pipeline</Link>
-        <span><strong className="text-gray-900">{total}</strong> leads (filtre courant)</span>
+        <span><strong className="text-gray-900">{total}</strong> dans cette liste</span>
       </div>
-      <h1 className="text-2xl font-semibold mb-5">Leads — prospects à qualifier</h1>
+
+      {/* Onglets : à qualifier / non intéressés */}
+      <div className="flex items-center gap-2 mb-5">
+        <Link href="/admin/crm/leads" className={`${tab} ${notInterested ? tabOff : tabOn}`}>
+          À qualifier <span className="opacity-70">({counts.toQualify})</span>
+        </Link>
+        <Link href="/admin/crm/leads?view=not_interested" className={`${tab} ${notInterested ? tabOn : tabOff}`}>
+          Non intéressés <span className="opacity-70">({counts.notInterested})</span>
+        </Link>
+      </div>
+
+      <h1 className="text-2xl font-semibold mb-5">
+        {notInterested ? "Prospects non intéressés" : "Leads — prospects à qualifier"}
+      </h1>
 
       {/* Filtres */}
       <div className="flex flex-wrap items-end gap-3 mb-4">
@@ -82,7 +108,8 @@ export default function LeadsInbox({
             Filtrer
           </button>
           {(filters.sector || filters.channel !== "all" || filters.q) && (
-            <button type="button" onClick={() => { setQ(""); router.push("/admin/crm/leads"); }}
+            <button type="button"
+              onClick={() => { setQ(""); router.push(`/admin/crm/leads${notInterested ? "?view=not_interested" : ""}`); }}
               className="text-sm text-gray-500 px-2 py-1.5 hover:underline">
               Réinitialiser
             </button>
@@ -106,7 +133,7 @@ export default function LeadsInbox({
             ))}
             {rows.length === 0 && (
               <tr><td colSpan={9} className="px-3 py-6 text-center text-gray-400 text-sm">
-                Aucun lead pour ce filtre.
+                {notInterested ? "Aucun prospect non intéressé." : "Aucun lead pour ce filtre."}
               </td></tr>
             )}
           </tbody>
@@ -180,30 +207,58 @@ export default function LeadsInbox({
             : <span className="text-gray-300">—</span>}
         </td>
         <td className={`${cell} whitespace-nowrap text-right`}>
-          <button
-            disabled={busy}
-            onClick={() => start(async () => { await setPhoneContacted(lead.id, !lead.contacted_phone); onDone(); })}
-            className={`text-xs rounded px-2 py-1 border disabled:opacity-50 ${
-              lead.contacted_phone
-                ? "bg-blue-50 text-blue-700 border-blue-200"
-                : "text-gray-500 border-gray-300 hover:bg-gray-50"
-            }`}
-            title={lead.contacted_phone ? "Annuler le contact téléphone" : "Déclarer contacté par téléphone"}>
-            📞 {lead.contacted_phone ? "✓" : "tél"}
-          </button>
-          <button
-            disabled={busy}
-            onClick={() => start(() => convertLeadToOpportunity(lead.id))}
-            className="ml-1 text-xs rounded bg-blue-600 text-white px-2 py-1 hover:bg-blue-700 disabled:opacity-50">
-            → Opportunité
-          </button>
-          <button
-            disabled={busy}
-            onClick={() => start(async () => { await ignoreLead(lead.id); onDone(); })}
-            className="ml-1 text-xs text-gray-400 px-1 hover:text-red-500"
-            title="Mettre de côté">
-            ✕
-          </button>
+          {notInterested ? (
+            <>
+              <button
+                disabled={busy}
+                onClick={() => start(async () => { await markInterested(lead.id); onDone(); })}
+                className="text-xs rounded bg-blue-600 text-white px-2 py-1 hover:bg-blue-700 disabled:opacity-50"
+                title="Remettre dans les prospects à qualifier">
+                ↩ Réintégrer
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => start(async () => { await ignoreLead(lead.id); onDone(); })}
+                className="ml-1 text-xs text-gray-400 px-1 hover:text-red-500"
+                title="Mettre de côté (archiver)">
+                ✕
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                disabled={busy}
+                onClick={() => start(async () => { await setPhoneContacted(lead.id, !lead.contacted_phone); onDone(); })}
+                className={`text-xs rounded px-2 py-1 border disabled:opacity-50 ${
+                  lead.contacted_phone
+                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                    : "text-gray-500 border-gray-300 hover:bg-gray-50"
+                }`}
+                title={lead.contacted_phone ? "Annuler le contact téléphone" : "Déclarer contacté par téléphone"}>
+                📞 {lead.contacted_phone ? "✓" : "tél"}
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => start(() => convertLeadToOpportunity(lead.id))}
+                className="ml-1 text-xs rounded bg-blue-600 text-white px-2 py-1 hover:bg-blue-700 disabled:opacity-50">
+                → Opportunité
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => start(async () => { await markNotInterested(lead.id); onDone(); })}
+                className="ml-1 text-xs rounded border border-gray-300 text-gray-600 px-2 py-1 hover:bg-gray-50 disabled:opacity-50"
+                title="Marquer non intéressé (le déplace dans la liste dédiée)">
+                🚫 Non intéressé
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => start(async () => { await ignoreLead(lead.id); onDone(); })}
+                className="ml-1 text-xs text-gray-400 px-1 hover:text-red-500"
+                title="Mettre de côté (archiver)">
+                ✕
+              </button>
+            </>
+          )}
         </td>
       </tr>
     );

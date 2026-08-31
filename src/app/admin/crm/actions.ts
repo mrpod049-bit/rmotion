@@ -169,6 +169,28 @@ export async function revertToLead(leadId: number) {
   redirect("/admin/crm/leads");
 }
 
+// Marque un prospect « non intéressé » : il quitte la liste à qualifier pour la
+// liste dédiée (réintégrable). Conserve tout le reste ; la synchro CSV n'y
+// touche pas -> le statut tient dans le temps.
+export async function markNotInterested(leadId: number) {
+  await pool.query(
+    `UPDATE crm_leads SET not_interested = true, not_interested_at = NOW() WHERE id = $1`,
+    [leadId]
+  );
+  revalidatePath("/admin/crm/leads");
+  revalidatePath("/admin/crm");
+}
+
+// Réintègre un « non intéressé » dans les prospects à qualifier.
+export async function markInterested(leadId: number) {
+  await pool.query(
+    `UPDATE crm_leads SET not_interested = false, not_interested_at = NULL WHERE id = $1`,
+    [leadId]
+  );
+  revalidatePath("/admin/crm/leads");
+  revalidatePath("/admin/crm");
+}
+
 // Met un lead de côté (archivé, sort de l'inbox) sans le supprimer.
 export async function ignoreLead(leadId: number) {
   await pool.query(

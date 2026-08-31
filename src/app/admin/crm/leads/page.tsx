@@ -1,4 +1,4 @@
-import { getInboxLeads, getSectors, type ContactChannel } from "@/lib/crm";
+import { getInboxLeads, getSectors, getInboxCounts, type ContactChannel } from "@/lib/crm";
 import LeadsInbox from "./LeadsInbox";
 
 export const dynamic = "force-dynamic";
@@ -18,11 +18,13 @@ export default async function LeadsPage({
     ? (sp.channel as ContactChannel)
     : "all";
   const q = sp.q || "";
+  const notInterested = sp.view === "not_interested";
   const page = Math.max(1, Number(sp.page) || 1);
 
-  const [{ rows, total }, sectors] = await Promise.all([
-    getInboxLeads({ sector, channel, q, limit: LIMIT, offset: (page - 1) * LIMIT }),
+  const [{ rows, total }, sectors, counts] = await Promise.all([
+    getInboxLeads({ sector, channel, q, notInterested, limit: LIMIT, offset: (page - 1) * LIMIT }),
     getSectors(),
+    getInboxCounts(),
   ]);
 
   return (
@@ -32,7 +34,8 @@ export default async function LeadsPage({
       total={total}
       page={page}
       limit={LIMIT}
-      filters={{ sector, channel, q }}
+      counts={counts}
+      filters={{ sector, channel, q, notInterested }}
     />
   );
 }

@@ -226,6 +226,8 @@ export type InboxLead = {
   contacted_email_at: Date | null;
   contacted_phone: boolean;
   contacted_phone_at: Date | null;
+  not_interested: boolean;
+  not_interested_at: Date | null;
   created_at: Date;
 };
 
@@ -236,6 +238,7 @@ export type InboxFilters = {
   sector?: string;
   channel?: ContactChannel;
   q?: string;
+  notInterested?: boolean; // false = à qualifier (défaut), true = liste des non intéressés
   limit?: number;
   offset?: number;
 };
@@ -254,6 +257,7 @@ export async function getInboxLeads(
 ): Promise<{ rows: InboxLead[]; total: number }> {
   const where: string[] = ["type = 'lead'", "active = true"];
   const params: unknown[] = [];
+  where.push(f.notInterested ? "not_interested = true" : "not_interested = false");
   if (f.sector) { params.push(f.sector); where.push(`sector = $${params.length}`); }
   switch (f.channel) {
     case "none": where.push("NOT contacted_email AND NOT contacted_phone"); break;
@@ -280,7 +284,7 @@ export async function getInboxLeads(
     `SELECT id, name, company_name, email, phone, city, department, sector,
             activity, website, score,
             contacted_email, contacted_email_at, contacted_phone, contacted_phone_at,
-            created_at
+            not_interested, not_interested_at, created_at
      FROM crm_leads ${whereSql}
      ORDER BY (contacted_email OR contacted_phone) ASC, score DESC NULLS LAST, name ASC
      LIMIT $${params.length - 1} OFFSET $${params.length}`,
@@ -289,14 +293,24 @@ export async function getInboxLeads(
   return { rows, total: totalRes.rows[0].n };
 }
 
-// Compteurs pour le lien vers l'inbox depuis le pipeline.
-export async function getInboxCounts(): Promise<{ total: number; toContact: number }> {
+// Compteurs pour l'inbox et le lien depuis le pipeline.
+export async function getInboxCounts(): Promise<{
+  toQualify: number;
+  toContact: number;
+  notInterested: number;
+}> {
   const { rows } = await pool.query(
-    `SELECT COUNT(*)::int AS total,
-            COUNT(*) FILTER (WHERE NOT contacted_email AND NOT contacted_phone)::int AS to_contact
+    `SELECT
+       COUNT(*) FILTER (WHERE NOT not_interested)::int AS to_qualify,
+       COUNT(*) FILTER (WHERE NOT not_interested AND NOT contacted_email AND NOT contacted_phone)::int AS to_contact,
+       COUNT(*) FILTER (WHERE not_interested)::int AS not_interested
      FROM crm_leads WHERE type = 'lead' AND active = true`
   );
-  return { total: rows[0].total, toContact: rows[0].to_contact };
+  return {
+    toQualify: rows[0].to_qualify,
+    toContact: rows[0].to_contact,
+    notInterested: rows[0].not_interested,
+  };
 }
 
 export function computeStats(leads: Lead[]): PipelineStats {
