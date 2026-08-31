@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import type { Metadata } from "next";
@@ -7,6 +6,7 @@ import { getLocale, getT } from "@/i18n/server";
 import { localizeHref, dateLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { translateCategory } from "../categories";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const getArticle = cache(async (slug: string, en: boolean) => {
   const res = await pool.query(
@@ -90,7 +90,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
-      <Link href={L("/articles")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
+      <Breadcrumbs
+        items={[
+          { label: t.breadcrumbHome, href: L("/") },
+          { label: t.breadcrumbArticles, href: L("/articles") },
+          { label: article.title },
+        ]}
+      />
       <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">{translateCategory(article.category, locale)}</p>
       <h1 className="text-3xl font-semibold mb-4">{article.title}</h1>
       {article.published_at && (

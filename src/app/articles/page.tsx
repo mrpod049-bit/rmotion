@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
-import { getLocale, getT } from "@/i18n/server";
+import { getT } from "@/i18n/server";
 import { localizeHref, dateLocale } from "@/i18n/config";
 import { translateCategory } from "./categories";
 

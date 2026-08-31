@@ -11,6 +11,8 @@ const SLUG_MAP: Record<string, string> = {
 };
 
 const nextConfig: NextConfig = {
+  // Le logo est servi en qualité 100 ; Next 16 impose de déclarer les qualités utilisées.
+  images: { qualities: [75, 100] },
   async redirects() {
     const perSlug = Object.entries(SLUG_MAP).flatMap(([oldSlug, newSlug]) => [
       { source: `/machines/${oldSlug}`, destination: `/products/${newSlug}`, permanent: true },
@@ -25,6 +27,9 @@ const nextConfig: NextConfig = {
       { source: "/en/machines", destination: "/en/products", permanent: true },
       { source: "/machines/:slug", destination: "/products/:slug", permanent: true },
       { source: "/en/machines/:slug", destination: "/en/products/:slug", permanent: true },
+      // Articles renommés (ancien slug -> nouveau slug).
+      { source: "/articles/roi-machine-laser", destination: "/articles/cas-du-roi", permanent: true },
+      { source: "/en/articles/roi-machine-laser", destination: "/en/articles/cas-du-roi", permanent: true },
     ];
   },
 };

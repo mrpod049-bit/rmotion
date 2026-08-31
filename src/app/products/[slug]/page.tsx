@@ -8,6 +8,8 @@ import PixelEvent from "@/components/PixelEvent";
 import { getLocale, getT } from "@/i18n/server";
 import { localizeHref, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { formatPriceFrom } from "@/lib/price";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const SITE = "https://www.rmotion.fr";
 
@@ -90,19 +92,13 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     : Object.entries((rawSpecs ?? {}) as Record<string, string>);
 
   // Prix « à partir de » : price_range contient le montant en euros HT (ex. "5399").
-  // Si la valeur n'est pas numérique, on l'affiche telle quelle (repli).
-  const en = locale === "en";
   const priceAmount = Number(machine.price_range);
   const hasNumericPrice =
     machine.price_range != null &&
     String(machine.price_range).trim() !== "" &&
     Number.isFinite(priceAmount) &&
     priceAmount > 0;
-  const priceLabel = hasNumericPrice
-    ? en
-      ? `${t.priceFrom} €${new Intl.NumberFormat("en-GB").format(priceAmount)} excl. VAT`
-      : `${t.priceFrom} ${new Intl.NumberFormat("fr-FR").format(priceAmount)} € HT`
-    : machine.price_range || null;
+  const priceLabel = formatPriceFrom(machine.price_range, locale as Locale, t.priceFrom);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -180,7 +176,13 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           content_category: machine.category,
         }}
       />
-      <Link href={L("/products")} className="text-sm text-gray-400 hover:text-gray-900 mb-8 block">{t.back}</Link>
+      <Breadcrumbs
+        items={[
+          { label: t.breadcrumbHome, href: L("/") },
+          { label: t.breadcrumbCatalog, href: L("/products") },
+          { label: machine.name },
+        ]}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         {/* Colonne gauche : visuel + description (remonte pour combler le vide) */}
@@ -282,8 +284,8 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">{t.specs}</h2>
             <dl className="border border-gray-200 rounded-lg divide-y divide-gray-200">
-              {specEntries.map(([key, val]) => (
-                <div key={key} className="grid grid-cols-2 px-4 py-3 text-sm">
+              {specEntries.map(([key, val], i) => (
+                <div key={`${key}-${i}`} className="grid grid-cols-2 px-4 py-3 text-sm">
                   <dt className="text-gray-500 first-letter:uppercase">{key.replace(/_/g, " ")}</dt>
                   <dd className="text-gray-900 font-medium">{val}</dd>
                 </div>

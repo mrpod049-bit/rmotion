@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function ProductGallery({ images, alt }: { images: string[]; alt: string }) {
   const [i, setI] = useState(0);
@@ -9,11 +10,13 @@ export default function ProductGallery({ images, alt }: { images: string[]; alt:
   return (
     <div className="flex flex-col gap-4">
       <div className="relative h-96 flex items-center justify-center overflow-hidden rounded-lg bg-white">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={images[i]}
           alt={`${alt} — vue ${i + 1}`}
-          className="max-h-full max-w-full object-contain"
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-contain"
         />
 
         {n > 1 && (
@@ -47,12 +50,11 @@ export default function ProductGallery({ images, alt }: { images: string[]; alt:
               onClick={() => setI(idx)}
               aria-label={`Voir l'image ${idx + 1}`}
               aria-current={idx === i}
-              className={`h-16 w-16 rounded border overflow-hidden bg-white transition-colors ${
+              className={`relative h-16 w-16 rounded border overflow-hidden bg-white transition-colors ${
                 idx === i ? "border-gray-900" : "border-gray-200 hover:border-gray-400"
               }`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt="" aria-hidden className="h-full w-full object-contain" />
+              <Image src={src} alt="" aria-hidden fill sizes="64px" className="object-contain" />
             </button>
           ))}
         </div>
