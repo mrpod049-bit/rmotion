@@ -59,9 +59,9 @@ export default function MetaPixel() {
 
   const t = TXT[locale];
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-4 shadow-lg backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center">
-        <p className="flex-1 text-sm text-gray-600">
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-lg backdrop-blur">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <p className="flex-1 text-xs leading-snug text-gray-600 sm:text-sm">
           {t.text}{" "}
           <Link
             href={localizeHref("/confidentialite", locale)}
@@ -74,14 +74,14 @@ export default function MetaPixel() {
           <button
             type="button"
             onClick={() => choose("denied")}
-            className="rounded border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            className="rounded border border-gray-300 px-4 py-1.5 text-sm text-gray-700 hover:bg-gray-50 sm:py-2"
           >
             {t.refuse}
           </button>
           <button
             type="button"
             onClick={() => choose("granted")}
-            className="rounded bg-[#0f3151] px-4 py-2 text-sm text-white hover:bg-[#184f79]"
+            className="rounded bg-[#0f3151] px-4 py-1.5 text-sm text-white hover:bg-[#184f79] sm:py-2"
           >
             {t.accept}
           </button>

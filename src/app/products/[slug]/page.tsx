@@ -184,9 +184,9 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         ]}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-        {/* Colonne gauche : visuel + description (remonte pour combler le vide) */}
-        <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 items-start">
+        {/* Galerie — colonne gauche, ligne 1 (reste tout en haut sur mobile) */}
+        <div className="lg:col-start-1 lg:row-start-1">
           {machine.images?.length ? (
             <ProductGallery images={machine.images} alt={machine.name} />
           ) : (
@@ -194,33 +194,11 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
               {machine.category}
             </div>
           )}
-
-          {/* Description */}
-          <div className="mt-10">
-            <h2 className="text-lg font-semibold mb-4">{t.description}</h2>
-            <div className="space-y-4">
-              {String(machine.description || "")
-                .split(/\n{2,}/)
-                .filter((p) => p.trim())
-                .map((para, idx) => {
-                  const isWarning = /^(AVERTISSEMENT|SAFETY WARNING)/i.test(para.trim());
-                  return (
-                    <p
-                      key={idx}
-                      className={`leading-relaxed whitespace-pre-line ${
-                        isWarning ? "text-red-600 font-bold" : "text-gray-600"
-                      }`}
-                    >
-                      {para}
-                    </p>
-                  );
-                })}
-            </div>
-          </div>
         </div>
 
-        {/* Colonne droite : infos + tableaux, décalée de 50px vers la droite */}
-        <div className="lg:pl-[50px]">
+        {/* Colonne droite : nom, prix, CTA, specs (décalée de 50px).
+            Sur mobile, ce bloc remonte juste sous la photo → prix + CTA visibles au 1er scroll. */}
+        <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:pl-[50px] mt-10 lg:mt-0">
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">{machine.category}</p>
           <h1 className="text-3xl font-semibold mb-3">{machine.name}</h1>
           <p className="text-gray-500 mb-6">{machine.tagline}</p>
@@ -291,6 +269,29 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </dl>
+          </div>
+        </div>
+
+        {/* Description — colonne gauche sous la galerie ; passe en dernier sur mobile */}
+        <div className="lg:col-start-1 lg:row-start-2 mt-10">
+          <h2 className="text-lg font-semibold mb-4">{t.description}</h2>
+          <div className="space-y-4">
+            {String(machine.description || "")
+              .split(/\n{2,}/)
+              .filter((p) => p.trim())
+              .map((para, idx) => {
+                const isWarning = /^(AVERTISSEMENT|SAFETY WARNING)/i.test(para.trim());
+                return (
+                  <p
+                    key={idx}
+                    className={`leading-relaxed whitespace-pre-line ${
+                      isWarning ? "text-red-600 font-bold" : "text-gray-600"
+                    }`}
+                  >
+                    {para}
+                  </p>
+                );
+              })}
           </div>
         </div>
       </div>
