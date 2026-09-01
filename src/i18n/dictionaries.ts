@@ -92,7 +92,7 @@ const fr = {
   },
   newsletter: {
     title: "Restez informé",
-    text: "Recevez en avant-première nos nouveautés machines, offres et guides techniques. Pas de spam, désinscription en un clic.",
+    text: "Recevez en avant première nos nouveautés ainsi que nos conseils techniques. Inscription sans engagement résiliable à tout moment.",
     emailPlaceholder: "votre@email.fr",
     consent: "J'accepte de recevoir la newsletter de Rmotion.",
     privacyBefore: "En vous inscrivant, vous acceptez notre ",
@@ -313,7 +313,7 @@ const en: Dictionary = {
   },
   newsletter: {
     title: "Stay in the loop",
-    text: "Get early access to our latest machines, offers and technical guides. No spam, unsubscribe in one click.",
+    text: "Get early access to our latest releases and technical tips. No commitment, cancel anytime.",
     emailPlaceholder: "you@email.com",
     consent: "I agree to receive the Rmotion newsletter.",
     privacyBefore: "By subscribing, you accept our ",
