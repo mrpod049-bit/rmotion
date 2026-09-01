@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import BackgroundPattern from "@/components/BackgroundPattern";
 import { Analytics } from "@vercel/analytics/next";
 import MetaPixel from "@/components/MetaPixel";
+import NewsletterPopup from "@/components/NewsletterPopup";
 import { getLocale } from "@/i18n/server";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -99,6 +100,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Footer />
         <Analytics />
         <MetaPixel />
+        <NewsletterPopup />
       </body>
     </html>
   );
