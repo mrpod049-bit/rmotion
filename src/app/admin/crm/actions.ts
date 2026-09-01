@@ -3,26 +3,79 @@
 import pool from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+
+// Qui déclenche l'action : l'utilisateur admin (en-tête Basic Auth), sinon défaut.
+async function getActor(): Promise<string> {
+  try {
+    const auth = (await headers()).get("authorization");
+    if (auth?.startsWith("Basic ")) {
+      const decoded = Buffer.from(auth.slice(6), "base64").toString("utf8");
+      const user = decoded.slice(0, decoded.indexOf(":"));
+      if (user) return user;
+    }
+  } catch {
+    // en-tête indisponible -> on retombe sur le défaut
+  }
+  return process.env.ADMIN_USER || "admin";
+}
+
+// Journalise une action dans crm_activity_log. Best-effort : ne bloque jamais
+// l'action métier si l'écriture du log échoue.
+async function logAction(
+  action: string,
+  opts: {
+    entityId?: number | null;
+    entityLabel?: string | null;
+    detail?: string | null;
+    entityType?: string;
+  } = {}
+) {
+  try {
+    const actor = await getActor();
+    await pool.query(
+      `INSERT INTO crm_activity_log (entity_type, entity_id, entity_label, action, detail, actor)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [
+        opts.entityType ?? "lead",
+        opts.entityId ?? null,
+        opts.entityLabel ?? null,
+        action,
+        opts.detail ?? null,
+        actor,
+      ]
+    );
+  } catch (e) {
+    console.error("[crm log]", e);
+  }
+}
 
 // Déplace une opportunité vers une autre étape (glisser-déposer du kanban).
 // Si l'étape cible est « gagné », on cale la probabilité à 100 %.
 export async function moveLead(leadId: number, stageId: number) {
   const { rows } = await pool.query(
-    `SELECT is_won FROM crm_stages WHERE id = $1`,
+    `SELECT name, is_won FROM crm_stages WHERE id = $1`,
     [stageId]
   );
   const isWon = rows[0]?.is_won === true;
+  const stageName = rows[0]?.name ?? "?";
 
-  await pool.query(
+  const { rows: upd } = await pool.query(
     `UPDATE crm_leads
        SET stage_id = $1,
            won = $2,
            probability = CASE WHEN $2 THEN 100 ELSE probability END,
            closed_at = CASE WHEN $2 THEN NOW() ELSE NULL END
-     WHERE id = $3`,
+     WHERE id = $3
+     RETURNING name`,
     [stageId, isWon, leadId]
   );
 
+  await logAction(isWon ? "won" : "stage", {
+    entityId: leadId,
+    entityLabel: upd[0]?.name,
+    detail: isWon ? `Gagnée (étape ${stageName})` : `Étape : ${stageName}`,
+  });
   revalidatePath("/admin/crm");
 }
 
@@ -43,11 +96,12 @@ export async function createLead(input: {
   );
   const firstStageId = stageRows[0]?.id ?? null;
 
-  await pool.query(
+  const { rows } = await pool.query(
     `INSERT INTO crm_leads
        (name, type, stage_id, company_name, contact_name, email, phone,
         expected_revenue, source)
-     VALUES ($1, 'opportunity', $2, $3, $4, $5, $6, $7, 'manuel')`,
+     VALUES ($1, 'opportunity', $2, $3, $4, $5, $6, $7, 'manuel')
+     RETURNING id`,
     [
       name,
       firstStageId,
@@ -59,6 +113,7 @@ export async function createLead(input: {
     ]
   );
 
+  await logAction("create", { entityId: rows[0]?.id, entityLabel: name });
   revalidatePath("/admin/crm");
 }
 
@@ -102,13 +157,16 @@ export async function updateLead(
 
 // Marque une opportunité comme perdue : archivée (active=false) avec un motif.
 export async function markLost(leadId: number, reason: string) {
-  await pool.query(
+  const motif = reason?.trim() || "Non précisé";
+  const { rows } = await pool.query(
     `UPDATE crm_leads
        SET active = false, won = false, probability = 0,
            lost_reason = $2, closed_at = NOW()
-     WHERE id = $1`,
-    [leadId, reason?.trim() || "Non précisé"]
+     WHERE id = $1
+     RETURNING name`,
+    [leadId, motif]
   );
+  await logAction("lost", { entityId: leadId, entityLabel: rows[0]?.name, detail: `Motif : ${motif}` });
   revalidatePath("/admin/crm");
 }
 
@@ -116,7 +174,14 @@ export async function markLost(leadId: number, reason: string) {
 // (lignes machines, activités, notes — via ON DELETE CASCADE). Irréversible.
 // À ne pas confondre avec markLost, qui ne fait qu'archiver.
 export async function deleteLead(leadId: number) {
+  // On récupère le nom AVANT suppression pour un log lisible.
+  const { rows } = await pool.query(`SELECT name, type FROM crm_leads WHERE id = $1`, [leadId]);
   await pool.query(`DELETE FROM crm_leads WHERE id = $1`, [leadId]);
+  await logAction("delete", {
+    entityId: leadId,
+    entityLabel: rows[0]?.name,
+    detail: rows[0]?.type === "opportunity" ? "Opportunité supprimée" : "Lead supprimé",
+  });
   revalidatePath("/admin/crm");
   redirect("/admin/crm");
 }
@@ -128,12 +193,14 @@ export async function convertLeadToOpportunity(leadId: number) {
     `SELECT id FROM crm_stages ORDER BY sequence, id LIMIT 1`
   );
   const firstStageId = rows[0]?.id ?? null;
-  await pool.query(
+  const { rows: upd } = await pool.query(
     `UPDATE crm_leads
        SET type = 'opportunity', stage_id = COALESCE(stage_id, $2), active = true
-     WHERE id = $1`,
+     WHERE id = $1
+     RETURNING name`,
     [leadId, firstStageId]
   );
+  await logAction("convert", { entityId: leadId, entityLabel: upd[0]?.name });
   revalidatePath("/admin/crm");
   revalidatePath("/admin/crm/leads");
   redirect(`/admin/crm/${leadId}`);
@@ -142,13 +209,19 @@ export async function convertLeadToOpportunity(leadId: number) {
 // Déclare (ou annule) un contact téléphonique sur un lead. Manuel : la synchro
 // CSV n'y touche jamais.
 export async function setPhoneContacted(leadId: number, value: boolean) {
-  await pool.query(
+  const { rows } = await pool.query(
     `UPDATE crm_leads
        SET contacted_phone = $2,
            contacted_phone_at = CASE WHEN $2 THEN COALESCE(contacted_phone_at, NOW()) ELSE NULL END
-     WHERE id = $1`,
+     WHERE id = $1
+     RETURNING name`,
     [leadId, value]
   );
+  await logAction(value ? "phone_on" : "phone_off", {
+    entityId: leadId,
+    entityLabel: rows[0]?.name,
+    detail: value ? "Contact téléphone déclaré" : "Contact téléphone annulé",
+  });
   revalidatePath("/admin/crm/leads");
   revalidatePath("/admin/crm");
 }
@@ -158,12 +231,14 @@ export async function setPhoneContacted(leadId: number, value: boolean) {
 // notamment les statuts contacté email/téléphone, les coordonnées, les notes,
 // les lignes machines — pour ne rien perdre si on reconvertit ensuite.
 export async function revertToLead(leadId: number) {
-  await pool.query(
+  const { rows } = await pool.query(
     `UPDATE crm_leads
        SET type = 'lead', stage_id = NULL, won = false, closed_at = NULL, active = true
-     WHERE id = $1`,
+     WHERE id = $1
+     RETURNING name`,
     [leadId]
   );
+  await logAction("revert", { entityId: leadId, entityLabel: rows[0]?.name });
   revalidatePath("/admin/crm");
   revalidatePath("/admin/crm/leads");
   redirect("/admin/crm/leads");
@@ -173,41 +248,46 @@ export async function revertToLead(leadId: number) {
 // liste dédiée (réintégrable). Conserve tout le reste ; la synchro CSV n'y
 // touche pas -> le statut tient dans le temps.
 export async function markNotInterested(leadId: number) {
-  await pool.query(
-    `UPDATE crm_leads SET not_interested = true, not_interested_at = NOW() WHERE id = $1`,
+  const { rows } = await pool.query(
+    `UPDATE crm_leads SET not_interested = true, not_interested_at = NOW() WHERE id = $1 RETURNING name`,
     [leadId]
   );
+  await logAction("not_interested", { entityId: leadId, entityLabel: rows[0]?.name });
   revalidatePath("/admin/crm/leads");
   revalidatePath("/admin/crm");
 }
 
 // Réintègre un « non intéressé » dans les prospects à qualifier.
 export async function markInterested(leadId: number) {
-  await pool.query(
-    `UPDATE crm_leads SET not_interested = false, not_interested_at = NULL WHERE id = $1`,
+  const { rows } = await pool.query(
+    `UPDATE crm_leads SET not_interested = false, not_interested_at = NULL WHERE id = $1 RETURNING name`,
     [leadId]
   );
+  await logAction("interested", { entityId: leadId, entityLabel: rows[0]?.name });
   revalidatePath("/admin/crm/leads");
   revalidatePath("/admin/crm");
 }
 
 // Met un lead de côté (archivé, sort de l'inbox) sans le supprimer.
 export async function ignoreLead(leadId: number) {
-  await pool.query(
-    `UPDATE crm_leads SET active = false WHERE id = $1`,
+  const { rows } = await pool.query(
+    `UPDATE crm_leads SET active = false WHERE id = $1 RETURNING name`,
     [leadId]
   );
+  await logAction("ignore", { entityId: leadId, entityLabel: rows[0]?.name });
   revalidatePath("/admin/crm/leads");
 }
 
 // Réactive une opportunité clôturée (perdue) et la remet dans le pipeline.
 export async function reopenLead(leadId: number) {
-  await pool.query(
+  const { rows } = await pool.query(
     `UPDATE crm_leads
        SET active = true, won = false, lost_reason = NULL, closed_at = NULL
-     WHERE id = $1`,
+     WHERE id = $1
+     RETURNING name`,
     [leadId]
   );
+  await logAction("reopen", { entityId: leadId, entityLabel: rows[0]?.name });
   revalidatePath(`/admin/crm/${leadId}`);
   revalidatePath("/admin/crm");
 }

@@ -27,6 +27,7 @@ export default async function CrmPage() {
           Leads <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-700 px-1.5 text-xs">{inbox.toContact} à contacter</span>
         </Link>
         <Link href="/admin/crm/machines" className="hover:underline">Coûts machines →</Link>
+        <Link href="/admin/crm/logs" className="hover:underline">Journal →</Link>
         <span><strong className="text-gray-900">{stats.count}</strong> opportunités</span>
         <span>CA prév. : <strong className="text-gray-900">{eur.format(stats.revenue)}</strong>
           <span className="text-gray-400"> ({eur.format(stats.revenueWeighted)} pondéré)</span></span>

@@ -313,6 +313,58 @@ export async function getInboxCounts(): Promise<{
   };
 }
 
+// ---------------------------------------------------------------------
+// Journal d'audit (crm_activity_log)
+// ---------------------------------------------------------------------
+
+export type LogEntry = {
+  id: number;
+  entity_type: string;
+  entity_id: number | null;
+  entity_label: string | null;
+  action: string;
+  detail: string | null;
+  actor: string | null;
+  created_at: Date;
+};
+
+export async function getActivityLog(f: {
+  action?: string;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<{ rows: LogEntry[]; total: number }> {
+  const where: string[] = [];
+  const params: unknown[] = [];
+  if (f.action) { params.push(f.action); where.push(`action = $${params.length}`); }
+  if (f.q) { params.push(`%${f.q}%`); where.push(`(entity_label ILIKE $${params.length} OR detail ILIKE $${params.length})`); }
+  const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
+
+  const totalRes = await pool.query(
+    `SELECT COUNT(*)::int AS n FROM crm_activity_log ${whereSql}`,
+    params
+  );
+
+  const limit = Math.min(f.limit ?? 100, 300);
+  const offset = f.offset ?? 0;
+  params.push(limit, offset);
+  const { rows } = await pool.query(
+    `SELECT * FROM crm_activity_log ${whereSql}
+     ORDER BY created_at DESC, id DESC
+     LIMIT $${params.length - 1} OFFSET $${params.length}`,
+    params
+  );
+  return { rows, total: totalRes.rows[0].n };
+}
+
+// Liste des types d'actions présents (pour le filtre).
+export async function getLogActionTypes(): Promise<string[]> {
+  const { rows } = await pool.query(
+    `SELECT DISTINCT action FROM crm_activity_log ORDER BY action`
+  );
+  return rows.map((r) => r.action);
+}
+
 export function computeStats(leads: Lead[]): PipelineStats {
   let revenue = 0;
   let revenueWeighted = 0;
