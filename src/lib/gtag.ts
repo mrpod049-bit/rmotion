@@ -6,7 +6,7 @@ export const GADS_ID = "AW-18425010143";
 // Format attendu : "AW-18425010143/xxxxxxxxxxxxxxxxxx" (ID de conversion + "/" + libellé).
 // Tant qu'un libellé est vide, la conversion correspondante est un no-op silencieux.
 export const GADS_CONVERSIONS = {
-  devis: "", // ← à renseigner : action "Demande de devis" créée dans Google Ads
+  devis: "AW-18425010143/qQSeCNig0-wcEN-v3dFE", // action "Demande de devis" (Google Ads)
 } as const;
 
 type GadsConversion = keyof typeof GADS_CONVERSIONS;
