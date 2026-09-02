@@ -94,15 +94,6 @@
 .pros-cons .cons .pc-title {
   color: #b91c1c;
 }
-.pros-cons .pc-title::before {
-  font-weight: 700;
-}
-.pros-cons .pros .pc-title::before {
-  content: "✓";
-}
-.pros-cons .cons .pc-title::before {
-  content: "✕";
-}
 .pros-cons ul {
   list-style: none;
   margin: 0;
@@ -110,22 +101,15 @@
 }
 .pros-cons li {
   position: relative;
-  padding-left: 1.5rem;
+  padding-left: 1.1rem;
   margin: 0.3rem 0;
   font-size: 0.9rem;
   line-height: 1.5;
 }
 .pros-cons li::before {
+  content: "•";
   position: absolute;
   left: 0;
   top: 0;
-  font-weight: 700;
-}
-.pros-cons .pros li::before {
-  content: "✓";
-  color: #16a34a;
-}
-.pros-cons .cons li::before {
-  content: "✕";
-  color: #dc2626;
+  color: #9ca3af;
 }
