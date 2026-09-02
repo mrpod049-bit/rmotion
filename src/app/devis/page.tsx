@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
+import { gtagConversion } from "@/lib/gtag";
 
 // Coordonnées encodées en base64 : jamais en clair dans le HTML, décodées
 // côté client uniquement après montage (invisibles pour les scrapers/SSR).
@@ -91,6 +92,7 @@ function DevisForm() {
     if (res.ok) {
       setDone(true);
       pixelTrack("Lead", { content_name: form.machine_name || undefined });
+      gtagConversion("devis", { value: 1.0, currency: "EUR" });
     } else setError(t.error);
   };
 

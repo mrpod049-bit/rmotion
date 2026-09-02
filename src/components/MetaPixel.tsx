@@ -4,18 +4,19 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { CONSENT_KEY, denyPixel, loadPixel, pixelTrack } from "@/lib/pixel";
+import { denyGtag, loadGtag } from "@/lib/gtag";
 
 type Consent = "granted" | "denied";
 
 const TXT = {
   fr: {
-    text: "Nous utilisons des cookies publicitaires (Meta) pour mesurer et améliorer nos campagnes. Vous pouvez accepter ou refuser.",
+    text: "Nous utilisons des cookies publicitaires (Meta et Google) pour mesurer et améliorer nos campagnes. Vous pouvez accepter ou refuser.",
     accept: "Accepter",
     refuse: "Refuser",
     more: "En savoir plus",
   },
   en: {
-    text: "We use advertising cookies (Meta) to measure and improve our campaigns. You can accept or decline.",
+    text: "We use advertising cookies (Meta and Google) to measure and improve our campaigns. You can accept or decline.",
     accept: "Accept",
     refuse: "Decline",
     more: "Learn more",
@@ -41,8 +42,13 @@ export default function MetaPixel() {
 
   // Charge le pixel dès que le consentement est accordé (ou abandonne la file si refusé).
   useEffect(() => {
-    if (consent === "granted") loadPixel();
-    else if (consent === "denied") denyPixel();
+    if (consent === "granted") {
+      loadPixel();
+      loadGtag();
+    } else if (consent === "denied") {
+      denyPixel();
+      denyGtag();
+    }
   }, [consent]);
 
   // PageView au montage et à chaque navigation interne (si consenti).
