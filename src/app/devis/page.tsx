@@ -5,6 +5,7 @@ import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
 import { gtagConversion } from "@/lib/gtag";
+import { getAttribution } from "@/lib/attribution";
 
 // Coordonnées encodées en base64 : jamais en clair dans le HTML, décodées
 // côté client uniquement après montage (invisibles pour les scrapers/SSR).
@@ -86,7 +87,7 @@ function DevisForm() {
     const res = await fetch("/api/devis", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, machine_id: machineId || null, locale }),
+      body: JSON.stringify({ ...form, machine_id: machineId || null, locale, attribution: getAttribution() }),
     });
     setSending(false);
     if (res.ok) {
