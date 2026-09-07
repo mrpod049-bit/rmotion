@@ -6,7 +6,7 @@ export const GADS_ID = "AW-18425010143";
 // Format attendu : "AW-18425010143/xxxxxxxxxxxxxxxxxx" (ID de conversion + "/" + libellé).
 // Tant qu'un libellé est vide, la conversion correspondante est un no-op silencieux.
 export const GADS_CONVERSIONS = {
-  devis: "AW-18425010143/qQSeCNig0-wcEN-v3dFE", // action "Demande de devis" (Google Ads)
+  devis: "AW-18425010143/v1riCL2wvPAcEN-v3dFE", // action "Demande de devis" (Google Ads, pondérée 25)
   newsletter: "AW-18425010143/sjQLCLn_u_AcEN-v3dFE", // action "Inscription newsletter" (Google Ads)
   fiche_technique: "AW-18425010143/OSQECP3ds_AcEN-v3dFE", // action "Demande de fiche technique" (Google Ads)
 } as const;
