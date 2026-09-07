@@ -10,6 +10,7 @@ import { localizeHref, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { formatPriceFrom } from "@/lib/price";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import FicheTechniqueButton from "@/components/FicheTechniqueButton";
 
 const SITE = "https://www.rmotion.fr";
 
@@ -207,12 +208,20 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
             <p className="text-2xl font-semibold text-gray-900 mb-8">{priceLabel}</p>
           )}
 
-          <Link
-            href={L(`/devis?machine=${machine.id}&nom=${encodeURIComponent(machine.name)}`)}
-            className="inline-block bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-700 transition-colors mb-10"
-          >
-            {t.quoteCta}
-          </Link>
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link
+              href={L(`/devis?machine=${machine.id}&nom=${encodeURIComponent(machine.name)}`)}
+              className="inline-block bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-700 transition-colors"
+            >
+              {t.quoteCta}
+            </Link>
+            <FicheTechniqueButton
+              machineId={machine.id}
+              machineName={machine.name}
+              machineSlug={machine.slug}
+              locale={locale as Locale}
+            />
+          </div>
 
           {/* Infos service — identiques pour toutes les machines, au-dessus des specs */}
           <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200 text-sm mb-8">

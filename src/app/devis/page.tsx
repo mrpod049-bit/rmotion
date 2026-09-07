@@ -93,7 +93,7 @@ function DevisForm() {
     if (res.ok) {
       setDone(true);
       pixelTrack("Lead", { content_name: form.machine_name || undefined });
-      gtagConversion("devis", { value: 1.0, currency: "EUR" });
+      gtagConversion("devis", { value: 25.0, currency: "EUR" });
     } else setError(t.error);
   };
 

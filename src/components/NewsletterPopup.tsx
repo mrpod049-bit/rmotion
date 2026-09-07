@@ -117,7 +117,7 @@ export default function NewsletterPopup() {
       setDone(true);
       persistDone();
       pixelTrack("Lead", { source: "newsletter" });
-      gtagConversion("newsletter");
+      gtagConversion("newsletter", { value: 1.0, currency: "EUR" });
     } else {
       setError(t.error);
     }

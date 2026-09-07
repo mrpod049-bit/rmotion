@@ -8,6 +8,7 @@ export const GADS_ID = "AW-18425010143";
 export const GADS_CONVERSIONS = {
   devis: "AW-18425010143/qQSeCNig0-wcEN-v3dFE", // action "Demande de devis" (Google Ads)
   newsletter: "", // ← à renseigner : action "Inscription newsletter" (Google Ads)
+  fiche_technique: "", // ← à renseigner : action "Demande de fiche technique" (Google Ads)
 } as const;
 
 type GadsConversion = keyof typeof GADS_CONVERSIONS;

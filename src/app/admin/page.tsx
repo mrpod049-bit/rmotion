@@ -21,11 +21,17 @@ async function getData() {
     `SELECT email, name, phone, message, source, campaign, created_at
      FROM contact_leads ORDER BY created_at DESC`
   );
+  const ftRequests = await pool.query(
+    `SELECT email, nom, machine_name, machine_slug, created_at,
+            gclid, utm_source, utm_medium, utm_campaign, utm_term
+     FROM ft_requests ORDER BY created_at DESC`
+  );
   return {
     devis: devis.rows,
     contacts: contacts.rows,
     newsletter: newsletter.rows,
     contactLeads: contactLeads.rows,
+    ftRequests: ftRequests.rows,
   };
 }
 
@@ -66,7 +72,7 @@ function newsletterSource(source: string | null): { label: string; paid: boolean
 }
 
 export default async function AdminPage() {
-  const { devis, contacts, newsletter, contactLeads } = await getData();
+  const { devis, contacts, newsletter, contactLeads, ftRequests } = await getData();
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
@@ -179,6 +185,45 @@ export default async function AdminPage() {
                     <td className="px-3 py-2 whitespace-nowrap text-gray-500">{r.campaign || "—"}</td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* Demandes de fiche technique (bouton par produit) */}
+      <section className="mb-14">
+        <h2 className="text-lg font-medium mb-4">
+          Demandes de fiche technique <span className="text-gray-400 font-normal">({ftRequests.length})</span>
+        </h2>
+        {ftRequests.length === 0 ? (
+          <p className="text-gray-500 text-sm">Aucune demande pour le moment.</p>
+        ) : (
+          <div className="overflow-x-auto border border-gray-200 rounded-lg">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-gray-500 text-left">
+                <tr>
+                  {["Date", "Machine", "Email", "Nom", "Source"].map((h) => (
+                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {ftRequests.map((r, i) => {
+                  const s = sourceInfo(r);
+                  return (
+                    <tr key={i} className="align-top">
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
+                      <td className="px-3 py-2 whitespace-nowrap">{r.machine_name || r.machine_slug || "—"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
+                      <td className="px-3 py-2 whitespace-nowrap">{r.nom || "—"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap">
+                        <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
+                        {s.detail && <div className="text-gray-400 text-xs">{s.detail}</div>}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
