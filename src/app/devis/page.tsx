@@ -73,6 +73,7 @@ function DevisForm() {
     nom: "", societe: "", email: "", telephone: "",
     machine_name: machineName, message: "",
   });
+  const [requestType, setRequestType] = useState<"devis" | "general">("devis");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -84,10 +85,12 @@ function DevisForm() {
     e.preventDefault();
     setSending(true);
     setError("");
+    const typeLabel = requestType === "general" ? t.requestTypeGeneral : t.requestTypeQuote;
+    const message = `${t.requestTypeLabel} : ${typeLabel}\n\n${form.message}`;
     const res = await fetch("/api/devis", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, machine_id: machineId || null, locale, attribution: getAttribution() }),
+      body: JSON.stringify({ ...form, message, machine_id: machineId || null, locale, attribution: getAttribution() }),
     });
     setSending(false);
     if (res.ok) {
@@ -109,6 +112,17 @@ function DevisForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t.requestTypeLabel}</label>
+        <select
+          value={requestType}
+          onChange={(e) => setRequestType(e.target.value as "devis" | "general")}
+          className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
+        >
+          <option value="devis">{t.requestTypeQuote}</option>
+          <option value="general">{t.requestTypeGeneral}</option>
+        </select>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label={t.name} name="nom" value={form.nom} onChange={handleChange} required />
         <Field label={t.company} name="societe" value={form.societe} onChange={handleChange} />
