@@ -17,7 +17,7 @@ export default function AdminNav({ toContact = 0 }: { toContact?: number }) {
     exact ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
+    <nav className="sticky top-20 xl:top-24 z-40 border-b border-gray-200 bg-white">
       <div className="px-6 flex items-center gap-1 overflow-x-auto">
         {TABS.map((tab) => {
           const active = isActive(tab.href, tab.exact);
