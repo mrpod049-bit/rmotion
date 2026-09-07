@@ -48,9 +48,10 @@ export default function NewsletterPopup() {
   // Arme les déclencheurs (intention de sortie + délai), une seule fois par visiteur.
   useEffect(() => {
     if (armed.current) return;
+    // Tous les premiers visiteurs (une fois par visiteur), plus seulement le trafic Meta.
     let eligible = false;
     try {
-      eligible = localStorage.getItem(FROM_META) === "1" && localStorage.getItem(DONE) !== "1";
+      eligible = localStorage.getItem(DONE) !== "1";
     } catch {}
     if (!eligible) return;
     armed.current = true;
@@ -99,14 +100,16 @@ export default function NewsletterPopup() {
     if (!consent) return setError(t.consentRequired);
     setSending(true);
     let fbclid: string | null = null;
+    let fromMeta = false;
     try {
       fbclid = localStorage.getItem(FBCLID);
+      fromMeta = localStorage.getItem(FROM_META) === "1";
     } catch {}
     const productSlug = /\/products\/([^/?#]+)/.exec(pathname)?.[1] || null;
     const res = await fetch("/api/newsletter", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: value, consent, source: "popup-meta", productSlug, fbclid }),
+      body: JSON.stringify({ email: value, consent, source: fromMeta ? "popup-meta" : "popup", productSlug, fbclid }),
     }).catch(() => null);
     setSending(false);
     if (res && res.ok) {
