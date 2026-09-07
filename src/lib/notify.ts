@@ -32,13 +32,21 @@ export async function sendNotification(
 
   try {
     const resend = new Resend(apiKey);
-    await resend.emails.send({
+    // Le SDK Resend ne « throw » pas sur une erreur API : il renvoie { data, error }.
+    // On inspecte donc explicitement `error`, sinon un échec (from invalide, quota…)
+    // passe totalement inaperçu.
+    const { data, error } = await resend.emails.send({
       from,
       to,
       subject,
       html,
       ...(replyTo ? { replyTo } : {}),
     });
+    if (error) {
+      console.error("Notification email refusée par Resend:", error, "(from:", from, ")");
+    } else {
+      console.log("Notification email envoyée:", data?.id, "→", to);
+    }
   } catch (e) {
     // On ne casse jamais la soumission si l'email échoue.
     console.error("Notification email échouée:", e);
