@@ -14,10 +14,19 @@ async function getData() {
      FROM contacts ORDER BY created_at DESC`
   );
   const newsletter = await pool.query(
-    `SELECT email, source, name, phone, product_slug, campaign, gclid, created_at
+    `SELECT email, source, product_slug, created_at
      FROM newsletter_subscribers ORDER BY created_at DESC`
   );
-  return { devis: devis.rows, contacts: contacts.rows, newsletter: newsletter.rows };
+  const contactLeads = await pool.query(
+    `SELECT email, name, phone, message, source, campaign, created_at
+     FROM contact_leads ORDER BY created_at DESC`
+  );
+  return {
+    devis: devis.rows,
+    contacts: contacts.rows,
+    newsletter: newsletter.rows,
+    contactLeads: contactLeads.rows,
+  };
 }
 
 function fmt(d: Date) {
@@ -44,11 +53,9 @@ function sourceInfo(r: DevisRow): { label: string; detail: string; paid: boolean
   return { label: "Direct / Organique", detail: "", paid: false };
 }
 
-// Libellé lisible pour l'origine d'un inscrit newsletter (popup site, Google Ads…).
+// Libellé lisible pour l'origine d'un inscrit newsletter (popup site issu de Meta).
 function newsletterSource(source: string | null): { label: string; paid: boolean } {
   switch (source) {
-    case "google-ads":
-      return { label: "Google Ads", paid: true };
     case "popup-meta":
       return { label: "Popup Meta", paid: true };
     case "popup":
@@ -59,7 +66,7 @@ function newsletterSource(source: string | null): { label: string; paid: boolean
 }
 
 export default async function AdminPage() {
-  const { devis, contacts, newsletter } = await getData();
+  const { devis, contacts, newsletter, contactLeads } = await getData();
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
@@ -144,10 +151,44 @@ export default async function AdminPage() {
         )}
       </section>
 
-      {/* Inscrits newsletter & leads pubs (popup site, Google Ads, Meta) */}
+      {/* Demandes de contact — Google Ads (lead form « rappel ») */}
+      <section className="mb-14">
+        <h2 className="text-lg font-medium mb-4">
+          Demandes de contact — Google Ads <span className="text-gray-400 font-normal">({contactLeads.length})</span>
+        </h2>
+        {contactLeads.length === 0 ? (
+          <p className="text-gray-500 text-sm">Aucune demande pour le moment.</p>
+        ) : (
+          <div className="overflow-x-auto border border-gray-200 rounded-lg">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-gray-500 text-left">
+                <tr>
+                  {["Date", "Nom", "Email", "Téléphone", "Message", "Campagne"].map((h) => (
+                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {contactLeads.map((r, i) => (
+                  <tr key={i} className="align-top">
+                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{r.name || "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{r.email ? <a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a> : "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{r.phone ? <a className="text-blue-600 hover:underline" href={`tel:${r.phone}`}>{r.phone}</a> : "—"}</td>
+                    <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message || "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{r.campaign || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* Inscrits newsletter (popup du site, trafic Meta) */}
       <section>
         <h2 className="text-lg font-medium mb-4">
-          Inscrits newsletter &amp; leads pubs <span className="text-gray-400 font-normal">({newsletter.length})</span>
+          Inscrits newsletter <span className="text-gray-400 font-normal">({newsletter.length})</span>
         </h2>
         {newsletter.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucune inscription pour le moment.</p>
@@ -156,7 +197,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Email", "Nom", "Téléphone", "Source", "Page / Campagne"].map((h) => (
+                  {["Date", "Email", "Source", "Page"].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -168,12 +209,10 @@ export default async function AdminPage() {
                     <tr key={i} className="align-top">
                       <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
                       <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
-                      <td className="px-3 py-2 whitespace-nowrap">{r.name || "—"}</td>
-                      <td className="px-3 py-2 whitespace-nowrap">{r.phone ? <a className="text-blue-600 hover:underline" href={`tel:${r.phone}`}>{r.phone}</a> : "—"}</td>
                       <td className="px-3 py-2 whitespace-nowrap">
                         <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
                       </td>
-                      <td className="px-3 py-2 whitespace-nowrap">{r.product_slug || r.campaign || "—"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap">{r.product_slug || "—"}</td>
                     </tr>
                   );
                 })}
