@@ -20,7 +20,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: p === "" ? 1 : 0.7,
-    alternates: alternates(p || "/"),
+    // p="" pour l'accueil -> hreflang sans slash final (évite un 308 et un conflit
+    // avec le <loc> qui, lui, n'a pas de slash). Ne pas remettre `p || "/"`.
+    alternates: alternates(p),
   }));
 
   let machineEntries: MetadataRoute.Sitemap = [];
