@@ -63,8 +63,17 @@ const fr = {
     title: "Catalogue",
     subtitle:
       "Notre sélection de machines laser & CNC, sélectionnées par nos soins pour répondre à l'intégralité de vos besoins.",
+    intro: [
+      "Notre catalogue réunit des machines de gravure et de marquage laser fibre ainsi que des centres d'usinage CNC compacts, choisis pour offrir de véritables capacités industrielles à l'échelle d'un atelier de PME ou de TPE, sans les contraintes d'une ligne de production.",
+      "Les machines laser fibre sont taillées pour le marquage et la gravure de précision sur métaux, plastiques, bois et cuir. Les machines CNC couvrent le fraisage et l'usinage du bois, de l'aluminium, des plastiques techniques et des métaux. Chaque machine est livrée avec un accompagnement technique, une garantie d'un an, et fait l'objet d'un devis adapté à votre besoin.",
+    ],
     laserGroup: "Machines laser",
     cncGroup: "Machines CNC",
+    helpTitle: "Besoin d'aide pour choisir ?",
+    helpText:
+      "Vous ne savez pas quelle machine correspond à votre production ? Décrivez-nous votre besoin : nous vous orientons vers la solution la plus adaptée, ou concevons une machine sur mesure.",
+    helpProject: "Décrire mon projet",
+    helpQuote: "Demander un devis",
   },
   machine: {
     back: "← Retour au catalogue",
@@ -284,8 +293,17 @@ const en: Dictionary = {
     title: "Catalogue",
     subtitle:
       "Our selection of laser & CNC machines, hand-picked to meet all your needs.",
+    intro: [
+      "Our catalogue brings together fiber laser marking and engraving machines and compact CNC machining centres, chosen to deliver genuine industrial capability at the scale of an SME or small-business workshop — without the constraints of a full production line.",
+      "Fiber laser machines are built for precision marking and engraving on metals, plastics, wood and leather. CNC machines cover milling and machining of wood, aluminium, engineering plastics and metals. Every machine ships with technical support, a one-year warranty, and a quote tailored to your needs.",
+    ],
     laserGroup: "Laser machines",
     cncGroup: "CNC machines",
+    helpTitle: "Need help choosing?",
+    helpText:
+      "Not sure which machine fits your production? Tell us what you need: we'll point you to the best-suited solution, or design a custom machine.",
+    helpProject: "Describe my project",
+    helpQuote: "Request a quote",
   },
   machine: {
     back: "← Back to catalogue",

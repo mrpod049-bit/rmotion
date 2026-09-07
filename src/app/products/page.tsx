@@ -50,7 +50,12 @@ export default async function MachinesPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
       <h1 className="text-3xl font-semibold mb-2">{t.machines.title}</h1>
-      <p className="text-gray-500 mb-14">{t.machines.subtitle}</p>
+      <p className="text-gray-500 mb-6">{t.machines.subtitle}</p>
+      <div className="max-w-3xl space-y-4 text-gray-600 leading-relaxed mb-14">
+        {t.machines.intro.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+      </div>
 
       {[{ label: t.machines.laserGroup, items: laser }, { label: t.machines.cncGroup, items: cnc }].map((group, gi) => (
         <section key={group.label} className="mb-16">
@@ -88,6 +93,19 @@ export default async function MachinesPage() {
           </div>
         </section>
       ))}
+
+      <section className="border-t border-gray-200 pt-10">
+        <h2 className="text-lg font-semibold mb-2">{t.machines.helpTitle}</h2>
+        <p className="text-gray-600 max-w-2xl mb-5 leading-relaxed">{t.machines.helpText}</p>
+        <div className="flex flex-wrap gap-3">
+          <Link href={L("/projet")} className="inline-block border border-gray-300 px-5 py-2.5 rounded hover:border-gray-500 transition-colors">
+            {t.machines.helpProject}
+          </Link>
+          <Link href={L("/devis")} className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded hover:bg-gray-700 transition-colors">
+            {t.machines.helpQuote}
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
