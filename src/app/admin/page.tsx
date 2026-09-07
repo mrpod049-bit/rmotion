@@ -14,7 +14,7 @@ async function getData() {
      FROM contacts ORDER BY created_at DESC`
   );
   const newsletter = await pool.query(
-    `SELECT email, source, product_slug, created_at
+    `SELECT email, source, name, phone, product_slug, campaign, gclid, created_at
      FROM newsletter_subscribers ORDER BY created_at DESC`
   );
   return { devis: devis.rows, contacts: contacts.rows, newsletter: newsletter.rows };
@@ -42,6 +42,20 @@ function sourceInfo(r: DevisRow): { label: string; detail: string; paid: boolean
     return { label: r.utm_source, detail, paid: false };
   }
   return { label: "Direct / Organique", detail: "", paid: false };
+}
+
+// Libellé lisible pour l'origine d'un inscrit newsletter (popup site, Google Ads…).
+function newsletterSource(source: string | null): { label: string; paid: boolean } {
+  switch (source) {
+    case "google-ads":
+      return { label: "Google Ads", paid: true };
+    case "popup-meta":
+      return { label: "Popup Meta", paid: true };
+    case "popup":
+      return { label: "Popup site", paid: false };
+    default:
+      return { label: source || "—", paid: false };
+  }
 }
 
 export default async function AdminPage() {
@@ -130,10 +144,10 @@ export default async function AdminPage() {
         )}
       </section>
 
-      {/* Inscrits newsletter */}
+      {/* Inscrits newsletter & leads pubs (popup site, Google Ads, Meta) */}
       <section>
         <h2 className="text-lg font-medium mb-4">
-          Inscrits newsletter <span className="text-gray-400 font-normal">({newsletter.length})</span>
+          Inscrits newsletter &amp; leads pubs <span className="text-gray-400 font-normal">({newsletter.length})</span>
         </h2>
         {newsletter.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucune inscription pour le moment.</p>
@@ -142,20 +156,27 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Email", "Source", "Page"].map((h) => (
+                  {["Date", "Email", "Nom", "Téléphone", "Source", "Page / Campagne"].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {newsletter.map((r, i) => (
-                  <tr key={i} className="align-top">
-                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
-                    <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.source || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.product_slug || "—"}</td>
-                  </tr>
-                ))}
+                {newsletter.map((r, i) => {
+                  const s = newsletterSource(r.source);
+                  return (
+                    <tr key={i} className="align-top">
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
+                      <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
+                      <td className="px-3 py-2 whitespace-nowrap">{r.name || "—"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap">{r.phone ? <a className="text-blue-600 hover:underline" href={`tel:${r.phone}`}>{r.phone}</a> : "—"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap">
+                        <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap">{r.product_slug || r.campaign || "—"}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
