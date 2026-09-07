@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
+import { gtagConversion } from "@/lib/gtag";
 
 // Clés localStorage : provenance Meta mémorisée + « déjà traité » (affiché une fois/visiteur).
 const FROM_META = "rm_from_meta";
@@ -116,6 +117,7 @@ export default function NewsletterPopup() {
       setDone(true);
       persistDone();
       pixelTrack("Lead", { source: "newsletter" });
+      gtagConversion("newsletter");
     } else {
       setError(t.error);
     }
