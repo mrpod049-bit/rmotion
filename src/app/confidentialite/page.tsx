@@ -22,9 +22,9 @@ export default function ConfidentialitePage() {
 
         <h2>1. Responsable du traitement</h2>
         <p>
-          Le responsable du traitement des données est Rmotion.
+          Le responsable du traitement des données est la société RMOTION (SASU).
           <br />
-          Raison sociale et coordonnées : [à compléter].
+          Siège social : 9 avenue Montaigne, 49100 Angers, France — SIRET : 10964591100016.
           <br />
           Contact : via la page <Link href="/contact">Contact</Link> ou par email à contact@rmotion.fr.
         </p>

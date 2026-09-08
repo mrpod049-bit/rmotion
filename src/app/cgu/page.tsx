@@ -23,13 +23,15 @@ export default function CguPage() {
 
         <h2>Article 2 — Éditeur du site</h2>
         <p>
-          Le Site est édité par Rmotion.
+          Le Site est édité par la société RMOTION, société par actions simplifiée unipersonnelle (SASU).
           <br />
-          Raison sociale, forme juridique et capital social : [à compléter].
+          Capital social : [à compléter].
           <br />
-          Siège social : [adresse à compléter].
+          Siège social : 9 avenue Montaigne, 49100 Angers, France.
           <br />
-          Numéro SIREN / SIRET : [à compléter].
+          Numéro SIREN : 109 645 911 — SIRET (siège) : 10964591100016.
+          <br />
+          Immatriculation au RCS : RCS Angers 109 645 911.
           <br />
           Contact : <a href="/contact">contact@rmotion.fr</a>.
         </p>

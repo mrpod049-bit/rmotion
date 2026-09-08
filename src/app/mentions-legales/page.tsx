@@ -22,17 +22,17 @@ export default function MentionsLegalesPage() {
 
         <h2>Éditeur du site</h2>
         <p>
-          Le site rmotion.fr est édité par Rmotion.
+          Le site rmotion.fr est édité par la société RMOTION.
           <br />
-          Raison sociale et forme juridique : [à compléter].
+          Raison sociale et forme juridique : RMOTION, société par actions simplifiée unipersonnelle (SASU).
           <br />
           Capital social : [à compléter].
           <br />
-          Siège social : [adresse à compléter].
+          Siège social : 9 avenue Montaigne, 49100 Angers, France.
           <br />
-          Numéro SIREN / SIRET : [à compléter].
+          Numéro SIREN : 109 645 911 — SIRET (siège) : 10964591100016.
           <br />
-          Immatriculation au RCS : [à compléter].
+          Immatriculation au RCS : RCS Angers 109 645 911.
           <br />
           Numéro de TVA intracommunautaire : [à compléter].
           <br />
