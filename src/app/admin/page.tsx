@@ -1,28 +1,29 @@
 import pool from "@/lib/db";
+import DeleteButton from "./DeleteButton";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin", robots: { index: false, follow: false } };
 
 async function getData() {
   const devis = await pool.query(
-    `SELECT nom, societe, email, telephone, machine_name, message, created_at,
+    `SELECT id, nom, societe, email, telephone, machine_name, message, created_at,
             gclid, utm_source, utm_medium, utm_campaign, utm_term
      FROM devis_requests ORDER BY created_at DESC`
   );
   const contacts = await pool.query(
-    `SELECT nom, email, sujet, message, created_at
+    `SELECT id, nom, email, sujet, message, created_at
      FROM contacts ORDER BY created_at DESC`
   );
   const newsletter = await pool.query(
-    `SELECT email, source, product_slug, created_at
+    `SELECT id, email, source, product_slug, created_at
      FROM newsletter_subscribers ORDER BY created_at DESC`
   );
   const contactLeads = await pool.query(
-    `SELECT email, name, phone, message, source, campaign, created_at
+    `SELECT id, email, name, phone, message, source, campaign, created_at
      FROM contact_leads ORDER BY created_at DESC`
   );
   const ftRequests = await pool.query(
-    `SELECT email, nom, machine_name, machine_slug, created_at,
+    `SELECT id, email, nom, machine_name, machine_slug, created_at,
             gclid, utm_source, utm_medium, utm_campaign, utm_term
      FROM ft_requests ORDER BY created_at DESC`
   );
@@ -90,7 +91,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Nom", "Société", "Email", "Téléphone", "Machine", "Source", "Message"].map((h) => (
+                  {["Date", "Nom", "Société", "Email", "Téléphone", "Machine", "Source", "Message", ""].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -116,6 +117,7 @@ export default async function AdminPage() {
                       })()}
                     </td>
                     <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message}</td>
+                    <td className="px-3 py-2 text-right"><DeleteButton table="devis_requests" id={r.id} label={r.email} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -136,7 +138,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Nom", "Email", "Sujet", "Message"].map((h) => (
+                  {["Date", "Nom", "Email", "Sujet", "Message", ""].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -149,6 +151,7 @@ export default async function AdminPage() {
                     <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
                     <td className="px-3 py-2 whitespace-nowrap">{r.sujet || "—"}</td>
                     <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message}</td>
+                    <td className="px-3 py-2 text-right"><DeleteButton table="contacts" id={r.id} label={r.email} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -169,7 +172,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Nom", "Email", "Téléphone", "Message", "Campagne"].map((h) => (
+                  {["Date", "Nom", "Email", "Téléphone", "Message", "Campagne", ""].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -183,6 +186,7 @@ export default async function AdminPage() {
                     <td className="px-3 py-2 whitespace-nowrap">{r.phone ? <a className="text-blue-600 hover:underline" href={`tel:${r.phone}`}>{r.phone}</a> : "—"}</td>
                     <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message || "—"}</td>
                     <td className="px-3 py-2 whitespace-nowrap text-gray-500">{r.campaign || "—"}</td>
+                    <td className="px-3 py-2 text-right"><DeleteButton table="contact_leads" id={r.id} label={r.email || r.name} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -203,7 +207,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Machine", "Email", "Nom", "Source"].map((h) => (
+                  {["Date", "Machine", "Email", "Nom", "Source", ""].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -221,6 +225,7 @@ export default async function AdminPage() {
                         <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
                         {s.detail && <div className="text-gray-400 text-xs">{s.detail}</div>}
                       </td>
+                      <td className="px-3 py-2 text-right"><DeleteButton table="ft_requests" id={r.id} label={r.email} /></td>
                     </tr>
                   );
                 })}
@@ -242,7 +247,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-gray-500 text-left">
                 <tr>
-                  {["Date", "Email", "Source", "Page"].map((h) => (
+                  {["Date", "Email", "Source", "Page", ""].map((h) => (
                     <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -258,6 +263,7 @@ export default async function AdminPage() {
                         <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">{r.product_slug || "—"}</td>
+                      <td className="px-3 py-2 text-right"><DeleteButton table="newsletter_subscribers" id={r.id} label={r.email} /></td>
                     </tr>
                   );
                 })}
