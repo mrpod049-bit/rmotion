@@ -7,6 +7,7 @@ const TABS = [
   { href: "/admin", label: "Demandes reçues", exact: true },
   { href: "/admin/crm", label: "Pipeline", exact: true },
   { href: "/admin/crm/leads", label: "Leads", exact: false },
+  { href: "/admin/newsletter", label: "Newsletter", exact: false },
   { href: "/admin/crm/machines", label: "Coûts machines", exact: false },
   { href: "/admin/crm/logs", label: "Journal", exact: false },
 ];
