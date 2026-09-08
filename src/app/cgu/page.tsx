@@ -25,7 +25,7 @@ export default function CguPage() {
         <p>
           Le Site est édité par la société RMOTION, société par actions simplifiée unipersonnelle (SASU).
           <br />
-          Capital social : [à compléter].
+          Capital social : 5 000 euros.
           <br />
           Siège social : 9 avenue Montaigne, 49100 Angers, France.
           <br />

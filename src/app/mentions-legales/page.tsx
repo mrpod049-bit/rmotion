@@ -26,7 +26,7 @@ export default function MentionsLegalesPage() {
           <br />
           Raison sociale et forme juridique : RMOTION, société par actions simplifiée unipersonnelle (SASU).
           <br />
-          Capital social : [à compléter].
+          Capital social : 5 000 euros.
           <br />
           Siège social : 9 avenue Montaigne, 49100 Angers, France.
           <br />
@@ -34,7 +34,7 @@ export default function MentionsLegalesPage() {
           <br />
           Immatriculation au RCS : RCS Angers 109 645 911.
           <br />
-          Numéro de TVA intracommunautaire : [à compléter].
+          Numéro de TVA intracommunautaire : non applicable, article 293 B du CGI (franchise en base de TVA).
           <br />
           Téléphone : +33 7 81 49 26 85.
           <br />
@@ -42,7 +42,7 @@ export default function MentionsLegalesPage() {
         </p>
 
         <h2>Directeur de la publication</h2>
-        <p>[Nom du directeur de la publication à compléter].</p>
+        <p>Monsieur Antoine Rougerie, président de la société RMOTION.</p>
 
         <h2>Hébergeur</h2>
         <p>
