@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { sendNotification } from "@/lib/notify";
+import { addNewsletterContact } from "@/lib/brevo";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -27,10 +28,15 @@ export async function POST(req: NextRequest) {
   );
 
   if ((res.rowCount ?? 0) > 0) {
-    await sendNotification("Nouvelle inscription newsletter — Rmotion", [
-      { label: "Email", value: email },
-      { label: "Source", value: source },
-      { label: "Page", value: productSlug || "—" },
+    // Notif interne + ajout dans Brevo, en parallèle. Aucune des deux ne doit
+    // faire échouer l'inscription (déjà enregistrée en base ci-dessus).
+    await Promise.allSettled([
+      sendNotification("Nouvelle inscription newsletter — Rmotion", [
+        { label: "Email", value: email },
+        { label: "Source", value: source },
+        { label: "Page", value: productSlug || "—" },
+      ]),
+      addNewsletterContact(email),
     ]);
   }
 
