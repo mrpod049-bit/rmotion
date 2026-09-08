@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import BackgroundPattern from "@/components/BackgroundPattern";
 import { Analytics } from "@vercel/analytics/next";
 import MetaPixel from "@/components/MetaPixel";
+import GoogleTag from "@/components/GoogleTag";
 import AttributionCapture from "@/components/AttributionCapture";
 import NewsletterPopup from "@/components/NewsletterPopup";
 import { getLocale } from "@/i18n/server";
@@ -100,6 +101,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />
+        <GoogleTag />
         <AttributionCapture />
         <MetaPixel />
         <NewsletterPopup />
