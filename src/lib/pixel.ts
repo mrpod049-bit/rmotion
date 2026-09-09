@@ -21,13 +21,15 @@ let ready = false;
 let denied = false;
 // Événements émis avant que le pixel soit prêt (ex. ViewContent, dont l'effet enfant
 // se déclenche avant l'effet parent qui charge le pixel). Envoyés au chargement.
-const pending: Array<[string, Record<string, unknown> | undefined]> = [];
+// [event, params, options] — options porte l'eventID (déduplication avec le CAPI).
+type PixelOptions = { eventID?: string };
+const pending: Array<[string, Record<string, unknown> | undefined, PixelOptions | undefined]> = [];
 
 function flush(): void {
   if (!ready || typeof window === "undefined" || typeof window.fbq !== "function") return;
   while (pending.length) {
     const item = pending.shift();
-    if (item) window.fbq("track", item[0], item[1]);
+    if (item) window.fbq("track", item[0], item[1], item[2]);
   }
 }
 
@@ -63,9 +65,11 @@ export function loadPixel(): void {
 }
 
 // Déclenche un événement. Mis en file si le pixel n'est pas encore prêt ;
-// no-op définitif si le consentement a été refusé.
-export function pixelTrack(event: string, params?: Record<string, unknown>): void {
+// no-op définitif si le consentement a été refusé. `eventId` (optionnel) doit
+// être identique à celui envoyé au serveur (CAPI) pour la déduplication Meta.
+export function pixelTrack(event: string, params?: Record<string, unknown>, eventId?: string): void {
   if (typeof window === "undefined" || denied) return;
-  if (ready && typeof window.fbq === "function") window.fbq("track", event, params);
-  else pending.push([event, params]);
+  const opts: PixelOptions | undefined = eventId ? { eventID: eventId } : undefined;
+  if (ready && typeof window.fbq === "function") window.fbq("track", event, params, opts);
+  else pending.push([event, params, opts]);
 }

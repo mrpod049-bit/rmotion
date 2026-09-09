@@ -5,7 +5,7 @@ import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
 import { gtagConversion } from "@/lib/gtag";
-import { getAttribution } from "@/lib/attribution";
+import { getAttribution, getFbData } from "@/lib/attribution";
 
 // Coordonnées encodées en base64 : jamais en clair dans le HTML, décodées
 // côté client uniquement après montage (invisibles pour les scrapers/SSR).
@@ -87,15 +87,22 @@ function DevisForm() {
     setError("");
     const typeLabel = requestType === "general" ? t.requestTypeGeneral : t.requestTypeQuote;
     const message = `${t.requestTypeLabel} : ${typeLabel}\n\n${form.message}`;
+    // Un seul identifiant d'événement partagé Pixel <-> serveur (CAPI) : Meta
+    // dédoublonne les deux remontées du même Lead.
+    const eventId =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : String(Date.now()) + Math.random().toString(36).slice(2);
+    const { fbc, fbp } = getFbData();
     const res = await fetch("/api/devis", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, message, machine_id: machineId || null, locale, attribution: getAttribution() }),
+      body: JSON.stringify({ ...form, message, machine_id: machineId || null, locale, attribution: getAttribution(), eventId, fbc, fbp }),
     });
     setSending(false);
     if (res.ok) {
       setDone(true);
-      pixelTrack("Lead", { content_name: form.machine_name || undefined });
+      pixelTrack("Lead", { content_name: form.machine_name || undefined }, eventId);
       gtagConversion("devis", { value: 25.0, currency: "EUR" });
     } else setError(t.error);
   };
