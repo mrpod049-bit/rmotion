@@ -1,6 +1,6 @@
 // Pixel Meta — chargé uniquement après consentement (voir MetaPixel.tsx).
 // L'ID de pixel n'est pas un secret : il est de toute façon visible côté navigateur.
-export const META_PIXEL_ID = "600758790713525";
+export const META_PIXEL_ID = "3760686240780257";
 export const CONSENT_KEY = "rm-consent-v1";
 
 type Fbq = ((...args: unknown[]) => void) & {
