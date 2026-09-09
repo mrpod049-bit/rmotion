@@ -8,6 +8,7 @@ const KEY = "rm-attr-v1";
 
 export type Attribution = {
   gclid?: string; gbraid?: string; wbraid?: string;
+  fbclid?: string; // identifiant de clic Meta (Facebook/Instagram Ads)
   utm_source?: string; utm_medium?: string; utm_campaign?: string;
   utm_term?: string; utm_content?: string;
   landing_page?: string; referrer?: string;
@@ -15,7 +16,7 @@ export type Attribution = {
 
 // Paramètres d'URL reconnus (identiques aux clés de colonnes).
 const PARAMS = [
-  "gclid", "gbraid", "wbraid",
+  "gclid", "gbraid", "wbraid", "fbclid",
   "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
 ] as const;
 
@@ -50,4 +51,24 @@ export function getAttribution(): Attribution {
   } catch {
     return {};
   }
+}
+
+// Récupère les identifiants navigateur du Pixel Meta (cookies _fbc / _fbp),
+// à joindre à l'événement serveur (Conversions API) pour maximiser la qualité
+// de matching. Si _fbc est absent (Pixel bloqué, ou consentement accordé après
+// l'arrivée) mais qu'un fbclid a été mémorisé à l'atterrissage, on reconstruit
+// _fbc au format attendu par Meta : fb.1.<timestamp_ms>.<fbclid>.
+export function getFbData(): { fbc?: string; fbp?: string } {
+  if (typeof document === "undefined") return {};
+  const read = (name: string): string | undefined => {
+    const m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : undefined;
+  };
+  let fbc = read("_fbc");
+  const fbp = read("_fbp");
+  if (!fbc) {
+    const fbclid = getAttribution().fbclid;
+    if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
+  }
+  return { fbc, fbp };
 }

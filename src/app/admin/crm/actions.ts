@@ -4,6 +4,7 @@ import pool from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { sendCapiEvent } from "@/lib/capi";
 
 // Qui déclenche l'action : l'utilisateur admin (en-tête Basic Auth), sinon défaut.
 async function getActor(): Promise<string> {
@@ -76,6 +77,41 @@ export async function moveLead(leadId: number, stageId: number) {
     entityLabel: upd[0]?.name,
     detail: isWon ? `Gagnée (étape ${stageName})` : `Étape : ${stageName}`,
   });
+
+  // Signal profond vers Meta : une opportunité gagnée est une VENTE. On la
+  // remonte en Purchase (pondéré par le CA attendu), avec les identifiants du
+  // clic Meta d'origine si l'opportunité vient d'une demande de devis. C'est
+  // le signal qui affine le plus le profiling et alimente les Lookalikes valeur.
+  if (isWon) {
+    try {
+      const { rows: r } = await pool.query(
+        `SELECT l.email, l.phone, l.expected_revenue,
+                d.fbc, d.fbp, d.email AS d_email, d.telephone AS d_phone
+           FROM crm_leads l
+           LEFT JOIN devis_requests d
+             ON l.origin_table = 'devis_requests' AND l.origin_id = d.id
+          WHERE l.id = $1`,
+        [leadId]
+      );
+      const row = r[0];
+      if (row) {
+        await sendCapiEvent({
+          eventName: "Purchase",
+          actionSource: "system_generated",
+          userData: {
+            email: row.email || row.d_email,
+            phone: row.phone || row.d_phone,
+            fbc: row.fbc,
+            fbp: row.fbp,
+          },
+          customData: { value: Number(row.expected_revenue) || 0, currency: "EUR" },
+        });
+      }
+    } catch (e) {
+      console.error("[meta capi] won event", e);
+    }
+  }
+
   revalidatePath("/admin/crm");
 }
 
