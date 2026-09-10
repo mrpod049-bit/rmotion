@@ -14,16 +14,30 @@ const alternates = (path: string) => ({
 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ["", "/products", "/projet", "/philosophie", "/articles", "/devis", "/contact", "/cgu", "/confidentialite", "/mentions-legales"];
-  const staticEntries: MetadataRoute.Sitemap = staticPaths.map((p) => ({
-    url: `${SITE}${p}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: p === "" ? 1 : 0.7,
-    // p="" pour l'accueil -> hreflang sans slash final (évite un 308 et un conflit
-    // avec le <loc> qui, lui, n'a pas de slash). Ne pas remettre `p || "/"`.
-    alternates: alternates(p),
-  }));
+  // Pages bilingues (FR à la racine + version /en traduite) -> alternances hreflang.
+  const bilingualPaths = ["", "/products", "/projet", "/philosophie", "/articles", "/devis", "/contact"];
+  // Pages uniquement en français (texte non traduit ; leur version /en se canonicalise
+  // vers la version FR). Pas d'alternative hreflang « en » ici, sinon le sitemap
+  // pointerait un hreflang vers une URL dont le canonical diffère (conflit Semrush).
+  const frOnlyPaths = ["/cgu", "/confidentialite", "/mentions-legales"];
+
+  const staticEntries: MetadataRoute.Sitemap = [
+    ...bilingualPaths.map((p) => ({
+      url: `${SITE}${p}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: p === "" ? 1 : 0.7,
+      // p="" pour l'accueil -> hreflang sans slash final (évite un 308 et un conflit
+      // avec le <loc> qui, lui, n'a pas de slash). Ne pas remettre `p || "/"`.
+      alternates: alternates(p),
+    })),
+    ...frOnlyPaths.map((p) => ({
+      url: `${SITE}${p}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    })),
+  ];
 
   let machineEntries: MetadataRoute.Sitemap = [];
   let articleEntries: MetadataRoute.Sitemap = [];
