@@ -3,6 +3,10 @@ import pool from "@/lib/db";
 
 const SITE = "https://www.rmotion.fr";
 
+// Regénère le sitemap au plus toutes les heures : un article/produit ajouté en base
+// (sans redéploiement) apparaît alors sans attendre un nouveau build.
+export const revalidate = 3600;
+
 // Chaque page existe en FR (racine) et en EN (/en). On déclare les deux versions
 // et leurs alternances hreflang pour que les moteurs indexent les deux langues.
 const alternates = (path: string) => ({
