@@ -6,6 +6,7 @@ const MAP: Record<string, string> = {
   "Technologie laser": "Laser technology",
   "Technologie CNC": "CNC technology",
   "Conseils": "Advice",
+  "Sécurité laser": "Laser safety",
 };
 
 export function translateCategory(category: string | null, locale: Locale): string {
