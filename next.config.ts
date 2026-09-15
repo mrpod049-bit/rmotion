@@ -12,7 +12,14 @@ const SLUG_MAP: Record<string, string> = {
 
 const nextConfig: NextConfig = {
   // Le logo est servi en qualité 100 ; Next 16 impose de déclarer les qualités utilisées.
-  images: { qualities: [75, 100] },
+  // remotePatterns : autorise next/image à servir les visuels hébergés sur Vercel Blob
+  // (uploads de fiches produits depuis l'admin).
+  images: {
+    qualities: [75, 100],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+    ],
+  },
   async redirects() {
     const perSlug = Object.entries(SLUG_MAP).flatMap(([oldSlug, newSlug]) => [
       { source: `/machines/${oldSlug}`, destination: `/products/${newSlug}`, permanent: true },

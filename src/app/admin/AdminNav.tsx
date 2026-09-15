@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 // Onglets de navigation partagés par toutes les pages admin (/admin et /admin/crm/*).
 const TABS = [
   { href: "/admin", label: "Demandes reçues", exact: true },
+  { href: "/admin/produits", label: "Produits", exact: false },
   { href: "/admin/crm", label: "Pipeline", exact: true },
   { href: "/admin/crm/leads", label: "Leads", exact: false },
   { href: "/admin/newsletter", label: "Newsletter", exact: false },
