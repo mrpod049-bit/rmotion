@@ -124,11 +124,14 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         }
       : {}),
     offers: {
-      "@type": hasNumericPrice ? "AggregateOffer" : "Offer",
+      // Offer simple (prix de départ « à partir de ») plutôt qu'AggregateOffer :
+      // évite les avertissements Search Console highPrice/offerCount, qui n'ont
+      // pas de valeur réelle ici (pas de vraie fourchette ni de multiples offres).
+      "@type": "Offer",
       availability: "https://schema.org/BackOrder",
       itemCondition: "https://schema.org/NewCondition",
       priceCurrency: "EUR",
-      ...(hasNumericPrice ? { lowPrice: priceAmount } : {}),
+      ...(hasNumericPrice ? { price: priceAmount } : {}),
       url: `${SITE}${L(`/products/${slug}`)}`,
       seller: { "@type": "Organization", name: "Rmotion" },
     },
