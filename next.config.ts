@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 const SLUG_MAP: Record<string, string> = {
   "laser-ouvert-30-100w": "ol-series",
   "laser-ferme-60-100w": "bcl-series",
-  "laser-ferme-20-30w": "scl-series",
+  "laser-ferme-20-30w": "new-slc-series",
   "centre-usinage-vmc540t": "mcs-series",
   "ms-series-router": "mr-series",
   "centre-usinage-xh7115": "scs-series",
@@ -37,6 +37,9 @@ const nextConfig: NextConfig = {
       // Articles renommés (ancien slug -> nouveau slug).
       { source: "/articles/roi-machine-laser", destination: "/articles/cas-du-roi", permanent: true },
       { source: "/en/articles/roi-machine-laser", destination: "/en/articles/cas-du-roi", permanent: true },
+      // Fiche SCL Series remplacée par la New SLC Series (préserve le référencement).
+      { source: "/products/scl-series", destination: "/products/new-slc-series", permanent: true },
+      { source: "/en/products/scl-series", destination: "/en/products/new-slc-series", permanent: true },
     ];
   },
 };

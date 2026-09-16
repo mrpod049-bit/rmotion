@@ -15,6 +15,11 @@ async function revalidateAll(slug?: string) {
   revalidatePath("/products");
   revalidatePath("/");
   if (slug) revalidatePath(`/products/${slug}`);
+  // Surfaces SEO générées depuis la base : à rafraîchir aussi pour que la gestion
+  // autonome des fiches se reflète tout de suite (sinon ISR jusqu'à 1 h).
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/llms.txt");
+  revalidatePath("/llms-full.txt");
 }
 
 export async function saveMachine(data: MachineInput): Promise<{ ok: boolean; error?: string; id?: number; slug?: string }> {
