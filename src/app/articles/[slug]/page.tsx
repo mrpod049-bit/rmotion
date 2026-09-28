@@ -10,7 +10,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 const getArticle = cache(async (slug: string, en: boolean) => {
   const res = await pool.query(
-    `SELECT id, slug, category, cover_image, published_at,
+    `SELECT id, slug, category, cover_image, og_image, published_at,
             COALESCE(${en ? "title_en" : "NULL"}, title) AS title,
             COALESCE(${en ? "excerpt_en" : "NULL"}, excerpt) AS excerpt,
             COALESCE(${en ? "content_en" : "NULL"}, content) AS content
@@ -41,7 +41,11 @@ export async function generateMetadata({
       title: `${article.title} — Rmotion`,
       description: article.excerpt || undefined,
       url: `https://www.rmotion.fr${localizeHref(`/articles/${slug}`, locale)}`,
-      ...(article.cover_image ? { images: [{ url: article.cover_image }] } : {}),
+      ...(article.og_image
+        ? { images: [{ url: article.og_image, width: 1200, height: 630, alt: article.title }] }
+        : article.cover_image
+          ? { images: [{ url: article.cover_image }] }
+          : {}),
     },
   };
 }
