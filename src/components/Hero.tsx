@@ -5,37 +5,24 @@ import { useState, useEffect } from "react";
 import { localeFromPathname, localizeHref } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
-// Photos des machines avec leurs dimensions naturelles (pour respecter leur format).
-const IMAGES = [
-  { src: "/gammes/cnc-1.jpg", w: 612, h: 390 },
-  { src: "/gammes/laser-1.jpg", w: 368, h: 352 },
-  { src: "/gammes/cnc-2.jpg", w: 351, h: 424 },
-  { src: "/gammes/laser-2.jpg", w: 331, h: 367 },
-  { src: "/gammes/cnc-3.jpg", w: 575, h: 537 },
-  { src: "/gammes/laser-3.jpg", w: 307, h: 365 },
-  { src: "/gammes/cnc-4.jpg", w: 555, h: 583 },
-  { src: "/gammes/laser-4.jpg", w: 358, h: 370 },
-  { src: "/gammes/cnc-5.jpg", w: 434, h: 511 },
-];
-
 const IMG_H = 300; // hauteur des photos (px) — LE réglage de taille
+const IMG_W = 400; // largeur uniforme (format 4:3, recadré en object-cover)
 const GAP = 100; // écart entre deux photos (px)
 const CLONES = 6; // photos dupliquées en fin de piste pour boucler sans couture (remplit les grands écrans)
 const STEP_MS = 2200; // temps entre deux crans
 
-// Largeur d'une photo à la hauteur IMG_H, en respectant son format naturel.
-const widthOf = (im: { w: number; h: number }) => Math.round(IMG_H * (im.w / im.h));
+// Repli utilisé uniquement si aucune fiche produit publiée n'a d'image (évite un Hero vide).
+const FALLBACK = ["/gammes/ol-1.jpg", "/gammes/cnc-1.jpg"];
 
-export default function Hero() {
+// Les photos proviennent des fiches produit publiées (prop `images`), pas de visuels de démo :
+// le carrousel reflète toujours le catalogue réel et se met à jour quand une fiche change.
+export default function Hero({ images }: { images: string[] }) {
   const locale = localeFromPathname(usePathname());
   const t = getDictionary(locale).hero;
   const L = (href: string) => localizeHref(href, locale);
-  const track = [...IMAGES, ...IMAGES.slice(0, CLONES)];
 
-  // Décalage cumulé (en px) pour amener chaque photo en position — gère les largeurs variables.
-  const offsets = track.map((_, i) =>
-    track.slice(0, i).reduce((sum, im) => sum + widthOf(im) + GAP, 0)
-  );
+  const base = images.length ? images : FALLBACK;
+  const track = [...base, ...base.slice(0, Math.min(CLONES, base.length))];
 
   const [index, setIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
@@ -48,18 +35,18 @@ export default function Hero() {
 
   // Bouclage : une fois arrivé sur les clones, on revient au début sans animation.
   useEffect(() => {
-    if (index === IMAGES.length) {
-      const t = setTimeout(() => {
+    if (index === base.length) {
+      const to = setTimeout(() => {
         setAnimate(false);
         setIndex(0);
       }, 800);
-      return () => clearTimeout(t);
+      return () => clearTimeout(to);
     }
     if (!animate) {
-      const t = setTimeout(() => setAnimate(true), 50);
-      return () => clearTimeout(t);
+      const to = setTimeout(() => setAnimate(true), 50);
+      return () => clearTimeout(to);
     }
-  }, [index, animate]);
+  }, [index, animate, base.length]);
 
   return (
     <section className="relative bg-white text-white overflow-hidden">
@@ -68,19 +55,19 @@ export default function Hero() {
         <div
           className="flex"
           style={{
-            transform: `translateX(-${offsets[index]}px)`,
+            transform: `translateX(-${index * (IMG_W + GAP)}px)`,
             transition: animate ? "transform 800ms ease-in-out" : "none",
           }}
         >
-          {track.map((im, i) => (
+          {track.map((src, i) => (
             <div
               key={i}
               className="shrink-0"
-              style={{ width: widthOf(im), height: IMG_H, marginRight: GAP }}
+              style={{ width: IMG_W, height: IMG_H, marginRight: GAP }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={im.src}
+                src={src}
                 alt=""
                 aria-hidden
                 className="h-full w-full object-cover rounded-lg"

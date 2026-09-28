@@ -1,18 +1,40 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
+import pool from "@/lib/db";
 import { getLocale } from "@/i18n/server";
 import { getDictionary } from "@/i18n/dictionaries";
 import { localizeHref } from "@/i18n/config";
+
+// Rafraîchit le carrousel au plus tard toutes les heures ; les actions admin
+// (saveMachine/togglePublished/deleteMachine) revalident déjà "/" immédiatement.
+export const revalidate = 3600;
+
+// Images du carrousel Hero : uniquement celles des fiches produit PUBLIÉES, pour
+// que le carrousel montre le catalogue réel et jamais d'anciennes photos de démo.
+async function getCarouselImages(): Promise<string[]> {
+  const { rows } = await pool.query<{ images: string[] }>(
+    "SELECT images FROM machines WHERE published = true AND images IS NOT NULL"
+  );
+  const lists = rows.map((r) => (r.images || []).filter(Boolean)).filter((l) => l.length);
+  // Entrelacement round-robin : évite d'aligner plusieurs photos du même produit.
+  const out: string[] = [];
+  const max = Math.max(0, ...lists.map((l) => l.length));
+  for (let i = 0; i < max; i++) {
+    for (const l of lists) if (i < l.length) out.push(l[i]);
+  }
+  return out;
+}
 
 export default async function HomePage() {
   const locale = await getLocale();
   const t = getDictionary(locale).home;
   const L = (href: string) => localizeHref(href, locale);
+  const carouselImages = await getCarouselImages();
 
   return (
     <>
       {/* Hero */}
-      <Hero />
+      <Hero images={carouselImages} />
 
       {/* Gammes */}
       <section className="flex flex-col w-full">
