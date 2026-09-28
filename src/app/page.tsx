@@ -9,20 +9,15 @@ import { localizeHref } from "@/i18n/config";
 // (saveMachine/togglePublished/deleteMachine) revalident déjà "/" immédiatement.
 export const revalidate = 3600;
 
-// Images du carrousel Hero : uniquement celles des fiches produit PUBLIÉES, pour
-// que le carrousel montre le catalogue réel et jamais d'anciennes photos de démo.
+// Images du carrousel Hero : la PREMIÈRE image (couverture) de chaque fiche produit
+// PUBLIÉE, pour montrer le catalogue réel — une seule photo par produit.
 async function getCarouselImages(): Promise<string[]> {
   const { rows } = await pool.query<{ images: string[] }>(
     "SELECT images FROM machines WHERE published = true AND images IS NOT NULL"
   );
-  const lists = rows.map((r) => (r.images || []).filter(Boolean)).filter((l) => l.length);
-  // Entrelacement round-robin : évite d'aligner plusieurs photos du même produit.
-  const out: string[] = [];
-  const max = Math.max(0, ...lists.map((l) => l.length));
-  for (let i = 0; i < max; i++) {
-    for (const l of lists) if (i < l.length) out.push(l[i]);
-  }
-  return out;
+  return rows
+    .map((r) => (r.images || []).find(Boolean))
+    .filter((s): s is string => Boolean(s));
 }
 
 export default async function HomePage() {
