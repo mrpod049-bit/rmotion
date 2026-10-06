@@ -72,11 +72,76 @@ function newsletterSource(source: string | null): { label: string; paid: boolean
   }
 }
 
+// Badge d'origine (clic payant en vert, sinon neutre).
+function SourceBadge({ label, detail, paid }: { label: string; detail?: string; paid: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center text-xs px-2 py-0.5 rounded-full ${
+        paid ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-600"
+      }`}
+    >
+      {label}
+      {detail ? ` · ${detail}` : ""}
+    </span>
+  );
+}
+
+type FieldDef = { label: string; value: React.ReactNode };
+
+// Une demande = une carte : tous les champs visibles d'un coup (grille responsive),
+// message affiché en entier en dessous. Aucun scroll horizontal.
+function RequestCard({
+  date,
+  badge,
+  fields,
+  message,
+  del,
+}: {
+  date: Date;
+  badge?: React.ReactNode;
+  fields: FieldDef[];
+  message?: React.ReactNode;
+  del: React.ReactNode;
+}) {
+  return (
+    <div className="border border-gray-200 rounded-lg p-4">
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs text-gray-500">{fmt(date)}</span>
+          {badge}
+        </div>
+        <div className="shrink-0">{del}</div>
+      </div>
+      <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+        {fields.map((f, i) => (
+          <div key={i} className="min-w-0">
+            <dt className="text-xs uppercase tracking-wide text-gray-400">{f.label}</dt>
+            <dd className="text-sm text-gray-900 break-words">{f.value || "—"}</dd>
+          </div>
+        ))}
+      </dl>
+      {message != null && String(message).trim() !== "" && (
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <div className="text-xs uppercase tracking-wide text-gray-400 mb-1">Message</div>
+          <div className="text-sm text-gray-800 whitespace-pre-line break-words">{message}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default async function AdminPage() {
   const { devis, contacts, newsletter, contactLeads, ftRequests } = await getData();
 
+  const email = (v: string) => (
+    <a className="text-blue-600 hover:underline break-all" href={`mailto:${v}`}>{v}</a>
+  );
+  const tel = (v: string) => (
+    <a className="text-blue-600 hover:underline" href={`tel:${v}`}>{v}</a>
+  );
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
+    <div className="max-w-5xl mx-auto px-6 py-12">
       <h1 className="text-2xl font-semibold mb-8">Demandes reçues</h1>
 
       {/* Devis */}
@@ -87,41 +152,26 @@ export default async function AdminPage() {
         {devis.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucune demande pour le moment.</p>
         ) : (
-          <div className="overflow-x-auto border border-gray-200 rounded-lg">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500 text-left">
-                <tr>
-                  {["Date", "Nom", "Société", "Email", "Téléphone", "Machine", "Source", "Message", ""].map((h) => (
-                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {devis.map((r, i) => (
-                  <tr key={i} className="align-top">
-                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.nom}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.societe || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.telephone || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.machine_name || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">
-                      {(() => {
-                        const s = sourceInfo(r);
-                        return (
-                          <>
-                            <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
-                            {s.detail && <div className="text-gray-400 text-xs">{s.detail}</div>}
-                          </>
-                        );
-                      })()}
-                    </td>
-                    <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message}</td>
-                    <td className="px-3 py-2 text-right"><DeleteButton table="devis_requests" id={r.id} label={r.email} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {devis.map((r, i) => {
+              const s = sourceInfo(r);
+              return (
+                <RequestCard
+                  key={i}
+                  date={r.created_at}
+                  badge={<SourceBadge label={s.label} detail={s.detail} paid={s.paid} />}
+                  del={<DeleteButton table="devis_requests" id={r.id} label={r.email} />}
+                  fields={[
+                    { label: "Nom", value: r.nom },
+                    { label: "Société", value: r.societe },
+                    { label: "Email", value: r.email ? email(r.email) : null },
+                    { label: "Téléphone", value: r.telephone ? tel(r.telephone) : null },
+                    { label: "Machine", value: r.machine_name },
+                  ]}
+                  message={r.message}
+                />
+              );
+            })}
           </div>
         )}
       </section>
@@ -134,28 +184,20 @@ export default async function AdminPage() {
         {contacts.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucun message pour le moment.</p>
         ) : (
-          <div className="overflow-x-auto border border-gray-200 rounded-lg">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500 text-left">
-                <tr>
-                  {["Date", "Nom", "Email", "Sujet", "Message", ""].map((h) => (
-                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {contacts.map((r, i) => (
-                  <tr key={i} className="align-top">
-                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.nom}</td>
-                    <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.sujet || "—"}</td>
-                    <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message}</td>
-                    <td className="px-3 py-2 text-right"><DeleteButton table="contacts" id={r.id} label={r.email} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {contacts.map((r, i) => (
+              <RequestCard
+                key={i}
+                date={r.created_at}
+                del={<DeleteButton table="contacts" id={r.id} label={r.email} />}
+                fields={[
+                  { label: "Nom", value: r.nom },
+                  { label: "Email", value: r.email ? email(r.email) : null },
+                  { label: "Sujet", value: r.sujet },
+                ]}
+                message={r.message}
+              />
+            ))}
           </div>
         )}
       </section>
@@ -168,29 +210,21 @@ export default async function AdminPage() {
         {contactLeads.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucune demande pour le moment.</p>
         ) : (
-          <div className="overflow-x-auto border border-gray-200 rounded-lg">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500 text-left">
-                <tr>
-                  {["Date", "Nom", "Email", "Téléphone", "Message", "Campagne", ""].map((h) => (
-                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {contactLeads.map((r, i) => (
-                  <tr key={i} className="align-top">
-                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.name || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.email ? <a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a> : "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{r.phone ? <a className="text-blue-600 hover:underline" href={`tel:${r.phone}`}>{r.phone}</a> : "—"}</td>
-                    <td className="px-3 py-2 max-w-md whitespace-pre-line">{r.message || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap text-gray-500">{r.campaign || "—"}</td>
-                    <td className="px-3 py-2 text-right"><DeleteButton table="contact_leads" id={r.id} label={r.email || r.name} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {contactLeads.map((r, i) => (
+              <RequestCard
+                key={i}
+                date={r.created_at}
+                badge={r.campaign ? <SourceBadge label={r.campaign} paid /> : undefined}
+                del={<DeleteButton table="contact_leads" id={r.id} label={r.email || r.name} />}
+                fields={[
+                  { label: "Nom", value: r.name },
+                  { label: "Email", value: r.email ? email(r.email) : null },
+                  { label: "Téléphone", value: r.phone ? tel(r.phone) : null },
+                ]}
+                message={r.message}
+              />
+            ))}
           </div>
         )}
       </section>
@@ -203,34 +237,23 @@ export default async function AdminPage() {
         {ftRequests.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucune demande pour le moment.</p>
         ) : (
-          <div className="overflow-x-auto border border-gray-200 rounded-lg">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500 text-left">
-                <tr>
-                  {["Date", "Machine", "Email", "Nom", "Source", ""].map((h) => (
-                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {ftRequests.map((r, i) => {
-                  const s = sourceInfo(r);
-                  return (
-                    <tr key={i} className="align-top">
-                      <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
-                      <td className="px-3 py-2 whitespace-nowrap">{r.machine_name || r.machine_slug || "—"}</td>
-                      <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
-                      <td className="px-3 py-2 whitespace-nowrap">{r.nom || "—"}</td>
-                      <td className="px-3 py-2 whitespace-nowrap">
-                        <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
-                        {s.detail && <div className="text-gray-400 text-xs">{s.detail}</div>}
-                      </td>
-                      <td className="px-3 py-2 text-right"><DeleteButton table="ft_requests" id={r.id} label={r.email} /></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {ftRequests.map((r, i) => {
+              const s = sourceInfo(r);
+              return (
+                <RequestCard
+                  key={i}
+                  date={r.created_at}
+                  badge={<SourceBadge label={s.label} detail={s.detail} paid={s.paid} />}
+                  del={<DeleteButton table="ft_requests" id={r.id} label={r.email} />}
+                  fields={[
+                    { label: "Machine", value: r.machine_name || r.machine_slug },
+                    { label: "Email", value: r.email ? email(r.email) : null },
+                    { label: "Nom", value: r.nom },
+                  ]}
+                />
+              );
+            })}
           </div>
         )}
       </section>
@@ -243,32 +266,22 @@ export default async function AdminPage() {
         {newsletter.length === 0 ? (
           <p className="text-gray-500 text-sm">Aucune inscription pour le moment.</p>
         ) : (
-          <div className="overflow-x-auto border border-gray-200 rounded-lg">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500 text-left">
-                <tr>
-                  {["Date", "Email", "Source", "Page", ""].map((h) => (
-                    <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {newsletter.map((r, i) => {
-                  const s = newsletterSource(r.source);
-                  return (
-                    <tr key={i} className="align-top">
-                      <td className="px-3 py-2 whitespace-nowrap text-gray-500">{fmt(r.created_at)}</td>
-                      <td className="px-3 py-2 whitespace-nowrap"><a className="text-blue-600 hover:underline" href={`mailto:${r.email}`}>{r.email}</a></td>
-                      <td className="px-3 py-2 whitespace-nowrap">
-                        <span className={s.paid ? "font-medium text-emerald-700" : "text-gray-700"}>{s.label}</span>
-                      </td>
-                      <td className="px-3 py-2 whitespace-nowrap">{r.product_slug || "—"}</td>
-                      <td className="px-3 py-2 text-right"><DeleteButton table="newsletter_subscribers" id={r.id} label={r.email} /></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {newsletter.map((r, i) => {
+              const s = newsletterSource(r.source);
+              return (
+                <RequestCard
+                  key={i}
+                  date={r.created_at}
+                  badge={<SourceBadge label={s.label} paid={s.paid} />}
+                  del={<DeleteButton table="newsletter_subscribers" id={r.id} label={r.email} />}
+                  fields={[
+                    { label: "Email", value: r.email ? email(r.email) : null },
+                    { label: "Page", value: r.product_slug },
+                  ]}
+                />
+              );
+            })}
           </div>
         )}
       </section>
