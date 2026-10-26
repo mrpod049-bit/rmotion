@@ -9,6 +9,7 @@ import MetaPixel from "@/components/MetaPixel";
 import GoogleTag from "@/components/GoogleTag";
 import AttributionCapture from "@/components/AttributionCapture";
 import NewsletterPopup from "@/components/NewsletterPopup";
+import { getMachines } from "@/lib/catalog";
 import { getLocale } from "@/i18n/server";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -89,6 +90,9 @@ const organizationJsonLd = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  // Liste légère des produits pour le menu déroulant « Produits » (lecture cachée).
+  const machines = await getMachines(locale === "en");
+  const navProducts = machines.map((m) => ({ slug: m.slug, name: m.name, type: m.type }));
   return (
     <html lang={locale} className={`${geist.variable} h-full bg-white`}>
       <body className="min-h-full flex flex-col text-gray-900 antialiased font-sans">
@@ -97,7 +101,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <BackgroundPattern />
-        <Nav />
+        <Nav products={navProducts} />
         <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />

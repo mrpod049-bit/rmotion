@@ -70,8 +70,8 @@ export default async function Footer() {
           <ul className="space-y-2">
             <li><Link href={L("/projet")} className="hover:text-white">{t.yourProject}</Link></li>
             <li><Link href={L("/philosophie")} className="hover:text-white">{t.philosophy}</Link></li>
-            <li><Link href={L("/products?type=gravure-laser")} className="hover:text-white">{t.engraving}</Link></li>
-            <li><Link href={L("/products?type=cnc")} className="hover:text-white">{t.milling}</Link></li>
+            <li><Link href={L("/products/laser")} className="hover:text-white">{t.engraving}</Link></li>
+            <li><Link href={L("/products/cnc")} className="hover:text-white">{t.milling}</Link></li>
           </ul>
         </div>
 

@@ -19,7 +19,7 @@ const alternates = (path: string) => ({
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Pages bilingues (FR à la racine + version /en traduite) -> alternances hreflang.
-  const bilingualPaths = ["", "/products", "/projet", "/philosophie", "/articles", "/devis", "/contact"];
+  const bilingualPaths = ["", "/products", "/products/laser", "/products/cnc", "/projet", "/philosophie", "/articles", "/devis", "/contact"];
   // Pages uniquement en français (texte non traduit ; leur version /en se canonicalise
   // vers la version FR). Pas d'alternative hreflang « en » ici, sinon le sitemap
   // pointerait un hreflang vers une URL dont le canonical diffère (conflit Semrush).

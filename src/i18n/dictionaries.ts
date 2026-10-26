@@ -4,6 +4,7 @@ import type { Locale } from "./config";
 const fr = {
   nav: {
     products: "Produits",
+    allMachines: "Toutes les machines",
     project: "Votre projet",
     philosophy: "Notre philosophie",
     docs: "Documentation",
@@ -74,6 +75,30 @@ const fr = {
       "Vous ne savez pas quelle machine correspond à votre production ? Décrivez-nous votre besoin : nous vous orientons vers la solution la plus adaptée, ou concevons une machine sur mesure.",
     helpProject: "Décrire mon projet",
     helpQuote: "Demander un devis",
+  },
+  productsLaser: {
+    metaTitle: "Machines laser fibre",
+    metaDesc:
+      "Machines de gravure et de marquage laser fibre pour PME et TPE : métaux, plastiques, bois et cuir. Compactes, industrielles, devis sur mesure.",
+    title: "Machines laser",
+    subtitle:
+      "Gravure et marquage laser fibre, pour une précision industrielle à l'échelle de votre atelier.",
+    intro: [
+      "Nos machines laser fibre sont conçues pour le marquage et la gravure de précision sur les métaux, les plastiques, le bois et le cuir. Elles offrent de véritables capacités industrielles dans un encombrement réduit, adapté à un atelier de PME ou de TPE.",
+      "Marquage de traçabilité, gravure profonde, personnalisation de pièces : chaque machine est livrée avec un accompagnement technique, une garantie d'un an, et fait l'objet d'un devis adapté à votre besoin.",
+    ],
+  },
+  productsCnc: {
+    metaTitle: "Machines CNC & centres d'usinage",
+    metaDesc:
+      "Centres d'usinage CNC compacts pour PME et TPE : fraisage du bois, de l'aluminium, des plastiques techniques et des métaux. Solutions compétitives, devis sur mesure.",
+    title: "Machines CNC",
+    subtitle:
+      "Fraisage et usinage CNC compacts, pour le bois, l'aluminium, les plastiques techniques et les métaux.",
+    intro: [
+      "Nos centres d'usinage CNC couvrent le fraisage et l'usinage du bois, de l'aluminium, des plastiques techniques et des métaux. Compacts et modulaires, ils apportent des capacités industrielles sans les contraintes d'une ligne de production.",
+      "Prototypage, petite série, usinage de précision : chaque machine est livrée avec un accompagnement technique, une garantie d'un an, et fait l'objet d'un devis adapté à votre besoin.",
+    ],
   },
   machine: {
     back: "← Retour au catalogue",
@@ -237,6 +262,7 @@ export type Dictionary = Widen<typeof fr>;
 const en: Dictionary = {
   nav: {
     products: "Products",
+    allMachines: "All machines",
     project: "Your project",
     philosophy: "Our philosophy",
     docs: "Documentation",
@@ -307,6 +333,30 @@ const en: Dictionary = {
       "Not sure which machine fits your production? Tell us what you need: we'll point you to the best-suited solution, or design a custom machine.",
     helpProject: "Describe my project",
     helpQuote: "Request a quote",
+  },
+  productsLaser: {
+    metaTitle: "Fiber laser machines",
+    metaDesc:
+      "Fiber laser marking and engraving machines for SMEs and small businesses: metals, plastics, wood and leather. Compact, industrial, tailored quotes.",
+    title: "Laser machines",
+    subtitle:
+      "Fiber laser marking and engraving, for industrial precision at the scale of your workshop.",
+    intro: [
+      "Our fiber laser machines are built for precision marking and engraving on metals, plastics, wood and leather. They deliver genuine industrial capability in a compact footprint, suited to an SME or small-business workshop.",
+      "Traceability marking, deep engraving, part customisation: every machine ships with technical support, a one-year warranty, and a quote tailored to your needs.",
+    ],
+  },
+  productsCnc: {
+    metaTitle: "CNC machines & machining centres",
+    metaDesc:
+      "Compact CNC machining centres for SMEs and small businesses: milling of wood, aluminium, engineering plastics and metals. Competitive solutions, tailored quotes.",
+    title: "CNC machines",
+    subtitle:
+      "Compact CNC milling and machining, for wood, aluminium, engineering plastics and metals.",
+    intro: [
+      "Our CNC machining centres cover milling and machining of wood, aluminium, engineering plastics and metals. Compact and modular, they bring industrial capability without the constraints of a full production line.",
+      "Prototyping, small runs, precision machining: every machine ships with technical support, a one-year warranty, and a quote tailored to your needs.",
+    ],
   },
   machine: {
     back: "← Back to catalogue",
