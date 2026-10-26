@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
+import { cachedRead, CACHE_TAGS } from "@/lib/cache";
 import { getT } from "@/i18n/server";
 import { localizeHref, dateLocale } from "@/i18n/config";
 import { translateCategory } from "./categories";
@@ -17,17 +18,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-async function getArticles(en: boolean) {
-  const res = await pool.query(
-    `SELECT id, slug, category, published_at,
-            COALESCE(${en ? "title_en" : "NULL"}, title) AS title,
-            COALESCE(${en ? "excerpt_en" : "NULL"}, excerpt) AS excerpt
-     FROM articles
-     WHERE published = true
-     ORDER BY published_at DESC`
-  );
-  return res.rows;
-}
+// Lecture mise en cache (voir lib/cache.ts) : une requête par heure et par locale.
+const getArticles = cachedRead(
+  async (en: boolean) => {
+    const res = await pool.query(
+      `SELECT id, slug, category, published_at,
+              COALESCE(${en ? "title_en" : "NULL"}, title) AS title,
+              COALESCE(${en ? "excerpt_en" : "NULL"}, excerpt) AS excerpt
+       FROM articles
+       WHERE published = true
+       ORDER BY published_at DESC`
+    );
+    return res.rows;
+  },
+  ["articles-list"],
+  [CACHE_TAGS.articles]
+);
 
 export default async function ArticlesPage() {
   const { locale, t } = await getT();

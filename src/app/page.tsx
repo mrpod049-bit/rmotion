@@ -1,24 +1,27 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import pool from "@/lib/db";
+import { cachedRead, CACHE_TAGS } from "@/lib/cache";
 import { getLocale } from "@/i18n/server";
 import { getDictionary } from "@/i18n/dictionaries";
 import { localizeHref } from "@/i18n/config";
 
-// Rafraîchit le carrousel au plus tard toutes les heures ; les actions admin
-// (saveMachine/togglePublished/deleteMachine) revalident déjà "/" immédiatement.
-export const revalidate = 3600;
-
 // Images du carrousel Hero : la PREMIÈRE image (couverture) de chaque fiche produit
 // PUBLIÉE, pour montrer le catalogue réel — une seule photo par produit.
-async function getCarouselImages(): Promise<string[]> {
-  const { rows } = await pool.query<{ images: string[] }>(
-    "SELECT images FROM machines WHERE published = true AND images IS NOT NULL"
-  );
-  return rows
-    .map((r) => (r.images || []).find(Boolean))
-    .filter((s): s is string => Boolean(s));
-}
+// Lecture mise en cache (voir lib/cache.ts) : Postgres n'est interrogé qu'une
+// fois par heure, invalidé à chaque édition de fiche en admin.
+const getCarouselImages = cachedRead(
+  async (): Promise<string[]> => {
+    const { rows } = await pool.query<{ images: string[] }>(
+      "SELECT images FROM machines WHERE published = true AND images IS NOT NULL"
+    );
+    return rows
+      .map((r) => (r.images || []).find(Boolean))
+      .filter((s): s is string => Boolean(s));
+  },
+  ["home-carousel-images"],
+  [CACHE_TAGS.machines]
+);
 
 export default async function HomePage() {
   const locale = await getLocale();

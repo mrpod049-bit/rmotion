@@ -1,8 +1,9 @@
 "use server";
 import pool from "@/lib/db";
 import { del } from "@vercel/blob";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { slugify } from "@/lib/slug";
+import { CACHE_TAGS } from "@/lib/cache";
 import type { Spec, MachineInput } from "./types";
 
 const cleanSpecs = (a?: Spec[]) =>
@@ -15,6 +16,9 @@ async function revalidateAll(slug?: string) {
   revalidatePath("/products");
   revalidatePath("/");
   if (slug) revalidatePath(`/products/${slug}`);
+  // Invalide le cache de données des lectures publiques produits (liste, fiche,
+  // carrousel d'accueil) : sinon elles resteraient en cache jusqu'à 1 h.
+  updateTag(CACHE_TAGS.machines);
   // Surfaces SEO générées depuis la base : à rafraîchir aussi pour que la gestion
   // autonome des fiches se reflète tout de suite (sinon ISR jusqu'à 1 h).
   revalidatePath("/sitemap.xml");

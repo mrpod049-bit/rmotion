@@ -1,14 +1,15 @@
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
+import { cachedRead, CACHE_TAGS } from "@/lib/cache";
 import { getLocale, getT } from "@/i18n/server";
 import { localizeHref, dateLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { translateCategory } from "../categories";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
-const getArticle = cache(async (slug: string, en: boolean) => {
+// Lecture mise en cache (voir lib/cache.ts), invalidée via le tag « articles ».
+const getArticle = cachedRead(async (slug: string, en: boolean) => {
   const res = await pool.query(
     `SELECT id, slug, category, cover_image, og_image, published_at,
             COALESCE(${en ? "title_en" : "NULL"}, title) AS title,
@@ -18,7 +19,7 @@ const getArticle = cache(async (slug: string, en: boolean) => {
     [slug]
   );
   return res.rows[0] || null;
-});
+}, ["article-by-slug"], [CACHE_TAGS.articles]);
 
 export async function generateMetadata({
   params,

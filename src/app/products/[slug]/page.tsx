@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
+import { cachedRead, CACHE_TAGS } from "@/lib/cache";
 import ProductGallery from "@/components/ProductGallery";
 import PixelEvent from "@/components/PixelEvent";
 import { getLocale, getT } from "@/i18n/server";
@@ -15,7 +15,8 @@ import FicheTechniqueButton from "@/components/FicheTechniqueButton";
 const SITE = "https://www.rmotion.fr";
 
 // Sélectionne les champs traduits (repli sur le FR) selon la locale.
-const getMachine = cache(async (slug: string, en: boolean) => {
+// Lecture mise en cache (voir lib/cache.ts), invalidée à l'édition d'une fiche.
+const getMachine = cachedRead(async (slug: string, en: boolean) => {
   const res = await pool.query(
     `SELECT m.id, m.slug, m.price_range, m.images,
             COALESCE(${en ? "m.name_en" : "NULL"}, m.name) AS name,
@@ -30,10 +31,10 @@ const getMachine = cache(async (slug: string, en: boolean) => {
     [slug]
   );
   return res.rows[0] || null;
-});
+}, ["product-by-slug"], [CACHE_TAGS.machines]);
 
 // Guides liés : articles publiés de la même famille (laser / cnc) — maillage interne.
-const getRelatedArticles = cache(async (type: string, en: boolean) => {
+const getRelatedArticles = cachedRead(async (type: string, en: boolean) => {
   const res = await pool.query(
     `SELECT slug, COALESCE(${en ? "title_en" : "NULL"}, title) AS title
      FROM articles
@@ -43,7 +44,7 @@ const getRelatedArticles = cache(async (type: string, en: boolean) => {
     [type === "laser" ? "%laser%" : "%cnc%"]
   );
   return res.rows as { title: string; slug: string }[];
-});
+}, ["product-related-articles"], [CACHE_TAGS.articles]);
 
 export async function generateMetadata({
   params,

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
+import { cachedRead, CACHE_TAGS } from "@/lib/cache";
 import { getT } from "@/i18n/server";
 import { localizeHref, type Locale } from "@/i18n/config";
 import { formatPriceFrom } from "@/lib/price";
@@ -26,19 +27,24 @@ const IMG_SCALE: Record<string, number> = {
   "scs-series": 65,
 };
 
-async function getMachines(en: boolean) {
-  const res = await pool.query(
-    `SELECT m.id, m.slug, m.price_range, m.images, c.type,
-            COALESCE(${en ? "m.name_en" : "NULL"}, m.name) AS name,
-            COALESCE(${en ? "m.tagline_en" : "NULL"}, m.tagline) AS tagline,
-            COALESCE(${en ? "c.name_en" : "NULL"}, c.name) AS category
-     FROM machines m
-     JOIN categories c ON c.id = m.category_id
-     WHERE m.published = true
-     ORDER BY c.type, m.name`
-  );
-  return res.rows;
-}
+// Lecture mise en cache (voir lib/cache.ts) : une requête par heure et par locale.
+const getMachines = cachedRead(
+  async (en: boolean) => {
+    const res = await pool.query(
+      `SELECT m.id, m.slug, m.price_range, m.images, c.type,
+              COALESCE(${en ? "m.name_en" : "NULL"}, m.name) AS name,
+              COALESCE(${en ? "m.tagline_en" : "NULL"}, m.tagline) AS tagline,
+              COALESCE(${en ? "c.name_en" : "NULL"}, c.name) AS category
+       FROM machines m
+       JOIN categories c ON c.id = m.category_id
+       WHERE m.published = true
+       ORDER BY c.type, m.name`
+    );
+    return res.rows;
+  },
+  ["products-list"],
+  [CACHE_TAGS.machines]
+);
 
 export default async function MachinesPage() {
   const { locale, t } = await getT();
