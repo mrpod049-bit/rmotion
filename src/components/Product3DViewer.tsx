@@ -65,9 +65,12 @@ export default function Product3DViewer({
           auto-rotate-delay="1500"
           rotation-per-second="20deg"
           interaction-prompt="none"
-          shadow-intensity="1"
-          exposure="1"
-          environment-image="neutral"
+          // Éclairage plus contrasté que le défaut (qui délave les blancs du carénage).
+          tone-mapping="aces"
+          exposure="0.75"
+          environment-image="legacy"
+          shadow-intensity="1.3"
+          shadow-softness="0.5"
           ar=""
           ar-modes="webxr scene-viewer quick-look"
           style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
