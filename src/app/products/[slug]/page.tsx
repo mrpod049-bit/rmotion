@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import pool from "@/lib/db";
 import { cachedRead, CACHE_TAGS } from "@/lib/cache";
-import ProductGallery from "@/components/ProductGallery";
+import ProductMedia from "@/components/ProductMedia";
+import { getModel3d } from "@/lib/models3d";
 import PixelEvent from "@/components/PixelEvent";
 import { getLocale, getT } from "@/i18n/server";
 import { localizeHref, type Locale } from "@/i18n/config";
@@ -190,15 +191,15 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 items-start">
-        {/* Galerie — colonne gauche, ligne 1 (reste tout en haut sur mobile) */}
+        {/* Galerie (+ vue 3D si modèle) — colonne gauche, ligne 1 (reste tout en haut sur mobile) */}
         <div className="lg:col-start-1 lg:row-start-1">
-          {machine.images?.length ? (
-            <ProductGallery images={machine.images} alt={machine.name} />
-          ) : (
-            <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm uppercase tracking-wider">
-              {machine.category}
-            </div>
-          )}
+          <ProductMedia
+            images={machine.images ?? []}
+            alt={machine.name}
+            category={machine.category}
+            model3d={getModel3d(machine.slug)}
+            labels={{ photos: t.photos, view3d: t.view3d, hint3d: t.hint3d, loading3d: t.loading3d }}
+          />
         </div>
 
         {/* Colonne droite : nom, prix, CTA, specs (décalée de 50px).

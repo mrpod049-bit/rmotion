@@ -103,6 +103,10 @@ const fr = {
   machine: {
     back: "← Retour au catalogue",
     description: "Description",
+    photos: "Photos",
+    view3d: "Vue 3D",
+    hint3d: "Glissez pour tourner · Molette ou pincement pour zoomer",
+    loading3d: "Chargement du modèle 3D",
     priceFrom: "À partir de",
     quoteCta: "Demander un devis pour cette machine",
     warranty: "Garantie 1 an",
@@ -361,6 +365,10 @@ const en: Dictionary = {
   machine: {
     back: "← Back to catalogue",
     description: "Description",
+    photos: "Photos",
+    view3d: "3D view",
+    hint3d: "Drag to rotate · Scroll or pinch to zoom",
+    loading3d: "Loading 3D model",
     priceFrom: "From",
     quoteCta: "Request a quote for this machine",
     warranty: "1-year warranty",
