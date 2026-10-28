@@ -17,9 +17,17 @@ export default function ProductMedia({
   alt: string;
   category: string;
   model3d: string | null;
-  labels: { photos: string; view3d: string; hint3d: string; loading3d: string };
+  labels: {
+    photos: string;
+    view3d: string;
+    hint3d: string;
+    loading3d: string;
+    fullscreen3d: string;
+    exitFullscreen3d: string;
+  };
 }) {
-  const [tab, setTab] = useState<"photos" | "3d">("photos");
+  // La vue 3D est affichée d'emblée quand un modèle existe.
+  const [tab, setTab] = useState<"photos" | "3d">(model3d ? "3d" : "photos");
 
   const photos = images.length ? (
     <ProductGallery images={images} alt={alt} />
@@ -44,20 +52,6 @@ export default function ProductMedia({
         <button
           type="button"
           role="tab"
-          aria-selected={tab === "photos"}
-          onClick={() => setTab("photos")}
-          className={tabClass(tab === "photos")}
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <polyline points="21 15 16 10 5 21" />
-          </svg>
-          {labels.photos}
-        </button>
-        <button
-          type="button"
-          role="tab"
           aria-selected={tab === "3d"}
           onClick={() => setTab("3d")}
           className={tabClass(tab === "3d")}
@@ -69,12 +63,33 @@ export default function ProductMedia({
           </svg>
           {labels.view3d}
         </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "photos"}
+          onClick={() => setTab("photos")}
+          className={tabClass(tab === "photos")}
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+          {labels.photos}
+        </button>
       </div>
 
       {tab === "photos" ? (
         photos
       ) : (
-        <Product3DViewer src={model3d} alt={alt} hint={labels.hint3d} loadingLabel={labels.loading3d} />
+        <Product3DViewer
+          src={model3d}
+          alt={alt}
+          hint={labels.hint3d}
+          loadingLabel={labels.loading3d}
+          fullscreenLabel={labels.fullscreen3d}
+          exitFullscreenLabel={labels.exitFullscreen3d}
+        />
       )}
     </div>
   );

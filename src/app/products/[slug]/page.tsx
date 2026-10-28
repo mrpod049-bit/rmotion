@@ -198,7 +198,14 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
             alt={machine.name}
             category={machine.category}
             model3d={getModel3d(machine.slug)}
-            labels={{ photos: t.photos, view3d: t.view3d, hint3d: t.hint3d, loading3d: t.loading3d }}
+            labels={{
+              photos: t.photos,
+              view3d: t.view3d,
+              hint3d: t.hint3d,
+              loading3d: t.loading3d,
+              fullscreen3d: t.fullscreen3d,
+              exitFullscreen3d: t.exitFullscreen3d,
+            }}
           />
         </div>
 
