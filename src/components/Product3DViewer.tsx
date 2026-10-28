@@ -73,7 +73,7 @@ export default function Product3DViewer({
 
   return (
     <div
-      className={`overflow-hidden bg-gradient-to-b from-white to-gray-100 ${
+      className={`overflow-hidden bg-white ${
         expanded ? "fixed inset-0 z-50" : "relative h-[480px] lg:h-[600px] rounded-lg"
       }`}
     >
