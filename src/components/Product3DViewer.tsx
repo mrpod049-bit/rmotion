@@ -32,7 +32,7 @@ type ModelViewerElement = HTMLElement & {
 
 function matteSurfaces(el: ModelViewerElement) {
   for (const material of el.model?.materials ?? []) {
-    if (material.getAlphaMode() === "BLEND" || /screen|glass/i.test(material.name)) continue;
+    if (material.getAlphaMode() === "BLEND" || /screen|glass|verre|lentille/i.test(material.name)) continue;
     const pbr = material.pbrMetallicRoughness;
     const min = pbr.metallicFactor > 0.5 ? MIN_ROUGHNESS_METAL : MIN_ROUGHNESS_OTHER;
     pbr.setRoughnessFactor(Math.max(pbr.roughnessFactor, min));
