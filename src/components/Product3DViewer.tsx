@@ -13,6 +13,7 @@ declare module "react" {
 
 export default function Product3DViewer({
   src,
+  cameraOrbit,
   alt,
   hint,
   loadingLabel,
@@ -20,6 +21,7 @@ export default function Product3DViewer({
   exitFullscreenLabel,
 }: {
   src: string;
+  cameraOrbit?: string;
   alt: string;
   hint: string;
   loadingLabel: string;
@@ -83,6 +85,7 @@ export default function Product3DViewer({
           src={src}
           alt={alt}
           camera-controls=""
+          camera-orbit={cameraOrbit}
           touch-action="pan-y"
           auto-rotate=""
           auto-rotate-delay="1500"

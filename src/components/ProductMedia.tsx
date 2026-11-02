@@ -2,6 +2,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import ProductGallery from "@/components/ProductGallery";
+import type { Model3d } from "@/lib/models3d";
 
 const Product3DViewer = dynamic(() => import("@/components/Product3DViewer"), { ssr: false });
 
@@ -16,7 +17,7 @@ export default function ProductMedia({
   images: string[];
   alt: string;
   category: string;
-  model3d: string | null;
+  model3d: Model3d | null;
   labels: {
     photos: string;
     view3d: string;
@@ -83,7 +84,8 @@ export default function ProductMedia({
         photos
       ) : (
         <Product3DViewer
-          src={model3d}
+          src={model3d.src}
+          cameraOrbit={model3d.cameraOrbit}
           alt={alt}
           hint={labels.hint3d}
           loadingLabel={labels.loading3d}
