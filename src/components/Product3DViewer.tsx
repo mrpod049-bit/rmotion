@@ -11,6 +11,34 @@ declare module "react" {
   }
 }
 
+// Rugosité minimale appliquée au chargement (0 = miroir, 1 = mat) : les exports sont trop brillants
+// et donnent un aspect « ébloui ». Le verre et l'écran gardent leur brillance d'origine.
+const MIN_ROUGHNESS_METAL = 0.55;
+const MIN_ROUGHNESS_OTHER = 0.7;
+
+type ModelViewerElement = HTMLElement & {
+  model?: {
+    materials: {
+      name: string;
+      getAlphaMode: () => string;
+      pbrMetallicRoughness: {
+        metallicFactor: number;
+        roughnessFactor: number;
+        setRoughnessFactor: (value: number) => void;
+      };
+    }[];
+  };
+};
+
+function matteSurfaces(el: ModelViewerElement) {
+  for (const material of el.model?.materials ?? []) {
+    if (material.getAlphaMode() === "BLEND" || /screen/i.test(material.name)) continue;
+    const pbr = material.pbrMetallicRoughness;
+    const min = pbr.metallicFactor > 0.5 ? MIN_ROUGHNESS_METAL : MIN_ROUGHNESS_OTHER;
+    pbr.setRoughnessFactor(Math.max(pbr.roughnessFactor, min));
+  }
+}
+
 export default function Product3DViewer({
   src,
   cameraOrbit,
@@ -64,7 +92,10 @@ export default function Product3DViewer({
     if (!el) return;
     const onProgress = (e: Event) =>
       setProgress((e as CustomEvent<{ totalProgress: number }>).detail.totalProgress);
-    const onLoad = () => setLoaded(true);
+    const onLoad = () => {
+      matteSurfaces(el as ModelViewerElement);
+      setLoaded(true);
+    };
     el.addEventListener("progress", onProgress);
     el.addEventListener("load", onLoad);
     return () => {
@@ -91,10 +122,10 @@ export default function Product3DViewer({
           auto-rotate-delay="1500"
           rotation-per-second="20deg"
           interaction-prompt="none"
-          // Éclairage plus contrasté que le défaut (qui délave les blancs du carénage).
+          // Éclairage neutre : l'environnement « legacy » voilait les noirs de gris.
           tone-mapping="aces"
-          exposure="0.75"
-          environment-image="legacy"
+          exposure="0.7"
+          environment-image="neutral"
           shadow-intensity="1.3"
           shadow-softness="0.5"
           ar=""
