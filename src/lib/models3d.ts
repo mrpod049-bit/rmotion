@@ -6,6 +6,7 @@ export type Model3d = { src: string; cameraOrbit?: string };
 const MODELS_3D: Record<string, Model3d> = {
   "bcl-series": { src: "/models/bcl-series.glb" },
   "mcs-atc": { src: "/models/mcs-atc.glb", cameraOrbit: "180deg 75deg auto" },
+  "ol-series": { src: "/models/ol-series.glb", cameraOrbit: "-30deg 75deg auto" },
 };
 
 export function getModel3d(slug: string): Model3d | null {
