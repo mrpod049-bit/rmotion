@@ -128,3 +128,16 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-marquee { animation: none; }
 }
+
+/* EXPÉRIMENTAL — thème inversé en noir & blanc (classe `bw-invert` sur <html>). */
+html.bw-invert {
+  filter: grayscale(1) invert(1);
+  background: #ffffff;
+}
+html.bw-invert img,
+html.bw-invert video,
+html.bw-invert canvas,
+html.bw-invert model-viewer,
+html.bw-invert svg image {
+  filter: invert(1);
+}

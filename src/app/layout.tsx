@@ -94,7 +94,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const machines = await getMachines(locale === "en");
   const navProducts = machines.map((m) => ({ slug: m.slug, name: m.name, type: m.type }));
   return (
-    <html lang={locale} className={`${geist.variable} h-full bg-white`}>
+    <html lang={locale} className={`${geist.variable} h-full bg-white bw-invert`}>
       <body className="min-h-full flex flex-col text-gray-900 antialiased font-sans">
         <script
           type="application/ld+json"
