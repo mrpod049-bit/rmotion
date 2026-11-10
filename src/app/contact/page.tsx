@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import ContactLinks from "@/components/ContactLinks";
+import Turnstile, { turnstileEnabled } from "@/components/Turnstile";
 import { localeFromPathname } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
@@ -10,6 +11,7 @@ export default function ContactPage() {
   const locale = localeFromPathname(usePathname());
   const t = getDictionary(locale).contact;
   const [form, setForm] = useState({ nom: "", email: "", sujet: "", message: "" });
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -24,7 +26,7 @@ export default function ContactPage() {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, locale }),
+      body: JSON.stringify({ ...form, locale, turnstileToken: captchaToken }),
     });
     setSending(false);
     if (res.ok) {
@@ -75,9 +77,10 @@ export default function ContactPage() {
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
           />
         </div>
+        <Turnstile onToken={setCaptchaToken} locale={locale} />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
-          type="submit" disabled={sending}
+          type="submit" disabled={sending || (turnstileEnabled && !captchaToken)}
           className="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-700 transition-colors disabled:opacity-50"
         >
           {sending ? t.sending : t.send}

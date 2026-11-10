@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getAttribution } from "@/lib/attribution";
 import { gtagConversion } from "@/lib/gtag";
 import { pixelTrack } from "@/lib/pixel";
+import Turnstile, { turnstileEnabled } from "@/components/Turnstile";
 
 type Locale = "fr" | "en";
 
@@ -51,6 +52,7 @@ export default function FicheTechniqueButton({
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [nom, setNom] = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -75,7 +77,7 @@ export default function FicheTechniqueButton({
       body: JSON.stringify({
         email: value, nom: nom.trim() || null,
         machine_id: machineId, machine_name: machineName, machine_slug: machineSlug,
-        attribution: getAttribution(),
+        attribution: getAttribution(), turnstileToken: captchaToken,
       }),
     }).catch(() => null);
     setSending(false);
@@ -140,9 +142,10 @@ export default function FicheTechniqueButton({
                     placeholder={t.nom} aria-label={t.nom}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
                   />
+                  <Turnstile onToken={setCaptchaToken} locale={locale} />
                   {error && <p className="text-red-500 text-sm">{error}</p>}
                   <button
-                    type="submit" disabled={sending}
+                    type="submit" disabled={sending || (turnstileEnabled && !captchaToken)}
                     className="w-full bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-700 transition-colors disabled:opacity-50"
                   >
                     {sending ? t.sending : t.submit}

@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { sendNotification } from '@/lib/notify';
+import { verifyTurnstile } from '@/lib/turnstile';
 
 // Demande de fiche technique d'une machine (aimant à leads).
 // Enregistre la demande + notifie contact@rmotion.fr. Envoi de la fiche manuel.
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { email, nom, machine_id, machine_name, machine_slug, attribution } = body;
+  const { email, nom, machine_id, machine_name, machine_slug, attribution, turnstileToken } = body;
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || !emailRe.test(email)) {
     return NextResponse.json({ error: 'Email invalide' }, { status: 400 });
+  }
+
+  const clientIp = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || undefined;
+  if (!(await verifyTurnstile(turnstileToken, clientIp))) {
+    return NextResponse.json({ error: 'Vérification anti-spam échouée' }, { status: 400 });
   }
 
   const a = (attribution ?? {}) as Record<string, string | undefined>;

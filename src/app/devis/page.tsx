@@ -6,6 +6,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { pixelTrack } from "@/lib/pixel";
 import { gtagConversion } from "@/lib/gtag";
 import { getAttribution, getFbData } from "@/lib/attribution";
+import Turnstile, { turnstileEnabled } from "@/components/Turnstile";
 
 // Coordonnées encodées en base64 : jamais en clair dans le HTML, décodées
 // côté client uniquement après montage (invisibles pour les scrapers/SSR).
@@ -74,6 +75,7 @@ function DevisForm() {
     machine_name: machineName, message: "",
   });
   const [requestType, setRequestType] = useState<"devis" | "general">("devis");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -97,7 +99,7 @@ function DevisForm() {
     const res = await fetch("/api/devis", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, message, machine_id: machineId || null, locale, attribution: getAttribution(), eventId, fbc, fbp }),
+      body: JSON.stringify({ ...form, message, machine_id: machineId || null, locale, attribution: getAttribution(), eventId, fbc, fbp, turnstileToken: captchaToken }),
     });
     setSending(false);
     if (res.ok) {
@@ -147,9 +149,10 @@ function DevisForm() {
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
         />
       </div>
+      <Turnstile onToken={setCaptchaToken} locale={locale} />
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <button
-        type="submit" disabled={sending}
+        type="submit" disabled={sending || (turnstileEnabled && !captchaToken)}
         className="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-700 transition-colors disabled:opacity-50"
       >
         {sending ? t.sending : t.send}

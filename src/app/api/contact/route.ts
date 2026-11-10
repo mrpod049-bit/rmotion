@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { sendNotification } from '@/lib/notify';
+import { verifyTurnstile } from '@/lib/turnstile';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { nom, email, sujet, message } = body;
+  const { nom, email, sujet, message, turnstileToken } = body;
 
   if (!nom || !email || !message) {
     return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 });
+  }
+
+  const clientIp = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || undefined;
+  if (!(await verifyTurnstile(turnstileToken, clientIp))) {
+    return NextResponse.json({ error: 'Vérification anti-spam échouée' }, { status: 400 });
   }
 
   await pool.query(
