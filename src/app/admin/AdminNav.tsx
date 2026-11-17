@@ -11,6 +11,7 @@ const TABS = [
   { href: "/admin/newsletter", label: "Newsletter", exact: false },
   { href: "/admin/crm/machines", label: "Coûts machines", exact: false },
   { href: "/admin/crm/logs", label: "Journal", exact: false },
+  { href: "/admin/boutique", label: "Boutique", exact: false },
 ];
 
 export default function AdminNav({ toContact = 0 }: { toContact?: number }) {
