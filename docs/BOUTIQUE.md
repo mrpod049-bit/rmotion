@@ -1,8 +1,13 @@
 # Boutique outils de coupe (B2B)
 
-Module e-commerce B2B intégré au site. Il est **inactif tant que `SHOP_ENABLED` ≠ `true`** : les pages publiques
-(`/outils`, `/panier`, `/commande`, `/compte`, `/cgv`, `/api/shop/siret`) répondent alors 404.
-L'admin (`/admin/boutique`, protégé par l'auth existante) reste disponible pour préparer le catalogue avant l'ouverture.
+Module e-commerce B2B intégré au site. **Tant que `SHOP_ENABLED` ≠ `true`**, le public qui ouvre l'onglet
+« Boutique » (`/outils`, `/panier`, `/commande`, `/compte`, `/cgv`) voit une page « Boutique en construction »
+(`src/app/boutique-bientot`, réécriture faite par `src/middleware.ts`, aucune requête en base).
+L'admin (`/admin/boutique`, protégé par l'auth existante) reste disponible pour préparer le catalogue.
+
+**Aperçu admin** : `/admin/boutique/apercu` pose un cookie signé (HMAC de `ADMIN_PASSWORD`, ou `SHOP_PREVIEW_SECRET`
+si défini) valable 30 jours, qui donne accès à la vraie boutique. `/admin/boutique/apercu?off=1` le retire.
+Changer le mot de passe admin invalide tous les aperçus.
 
 ## Isolation vis-à-vis du site existant
 - Base : uniquement des tables nouvelles `shop_*` (migration `src/lib/migrations/shop/001_shop_core.sql`, idempotente).
@@ -33,7 +38,9 @@ L'admin (`/admin/boutique`, protégé par l'auth existante) reste disponible pou
    `.async_payment_failed`, `.expired`).
 5. Variables Vercel : `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `SHOP_BASE_URL=https://www.rmotion.fr`,
    (optionnel `SHOP_ADMIN_EMAIL`, `SHOP_MAIL_FROM`), puis `SHOP_ENABLED=true` → Redeploy.
-6. Faire relire les CGV (`/cgv`, projet) avant ouverture ; ajouter le lien « Outils » dans la navigation.
+6. Faire relire les CGV (`/cgv`, projet) avant ouverture.
+
+Étapes 1 et 2 faites le 2026-11-17 (tables créées sur Neon, code en ligne, boutique en construction).
 
 ## Développement local (sans toucher la prod)
 Base de test PGlite isolée : `C:\Users\mrpod\Desktop\rmotion-boutique-testdb`
