@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { PREVIEW_COOKIE, SHOP_PATH, isPreviewValue, shopIsOpen } from "@/lib/shop/preview";
 
 // Deux rôles :
 // 1) Protège /admin par une authentification basique (ADMIN_USER / ADMIN_PASSWORD).
@@ -30,7 +31,7 @@ function requireAdminAuth(req: NextRequest): NextResponse | null {
   });
 }
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
@@ -43,6 +44,15 @@ export function middleware(req: NextRequest) {
   const locale = isEn ? "en" : "fr";
   const headers = new Headers(req.headers);
   headers.set("x-locale", locale);
+
+  // Boutique pas encore ouverte : le public voit « en construction » (aucune
+  // page boutique n'est exécutée), l'admin muni du cookie d'aperçu voit tout.
+  const basePath = isEn ? pathname.replace(/^\/en/, "") || "/" : pathname;
+  if (SHOP_PATH.test(basePath) && !shopIsOpen() && !(await isPreviewValue(req.cookies.get(PREVIEW_COOKIE)?.value))) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/boutique-bientot";
+    return NextResponse.rewrite(url, { request: { headers } });
+  }
 
   if (isEn) {
     const url = req.nextUrl.clone();

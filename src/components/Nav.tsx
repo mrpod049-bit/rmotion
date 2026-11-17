@@ -19,6 +19,7 @@ export default function Nav({ products = [] }: { products?: NavProduct[] }) {
 
   const productsHref = L("/products");
   const otherLinks = [
+    { href: L("/outils"), label: t.shop },
     { href: L("/projet"), label: t.project },
     { href: L("/philosophie"), label: t.philosophy },
     { href: L("/articles"), label: t.docs },
@@ -29,7 +30,7 @@ export default function Nav({ products = [] }: { products?: NavProduct[] }) {
   const cncProducts = products.filter((p) => p.type === "cnc");
 
   const tabClass = (isActive: boolean) =>
-    `flex-1 text-[1.4rem] px-3 flex items-center justify-center text-center whitespace-nowrap transition-colors ${
+    `flex-1 text-[1.2rem] 2xl:text-[1.4rem] px-3 flex items-center justify-center text-center whitespace-nowrap transition-colors ${
       isActive ? "bg-gray-900 text-white font-medium" : "text-gray-500 hover:bg-gray-900 hover:text-white"
     }`;
 
@@ -127,7 +128,7 @@ export default function Nav({ products = [] }: { products?: NavProduct[] }) {
           ))}
           <Link
             href={L("/devis")}
-            className="flex items-center px-6 bg-gray-900 text-white text-[1.4rem] whitespace-nowrap hover:bg-gray-700 transition-colors"
+            className="flex items-center px-6 bg-gray-900 text-white text-[1.2rem] 2xl:text-[1.4rem] whitespace-nowrap hover:bg-gray-700 transition-colors"
           >
             {t.quote}
           </Link>

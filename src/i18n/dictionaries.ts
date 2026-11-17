@@ -4,6 +4,7 @@ import type { Locale } from "./config";
 const fr = {
   nav: {
     products: "Produits",
+    shop: "Boutique",
     allMachines: "Toutes les machines",
     project: "Votre projet",
     philosophy: "Notre philosophie",
@@ -268,6 +269,7 @@ export type Dictionary = Widen<typeof fr>;
 const en: Dictionary = {
   nav: {
     products: "Products",
+    shop: "Shop",
     allMachines: "All machines",
     project: "Your project",
     philosophy: "Our philosophy",

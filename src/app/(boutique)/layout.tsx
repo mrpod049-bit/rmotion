@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { shopEnabled } from "@/lib/shop/core";
+import { canSeeShop, inPreview } from "@/lib/shop/access";
 import { getCurrentUser } from "@/lib/shop/auth";
 import pool from "@/lib/db";
 
 // Toutes les pages publiques de la boutique (/outils, /panier, /commande, /compte)
-// passent par ce layout : tant que SHOP_ENABLED n'est pas « true », elles
-// répondent 404 et le site actuel est strictement inchangé.
+// passent par ce layout. Tant que SHOP_ENABLED n'est pas « true », le middleware
+// affiche « Boutique en construction » au public ; seul l'admin en mode aperçu
+// (cookie posé par /admin/boutique/apercu) arrive ici. Double garde ci-dessous.
 export const dynamic = "force-dynamic";
 
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
-  if (!shopEnabled()) notFound();
+  if (!(await canSeeShop())) notFound();
+  const preview = await inPreview();
   const user = await getCurrentUser();
   let cartCount = 0;
   if (user) {
@@ -19,6 +21,11 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
   }
   return (
     <div>
+      {preview && (
+        <div className="bg-amber-100 px-6 py-1.5 text-center text-xs text-amber-900">
+          Mode aperçu : la boutique est fermée au public, vous seul la voyez. <a href="/admin/boutique" className="underline">Admin boutique</a> · <a href="/admin/boutique/apercu?off=1" className="underline">Quitter l&apos;aperçu</a>
+        </div>
+      )}
       <div className="border-b border-gray-200 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6 py-2 flex flex-wrap items-center gap-4 text-sm">
           <Link href="/outils" className="font-semibold">Outils de coupe</Link>

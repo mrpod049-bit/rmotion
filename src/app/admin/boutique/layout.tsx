@@ -11,7 +11,8 @@ export default function BoutiqueLayout({ children }: { children: React.ReactNode
     <>
       <BoutiqueNav />
       <div className={`px-6 py-1.5 text-xs print:hidden ${on ? "bg-green-50 text-green-800" : "bg-amber-50 text-amber-800"}`}>
-        {on ? "Boutique publique : EN LIGNE." : "Boutique publique : HORS LIGNE (SHOP_ENABLED ≠ true) — vous pouvez préparer catalogue et stock."}
+        {on ? "Boutique publique : EN LIGNE." : "Boutique publique : EN CONSTRUCTION (le public voit une page d'attente)."}
+        {" · "}<a href="/admin/boutique/apercu" className="underline font-medium">Voir la boutique{on ? "" : " (aperçu)"} →</a>
         {" · "}Paiement en ligne : {stripeConfigured() ? (stripeTestMode() ? "Stripe mode TEST" : "Stripe LIVE") : "non configuré"}
       </div>
       {children}
