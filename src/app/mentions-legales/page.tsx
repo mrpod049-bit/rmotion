@@ -28,7 +28,7 @@ export default function MentionsLegalesPage() {
           <br />
           Capital social : 5 000 euros.
           <br />
-          Siège social : 9 avenue Montaigne, 49100 Angers, France.
+          Siège social : 5 rue du Stade, 49320 Les Alleuds, France.
           <br />
           Numéro SIREN : 109 645 911 — SIRET (siège) : 10964591100016.
           <br />
