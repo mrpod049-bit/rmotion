@@ -12,6 +12,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { formatPriceFrom } from "@/lib/price";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FicheTechniqueButton from "@/components/FicheTechniqueButton";
+import { absoluteUrl } from "@/lib/absolute-url";
 
 const SITE = "https://www.rmotion.fr";
 
@@ -113,7 +114,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     category: machine.category,
     sku: machine.slug,
     ...(machine.images?.length
-      ? { image: (machine.images as string[]).map((i) => `${SITE}${i}`) }
+      ? { image: (machine.images as string[]).map(absoluteUrl) }
       : {}),
     brand: { "@type": "Brand", name: "Rmotion" },
     ...(specEntries.length

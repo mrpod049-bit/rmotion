@@ -7,6 +7,7 @@ import { localizeHref, dateLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { translateCategory } from "../categories";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { absoluteUrl } from "@/lib/absolute-url";
 
 // Lecture mise en cache (voir lib/cache.ts), invalidée via le tag « articles ».
 const getArticle = cachedRead(async (slug: string, en: boolean) => {
@@ -74,7 +75,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     "@type": "Article",
     headline: article.title,
     description: article.excerpt || undefined,
-    ...(article.cover_image ? { image: `https://www.rmotion.fr${article.cover_image}` } : {}),
+    ...(article.cover_image ? { image: absoluteUrl(article.cover_image) } : {}),
     ...(article.published_at ? { datePublished: new Date(article.published_at).toISOString() } : {}),
     author: { "@type": "Organization", name: "Rmotion" },
     publisher: {
