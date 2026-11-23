@@ -34,7 +34,7 @@ export default function MentionsLegalesPage() {
           <br />
           Immatriculation au RCS : RCS Angers 109 645 911.
           <br />
-          Numéro de TVA intracommunautaire : FR75109645911 (franchise en base de TVA, article 293 B du CGI — TVA non applicable sur les factures).
+          Numéro de TVA intracommunautaire : FR75109645911.
           <br />
           Téléphone : +33 7 81 49 26 85.
           <br />
