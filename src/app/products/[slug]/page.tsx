@@ -13,7 +13,8 @@ import { formatPriceFrom } from "@/lib/price";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FicheTechniqueButton from "@/components/FicheTechniqueButton";
 import { absoluteUrl } from "@/lib/absolute-url";
-import { descriptionToHtml, descriptionExcerpt, stripHtml } from "@/lib/richtext";
+import { descriptionToHtml, descriptionExcerpt, stripHtml, buildTocAndAnchors } from "@/lib/richtext";
+import DescriptionToc from "@/components/DescriptionToc";
 
 const SITE = "https://www.rmotion.fr";
 
@@ -86,6 +87,12 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
   const L = (href: string) => localizeHref(href, locale as Locale);
   const machine = await getMachine(slug, locale === "en");
   if (!machine) notFound();
+
+  // Description HTML + sommaire (ancres sur les H2/H3) pour la section pleine largeur.
+  const { html: descriptionHtml, toc } = buildTocAndAnchors(
+    descriptionToHtml(machine.description)
+  );
+  const hasToc = toc.length >= 2;
 
   const relatedArticles = await getRelatedArticles(machine.type, locale === "en");
 
@@ -293,15 +300,28 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        {/* Description — colonne gauche sous la galerie ; passe en dernier sur mobile */}
-        <div className="lg:col-start-1 lg:row-start-2 mt-10">
-          <h2 className="text-lg font-semibold mb-4">{t.description}</h2>
-          <div
-            className="prose prose-gray max-w-none prose-headings:font-semibold prose-img:rounded-lg prose-img:w-full prose-p:leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: descriptionToHtml(machine.description) }}
-          />
-        </div>
       </div>
+
+      {/* Description : pleine largeur sous le bloc produit, avec sommaire latéral collant. */}
+      {descriptionHtml && (
+        <section className="mt-14 lg:mt-20 border-t border-gray-200 pt-10 lg:pt-12">
+          <h2 className="text-lg font-semibold mb-8">{t.description}</h2>
+          {hasToc ? (
+            <div className="grid grid-cols-1 lg:grid-cols-[210px_minmax(0,1fr)] gap-x-12 xl:gap-x-16">
+              <DescriptionToc items={toc} title={t.summary} />
+              <div
+                className="prose prose-gray max-w-none prose-headings:font-semibold prose-headings:scroll-mt-28 prose-img:rounded-lg prose-img:w-full prose-p:leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+              />
+            </div>
+          ) : (
+            <div
+              className="prose prose-gray max-w-3xl prose-headings:font-semibold prose-headings:scroll-mt-28 prose-img:rounded-lg prose-img:w-full prose-p:leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+            />
+          )}
+        </section>
+      )}
 
       {/* FAQ — visible + JSON-LD FAQPage (utile référencement Google et IA) */}
       <div className="mt-16 max-w-2xl">

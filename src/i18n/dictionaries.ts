@@ -104,6 +104,7 @@ const fr = {
   machine: {
     back: "← Retour au catalogue",
     description: "Description",
+    summary: "Sommaire",
     photos: "Photos",
     view3d: "Vue 3D",
     hint3d: "Glissez pour tourner · Molette ou pincement pour zoomer",
@@ -369,6 +370,7 @@ const en: Dictionary = {
   machine: {
     back: "← Back to catalogue",
     description: "Description",
+    summary: "Contents",
     photos: "Photos",
     view3d: "3D view",
     hint3d: "Drag to rotate · Scroll or pinch to zoom",

@@ -2,6 +2,7 @@
  * Utilitaires pour les descriptions de fiches produit en HTML riche (éditeur TipTap).
  * Gère aussi rétro-compatibilité avec les anciennes descriptions en texte brut.
  */
+import { slugify } from "@/lib/slug";
 
 /** Détecte si une chaîne contient déjà du balisage HTML (produit par l'éditeur). */
 export function isHtml(s: string): boolean {
@@ -62,4 +63,34 @@ export function descriptionExcerpt(s: string | null | undefined, max = 160): str
   const text = stripHtml(s);
   if (text.length <= max) return text;
   return text.slice(0, max - 1).replace(/\s+\S*$/, "") + "…";
+}
+
+/** Une entrée de sommaire : un sous-titre H2 ou H3 de la description. */
+export type TocItem = { id: string; text: string; level: 2 | 3 };
+
+/**
+ * Parcourt le HTML d'une description, injecte un identifiant (ancre) sur chaque
+ * <h2>/<h3> et renvoie le HTML modifié + la liste des entrées de sommaire.
+ * Les identifiants en doublon sont suffixés (-2, -3…). Sert au sommaire latéral
+ * de la fiche produit (ancres cliquables).
+ */
+export function buildTocAndAnchors(html: string): { html: string; toc: TocItem[] } {
+  const toc: TocItem[] = [];
+  const used = new Map<string, number>();
+  const out = (html ?? "").replace(
+    /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+    (match, levelStr: string, attrs: string, inner: string) => {
+      const text = stripHtml(inner);
+      if (!text) return match;
+      let id = slugify(text) || "section";
+      const count = (used.get(id) ?? 0) + 1;
+      used.set(id, count);
+      if (count > 1) id = `${id}-${count}`;
+      toc.push({ id, text, level: Number(levelStr) as 2 | 3 });
+      // Ne pas écraser un id déjà présent (l'éditeur n'en pose pas, mais par sûreté).
+      if (/\sid\s*=/i.test(attrs)) return match;
+      return `<h${levelStr}${attrs} id="${id}">${inner}</h${levelStr}>`;
+    }
+  );
+  return { html: out, toc };
 }
