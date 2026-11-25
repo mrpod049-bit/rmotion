@@ -13,6 +13,7 @@ import { formatPriceFrom } from "@/lib/price";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FicheTechniqueButton from "@/components/FicheTechniqueButton";
 import { absoluteUrl } from "@/lib/absolute-url";
+import { descriptionToHtml, descriptionExcerpt, stripHtml } from "@/lib/richtext";
 
 const SITE = "https://www.rmotion.fr";
 
@@ -58,7 +59,7 @@ export async function generateMetadata({
   const machine = await getMachine(slug, locale === "en");
   if (!machine) return { title: getDictionary(locale).machine.notFound };
   const desc: string =
-    (machine.description ? String(machine.description).split("\n")[0] : "") ||
+    descriptionExcerpt(machine.description) ||
     machine.tagline ||
     "";
   const image: string | undefined = machine.images?.[0];
@@ -108,9 +109,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
     "@context": "https://schema.org",
     "@type": "Product",
     name: machine.name,
-    description: machine.description
-      ? String(machine.description).replace(/\n+/g, " ")
-      : machine.tagline || "",
+    description: stripHtml(machine.description) || machine.tagline || "",
     category: machine.category,
     sku: machine.slug,
     ...(machine.images?.length
@@ -297,24 +296,10 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
         {/* Description — colonne gauche sous la galerie ; passe en dernier sur mobile */}
         <div className="lg:col-start-1 lg:row-start-2 mt-10">
           <h2 className="text-lg font-semibold mb-4">{t.description}</h2>
-          <div className="space-y-4">
-            {String(machine.description || "")
-              .split(/\n{2,}/)
-              .filter((p) => p.trim())
-              .map((para, idx) => {
-                const isWarning = /^(AVERTISSEMENT|SAFETY WARNING)/i.test(para.trim());
-                return (
-                  <p
-                    key={idx}
-                    className={`leading-relaxed whitespace-pre-line ${
-                      isWarning ? "text-red-600 font-bold" : "text-gray-600"
-                    }`}
-                  >
-                    {para}
-                  </p>
-                );
-              })}
-          </div>
+          <div
+            className="prose prose-gray max-w-none prose-headings:font-semibold prose-img:rounded-lg prose-img:w-full prose-p:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: descriptionToHtml(machine.description) }}
+          />
         </div>
       </div>
 

@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { saveMachine } from "./actions";
 import type { Spec, MachineInput } from "./types";
 import { slugify } from "@/lib/slug";
+import { descriptionToHtml } from "@/lib/richtext";
+import RichTextEditor from "./RichTextEditor";
 
 type Category = { id: number; name: string; type: string };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,8 +34,8 @@ export default function MachineForm({ categories, machine }: { categories: Categ
   const [categoryId, setCategoryId] = useState<number>(machine?.category_id ?? categories[0]?.id ?? 0);
   const [tagline, setTagline] = useState<string>(machine?.tagline ?? "");
   const [taglineEn, setTaglineEn] = useState<string>(machine?.tagline_en ?? "");
-  const [description, setDescription] = useState<string>(machine?.description ?? "");
-  const [descriptionEn, setDescriptionEn] = useState<string>(machine?.description_en ?? "");
+  const [description, setDescription] = useState<string>(descriptionToHtml(machine?.description));
+  const [descriptionEn, setDescriptionEn] = useState<string>(descriptionToHtml(machine?.description_en));
   const [priceRange, setPriceRange] = useState<string>(machine?.price_range ?? "");
   const [featured, setFeatured] = useState<boolean>(Boolean(machine?.featured));
   const [published, setPublished] = useState<boolean>(machine ? Boolean(machine.published) : true);
@@ -160,9 +162,10 @@ export default function MachineForm({ categories, machine }: { categories: Categ
       {/* Descriptions */}
       <div className={section}>
         <label className={label}>Description (FR)</label>
-        <textarea className={input} rows={6} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Séparez les paragraphes par une ligne vide." />
+        <RichTextEditor value={description} onChange={setDescription} onUploadingChange={setUploading} />
+        <p className="text-xs text-gray-400 mt-1">Mise en forme libre : gras, italique, titres, listes, couleurs, liens et images.</p>
         <label className={`${label} mt-4`}>Description (EN)</label>
-        <textarea className={input} rows={5} value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} />
+        <RichTextEditor value={descriptionEn} onChange={setDescriptionEn} onUploadingChange={setUploading} />
       </div>
 
       {/* Images */}
