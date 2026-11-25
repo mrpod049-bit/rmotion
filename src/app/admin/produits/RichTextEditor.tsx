@@ -5,7 +5,28 @@ import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
-import { useRef } from "react";
+import { useRef, useEffect, useReducer } from "react";
+
+/**
+ * Image avec ancrage par rapport au texte : plein (bloc), flottante à gauche,
+ * flottante à droite, ou centrée. L'ancrage est stocké en attribut `data-align`
+ * sur la balise <img> ; l'habillage (float + largeur + repli mobile) est géré
+ * par les règles `.prose img[data-align=…]` de globals.css, partagées entre
+ * l'éditeur et l'affichage public.
+ */
+const AlignedImage = Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      align: {
+        default: null,
+        parseHTML: (el: HTMLElement) => el.getAttribute("data-align"),
+        renderHTML: (attrs: { align?: string | null }) =>
+          attrs.align ? { "data-align": attrs.align } : {},
+      },
+    };
+  },
+});
 
 /**
  * Éditeur de texte riche (WYSIWYG) basé sur TiptTap.
@@ -32,7 +53,7 @@ export default function RichTextEditor({
       }),
       TextStyle,
       Color,
-      Image.configure({ inline: false, HTMLAttributes: { class: "rounded-lg" } }),
+      AlignedImage.configure({ inline: false, HTMLAttributes: { class: "rounded-lg" } }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
     content: value || "",
@@ -44,6 +65,19 @@ export default function RichTextEditor({
       },
     },
   });
+
+  // TipTap v3 ne re-rend pas React à chaque transaction : on force le rafraîchissement
+  // pour que les états actifs de la barre d'outils et les boutons d'ancrage d'image
+  // (affichés seulement quand une image est sélectionnée) reflètent la sélection courante.
+  const [, forceRender] = useReducer((x: number) => x + 1, 0);
+  useEffect(() => {
+    if (!editor) return;
+    const update = () => forceRender();
+    editor.on("transaction", update);
+    return () => {
+      editor.off("transaction", update);
+    };
+  }, [editor]);
 
   if (!editor) {
     return (
@@ -171,6 +205,40 @@ function Toolbar({
       <Btn on={() => editor.chain().focus().setHorizontalRule().run()} title="Séparateur">
         —
       </Btn>
+      {editor.isActive("image") && (
+        <>
+          <Sep />
+          <span className="px-1 text-xs text-gray-500">Image&nbsp;:</span>
+          <Btn
+            on={() => editor.chain().focus().updateAttributes("image", { align: null }).run()}
+            active={editor.isActive("image", { align: null })}
+            title="Pleine largeur"
+          >
+            <span className="text-xs">Plein</span>
+          </Btn>
+          <Btn
+            on={() => editor.chain().focus().updateAttributes("image", { align: "left" }).run()}
+            active={editor.isActive("image", { align: "left" })}
+            title="Image à gauche, texte à droite"
+          >
+            <span className="text-xs">◧ Gauche</span>
+          </Btn>
+          <Btn
+            on={() => editor.chain().focus().updateAttributes("image", { align: "center" }).run()}
+            active={editor.isActive("image", { align: "center" })}
+            title="Image centrée"
+          >
+            <span className="text-xs">Centré</span>
+          </Btn>
+          <Btn
+            on={() => editor.chain().focus().updateAttributes("image", { align: "right" }).run()}
+            active={editor.isActive("image", { align: "right" })}
+            title="Image à droite, texte à gauche"
+          >
+            <span className="text-xs">Droite ◨</span>
+          </Btn>
+        </>
+      )}
       <Sep />
       <Btn on={() => editor.chain().focus().undo().run()} title="Annuler">
         ↶

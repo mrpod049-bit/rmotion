@@ -114,6 +114,41 @@
   color: #9ca3af;
 }
 
+/* Ancrage des images dans les contenus riches (descriptions produit, articles) :
+   image flottante avec texte qui s'enroule autour. Piloté par l'attribut
+   data-align posé par l'éditeur TipTap. Scopé sous .prose pour battre la règle
+   prose-img:w-full. Sur mobile : repli en pleine largeur (pas de flottant étroit). */
+.prose img[data-align="left"] {
+  float: left;
+  width: 45%;
+  margin: 0.25rem 1.5rem 0.75rem 0;
+}
+.prose img[data-align="right"] {
+  float: right;
+  width: 45%;
+  margin: 0.25rem 0 0.75rem 1.5rem;
+}
+.prose img[data-align="center"] {
+  display: block;
+  width: auto;
+  max-width: 75%;
+  margin: 1rem auto;
+}
+/* Le conteneur englobe la hauteur des images flottantes (clearfix). */
+.prose::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+@media (max-width: 640px) {
+  .prose img[data-align] {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1rem 0 !important;
+  }
+}
+
 /* Carrousel Hero : défilement horizontal continu et sans couture. */
 @keyframes hero-scroll {
   from { transform: translateX(0); }
