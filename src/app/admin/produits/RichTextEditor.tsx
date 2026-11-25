@@ -93,10 +93,14 @@ export default function RichTextEditor({
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/admin/upload", { method: "POST", body: fd });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (res.ok && json.url) {
         editor.chain().focus().setImage({ src: json.url, alt: file.name }).run();
+      } else {
+        window.alert(`Échec de l'insertion de l'image : ${json.error || `erreur ${res.status}`}`);
       }
+    } catch {
+      window.alert("Échec de l'insertion de l'image (réseau).");
     } finally {
       onUploadingChange?.(false);
       if (fileRef.current) fileRef.current.value = "";

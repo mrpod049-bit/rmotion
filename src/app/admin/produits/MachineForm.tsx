@@ -163,14 +163,15 @@ export default function MachineForm({ categories, machine }: { categories: Categ
       <div className={section}>
         <label className={label}>Description (FR)</label>
         <RichTextEditor value={description} onChange={setDescription} onUploadingChange={setUploading} />
-        <p className="text-xs text-gray-400 mt-1">Mise en forme libre : gras, italique, titres, listes, couleurs, liens et images.</p>
+        <p className="text-xs text-gray-400 mt-1">Mise en forme libre : gras, italique, titres, listes, couleurs, liens. Le bouton 🖼 insère une image <strong>dans le texte</strong> (pour les photos du carrousel, voir la section « Photos du produit » plus bas).</p>
         <label className={`${label} mt-4`}>Description (EN)</label>
         <RichTextEditor value={descriptionEn} onChange={setDescriptionEn} onUploadingChange={setUploading} />
       </div>
 
       {/* Images */}
       <div className={section}>
-        <label className={label}>Images (carrousel) — la 1ère sert de vignette</label>
+        <label className={label}>Photos du produit (carrousel) — la 1ère sert de vignette</label>
+        <p className="text-xs text-gray-400 mb-2">Galerie affichée en haut de la fiche produit (la vue 3D s'ajoute automatiquement si un modèle existe). Distinct des images insérées dans le texte de la description.</p>
         <input type="file" accept="image/*" multiple onChange={(e) => uploadFiles(e.target.files)} className="text-sm" disabled={uploading} />
         {uploading && <p className="text-xs text-gray-500 mt-1">Upload en cours…</p>}
         {images.length > 0 && (
