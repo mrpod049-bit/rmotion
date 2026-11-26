@@ -97,15 +97,25 @@ export function wrapSections(html: string): string {
   const isImg = (t: string) => /^<img\b/i.test(t);
   const sections: string[][] = [];
   let cur: string[] = [];
-  let prev = "";
+  let curHasH = false;
+  let curHasImg = false;
   for (const t of toks) {
-    const startNew = cur.length > 0 && (isImg(t) || (isH(t) && !isImg(prev)));
+    // Nouvelle section quand : un titre arrive alors qu'on en a déjà un (nouvelle
+    // section titrée), OU une image arrive alors que la section a déjà une image ou
+    // un titre. Ainsi une image garde son prochain titre même si des paragraphes
+    // (vides notamment) les séparent.
+    const startNew =
+      cur.length > 0 &&
+      ((isH(t) && curHasH) || (isImg(t) && (curHasImg || curHasH)));
     if (startNew) {
       sections.push(cur);
       cur = [];
+      curHasH = false;
+      curHasImg = false;
     }
     cur.push(t);
-    prev = t;
+    if (isH(t)) curHasH = true;
+    if (isImg(t)) curHasImg = true;
   }
   if (cur.length) sections.push(cur);
   return sections.map((s) => `<section class="desc-sec">${s.join("")}</section>`).join("");
