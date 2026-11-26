@@ -134,6 +134,11 @@
 .prose .desc-sec {
   display: flow-root;
 }
+/* Les paragraphes vides (lignes vides ajoutées dans l'éditeur avec Entrée)
+   gardent une hauteur visible : on peut ainsi aérer le texte comme dans l'éditeur. */
+.prose p:empty {
+  min-height: 1.5em;
+}
 .prose img[data-align="center"] {
   display: block;
   width: auto;
