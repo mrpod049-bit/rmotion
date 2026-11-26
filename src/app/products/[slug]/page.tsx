@@ -13,7 +13,7 @@ import { formatPriceFrom } from "@/lib/price";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FicheTechniqueButton from "@/components/FicheTechniqueButton";
 import { absoluteUrl } from "@/lib/absolute-url";
-import { descriptionToHtml, descriptionExcerpt, stripHtml, buildTocAndAnchors } from "@/lib/richtext";
+import { descriptionToHtml, descriptionExcerpt, stripHtml, buildTocAndAnchors, wrapSections } from "@/lib/richtext";
 import DescriptionToc from "@/components/DescriptionToc";
 
 const SITE = "https://www.rmotion.fr";
@@ -92,6 +92,9 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
   const { html: descriptionHtml, toc } = buildTocAndAnchors(
     descriptionToHtml(machine.description)
   );
+  // Isole chaque section (image + titre + texte) dans un conteneur BFC pour un
+  // habillage propre (titre aligné avec son texte à côté de l'image, sans débordement).
+  const descriptionHtmlWrapped = wrapSections(descriptionHtml);
   const hasToc = toc.length >= 2;
 
   const relatedArticles = await getRelatedArticles(machine.type, locale === "en");
@@ -311,13 +314,13 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
               <DescriptionToc items={toc} title={t.summary} />
               <div
                 className="prose prose-gray max-w-none prose-headings:font-semibold prose-headings:scroll-mt-28 prose-img:rounded-lg prose-img:w-full prose-p:leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                dangerouslySetInnerHTML={{ __html: descriptionHtmlWrapped }}
               />
             </div>
           ) : (
             <div
               className="prose prose-gray max-w-3xl prose-headings:font-semibold prose-headings:scroll-mt-28 prose-img:rounded-lg prose-img:w-full prose-p:leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+              dangerouslySetInnerHTML={{ __html: descriptionHtmlWrapped }}
             />
           )}
         </section>

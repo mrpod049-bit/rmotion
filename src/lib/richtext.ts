@@ -75,6 +75,42 @@ export function descriptionExcerpt(s: string | null | undefined, max = 160): str
   return text.slice(0, max - 1).replace(/\s+\S*$/, "") + "…";
 }
 
+/**
+ * Enveloppe chaque « section » de la description (image flottante + titre + texte)
+ * dans un conteneur <section class="desc-sec"> qui établit un contexte de formatage
+ * de bloc (CSS display:flow-root). Ainsi l'image reste contenue dans sa section :
+ * le titre s'enroule à côté d'elle (aligné avec son paragraphe), sans déborder sur
+ * la section suivante. Une section commence à une image, ou à un titre non précédé
+ * d'une image. Garde-fou : si le découpage ne recouvre pas tout le HTML, on renvoie
+ * l'original tel quel (jamais de perte de contenu).
+ */
+export function wrapSections(html: string): string {
+  const src = html ?? "";
+  const TOKEN =
+    /<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]>|<img\b[^>]*>|<hr\s*\/?>|<(ul|ol|blockquote)\b[^>]*>[\s\S]*?<\/\1>|<p\b[^>]*>[\s\S]*?<\/p>/gi;
+  const toks = src.match(TOKEN);
+  if (!toks || toks.length === 0) return src;
+  // Garde-fou : le concat des blocs doit redonner le HTML d'origine (sinon on n'y touche pas).
+  if (toks.join("") !== src.trim()) return src;
+
+  const isH = (t: string) => /^<h[1-6]\b/i.test(t);
+  const isImg = (t: string) => /^<img\b/i.test(t);
+  const sections: string[][] = [];
+  let cur: string[] = [];
+  let prev = "";
+  for (const t of toks) {
+    const startNew = cur.length > 0 && (isImg(t) || (isH(t) && !isImg(prev)));
+    if (startNew) {
+      sections.push(cur);
+      cur = [];
+    }
+    cur.push(t);
+    prev = t;
+  }
+  if (cur.length) sections.push(cur);
+  return sections.map((s) => `<section class="desc-sec">${s.join("")}</section>`).join("");
+}
+
 /** Une entrée de sommaire : un sous-titre H2 ou H3 de la description. */
 export type TocItem = { id: string; text: string; level: 2 | 3 };
 
