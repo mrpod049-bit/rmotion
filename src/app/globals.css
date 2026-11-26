@@ -134,6 +134,12 @@
   max-width: 75%;
   margin: 1rem auto;
 }
+/* Les titres repartent toujours en pleine largeur SOUS les images flottantes
+   (habillage cohérent : titre pleine largeur à gauche, puis image + texte
+   enroulé en dessous). Il faut donc rédiger : titre, puis image, puis texte. */
+.prose :is(h1, h2, h3, h4, h5, h6) {
+  clear: both;
+}
 /* Le conteneur englobe la hauteur des images flottantes (clearfix). */
 .prose::after {
   content: "";
