@@ -34,6 +34,13 @@ const TocToggle = Extension.create({
             renderHTML: (attrs: { tocHidden?: boolean }) =>
               attrs.tocHidden ? { "data-toc": "off" } : {},
           },
+          // Intitulé personnalisé affiché dans le sommaire (sinon = texte du titre).
+          tocLabel: {
+            default: null,
+            parseHTML: (el: HTMLElement) => el.getAttribute("data-toc-label") || null,
+            renderHTML: (attrs: { tocLabel?: string | null }) =>
+              attrs.tocLabel ? { "data-toc-label": attrs.tocLabel } : {},
+          },
         },
       },
     ];
@@ -293,6 +300,27 @@ function Toolbar({
           >
             <span className="text-xs">☰ Sommaire</span>
           </Btn>
+          {!editor.getAttributes("heading").tocHidden && (
+            <Btn
+              on={() => {
+                const current = (editor.getAttributes("heading").tocLabel as string) || "";
+                const label = window.prompt(
+                  "Intitulé affiché dans le sommaire (laisser vide pour reprendre le titre) :",
+                  current
+                );
+                if (label === null) return;
+                editor
+                  .chain()
+                  .focus()
+                  .updateAttributes("heading", { tocLabel: label.trim() || null })
+                  .run();
+              }}
+              active={!!editor.getAttributes("heading").tocLabel}
+              title="Personnaliser l'intitulé de ce titre dans le sommaire"
+            >
+              <span className="text-xs">✎ Intitulé</span>
+            </Btn>
+          )}
         </>
       )}
       <Sep />

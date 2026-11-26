@@ -15,6 +15,16 @@ const escapeHtml = (s: string) =>
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
+/** Décode les entités HTML courantes (pour relire une valeur d'attribut sérialisée). */
+const decodeEntities = (s: string) =>
+  s
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&nbsp;/gi, " ");
+
 /**
  * Convertit un ancien texte brut (paragraphes séparés par une ligne vide) en HTML.
  * Les paragraphes commençant par AVERTISSEMENT / SAFETY WARNING sont rendus en rouge gras,
@@ -89,7 +99,11 @@ export function buildTocAndAnchors(html: string): { html: string; toc: TocItem[]
       const count = (used.get(id) ?? 0) + 1;
       used.set(id, count);
       if (count > 1) id = `${id}-${count}`;
-      toc.push({ id, text, level: Number(levelStr) as 2 | 3 });
+      // Intitulé personnalisé pour le sommaire (data-toc-label posé par l'éditeur),
+      // sinon on reprend le texte du titre.
+      const labelMatch = attrs.match(/data-toc-label="([^"]*)"/i);
+      const label = labelMatch ? decodeEntities(labelMatch[1]).trim() : "";
+      toc.push({ id, text: label || text, level: Number(levelStr) as 2 | 3 });
       // Ne pas écraser un id déjà présent (l'éditeur n'en pose pas, mais par sûreté).
       if (/\sid\s*=/i.test(attrs)) return match;
       return `<h${levelStr}${attrs} id="${id}">${inner}</h${levelStr}>`;
