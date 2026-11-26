@@ -1,5 +1,6 @@
 "use client";
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import { Extension } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
@@ -14,6 +15,31 @@ import { useRef, useEffect, useReducer } from "react";
  * par les règles `.prose img[data-align=…]` de globals.css, partagées entre
  * l'éditeur et l'affichage public.
  */
+/**
+ * Permet d'inclure ou d'exclure un titre (H2/H3) du sommaire automatique de la
+ * fiche produit. Ajoute un attribut `data-toc="off"` sur le heading exclu ; le
+ * générateur de sommaire (`buildTocAndAnchors`) ignore ces titres. Par défaut,
+ * tous les titres sont inclus (tocHidden = false).
+ */
+const TocToggle = Extension.create({
+  name: "tocToggle",
+  addGlobalAttributes() {
+    return [
+      {
+        types: ["heading"],
+        attributes: {
+          tocHidden: {
+            default: false,
+            parseHTML: (el: HTMLElement) => el.getAttribute("data-toc") === "off",
+            renderHTML: (attrs: { tocHidden?: boolean }) =>
+              attrs.tocHidden ? { "data-toc": "off" } : {},
+          },
+        },
+      },
+    ];
+  },
+});
+
 const AlignedImage = Image.extend({
   addAttributes() {
     return {
@@ -55,6 +81,7 @@ export default function RichTextEditor({
       Color,
       AlignedImage.configure({ inline: false, HTMLAttributes: { class: "rounded-lg" } }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TocToggle,
     ],
     content: value || "",
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
@@ -240,6 +267,31 @@ function Toolbar({
             title="Image à droite, texte à gauche"
           >
             <span className="text-xs">Droite ◨</span>
+          </Btn>
+        </>
+      )}
+      {editor.isActive("heading") && (
+        <>
+          <Sep />
+          <span className="px-1 text-xs text-gray-500">Titre&nbsp;:</span>
+          <Btn
+            on={() =>
+              editor
+                .chain()
+                .focus()
+                .updateAttributes("heading", {
+                  tocHidden: !editor.getAttributes("heading").tocHidden,
+                })
+                .run()
+            }
+            active={!editor.getAttributes("heading").tocHidden}
+            title={
+              editor.getAttributes("heading").tocHidden
+                ? "Titre exclu du sommaire — cliquer pour l'ajouter"
+                : "Titre affiché dans le sommaire — cliquer pour l'exclure"
+            }
+          >
+            <span className="text-xs">☰ Sommaire</span>
           </Btn>
         </>
       )}

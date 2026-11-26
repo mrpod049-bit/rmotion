@@ -163,7 +163,7 @@ export default function MachineForm({ categories, machine }: { categories: Categ
       <div className={section}>
         <label className={label}>Description (FR)</label>
         <RichTextEditor value={description} onChange={setDescription} onUploadingChange={setUploading} />
-        <p className="text-xs text-gray-400 mt-1">Mise en forme libre : gras, italique, titres, listes, couleurs, liens. Le bouton 🖼 insère une image <strong>dans le texte</strong> (pour les photos du carrousel, voir la section « Photos du produit » plus bas).</p>
+        <p className="text-xs text-gray-400 mt-1">Mise en forme libre : gras, italique, titres, listes, couleurs, liens. Le bouton 🖼 insère une image <strong>dans le texte</strong> (pour les photos du carrousel, voir la section « Photos du produit » plus bas). Place le curseur dans un titre pour l'<strong>inclure ou l'exclure du sommaire</strong> (bouton ☰ Sommaire).</p>
         <label className={`${label} mt-4`}>Description (EN)</label>
         <RichTextEditor value={descriptionEn} onChange={setDescriptionEn} onUploadingChange={setUploading} />
       </div>

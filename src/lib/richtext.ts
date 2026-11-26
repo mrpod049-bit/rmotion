@@ -82,6 +82,9 @@ export function buildTocAndAnchors(html: string): { html: string; toc: TocItem[]
     (match, levelStr: string, attrs: string, inner: string) => {
       const text = stripHtml(inner);
       if (!text) return match;
+      // Titre explicitement exclu du sommaire (data-toc="off" posé par l'éditeur) :
+      // on le laisse intact dans le texte mais on ne l'ajoute pas au sommaire.
+      if (/data-toc\s*=\s*["']off["']/i.test(attrs)) return match;
       let id = slugify(text) || "section";
       const count = (used.get(id) ?? 0) + 1;
       used.set(id, count);
