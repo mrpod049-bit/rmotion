@@ -217,6 +217,33 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
               exitFullscreen3d: t.exitFullscreen3d,
             }}
           />
+          {/* Cartouche service (garantie, disponibilité, SAV) sous le carrousel.
+              Les trois intitulés côte à côte sur desktop ; empilés sur petit écran.
+              Sur desktop, débord dans la gouttière (lg:-mr-12) pour un cartouche plus large. */}
+          <div className="mt-6 lg:-mr-12 grid grid-cols-1 sm:grid-cols-3 border border-gray-200 rounded-lg divide-y sm:divide-y-0 sm:divide-x divide-gray-200 text-sm">
+            <div className="flex items-start gap-3 px-4 py-3">
+              <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+              <span className="text-gray-700">{t.warranty}</span>
+            </div>
+            <div className="flex items-start gap-3 px-4 py-3">
+              <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+              </svg>
+              <span className="text-gray-700">{t.stockLabel} <span className="text-gray-900 font-medium">{t.stockValue}</span>, {t.stockTail}</span>
+            </div>
+            <div className="flex items-start gap-3 px-4 py-3">
+              <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span className="text-gray-700">{t.support}</span>
+            </div>
+          </div>
         </div>
 
         {/* Colonne droite : nom, prix, CTA, specs (décalée de 50px).
@@ -245,50 +272,6 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
             />
           </div>
 
-          {/* Infos service — identiques pour toutes les machines, au-dessus des specs */}
-          <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200 text-sm mb-8">
-            <li className="flex items-start gap-3 px-4 py-3">
-              <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <polyline points="9 12 11 14 15 10" />
-              </svg>
-              <span className="text-gray-700">{t.warranty}</span>
-            </li>
-            <li className="flex items-start gap-3 px-4 py-3">
-              <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                <line x1="12" y1="22.08" x2="12" y2="12" />
-              </svg>
-              <span className="text-gray-700">{t.stockLabel} <span className="text-gray-900 font-medium">{t.stockValue}</span>, {t.stockTail}</span>
-            </li>
-            <li className="flex items-start gap-3 px-4 py-3">
-              <svg className="w-5 h-5 shrink-0 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span className="text-gray-700">{t.support}</span>
-            </li>
-          </ul>
-
-          {/* Options */}
-          {machine.options?.length ? (
-            <div className="mb-8">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">{t.options}</h2>
-              <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200 text-sm">
-                {(machine.options as string[]).map((opt) => (
-                  <li key={opt} className="flex items-center gap-3 px-4 py-3">
-                    <svg className="w-4 h-4 shrink-0 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                      <line x1="12" y1="5" x2="12" y2="19" />
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    <span className="text-gray-700">{opt}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-
           {/* Caractéristiques */}
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">{t.specs}</h2>
@@ -307,7 +290,7 @@ export default async function MachinePage({ params }: { params: Promise<{ slug: 
 
       {/* Description : pleine largeur sous le bloc produit, avec sommaire latéral collant. */}
       {descriptionHtml && (
-        <section className="mt-14 lg:mt-20 border-t border-gray-200 pt-10 lg:pt-12">
+        <section className="mt-8 lg:mt-10 border-t border-gray-200 pt-8 lg:pt-10">
           <h2 className="text-lg font-semibold mb-8">{t.description}</h2>
           {hasToc ? (
             <div className="grid grid-cols-1 lg:grid-cols-[210px_minmax(0,1fr)] gap-x-12 xl:gap-x-16">
